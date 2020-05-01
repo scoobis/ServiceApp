@@ -1,13 +1,29 @@
 package model.database;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
+
+import SecretStuff.DatabaseSecrets;
 
 public interface DatabaseConnector {
 
-	public String serverName = "";
-	public String instanceName = "";
-	public String username = "";
-	public String password = "";
-	public int port = -1;
-	public Connection database = null; //TODO Make sure this is correct connection object
+DatabaseSecrets dbSercrets = new DatabaseSecrets();
+	
+	final String driver = "com.mysql.jdbc.Driver";
+	final String url = dbSercrets.getUrl();
+	final String user = dbSercrets.getUsername();
+	final String password = dbSercrets.getPassword();
+
+	public static Connection getConnection() {
+		try {
+            Class.forName(driver);
+            Connection mysqlConnection = DriverManager.getConnection(url, user, password);
+            return mysqlConnection;
+            
+        }catch(Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+		
+	}
 }
