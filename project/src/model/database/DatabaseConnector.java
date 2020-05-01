@@ -3,7 +3,7 @@ package model.database;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-import SecretStuff.DatabaseSecrets;
+import secretStuff.DatabaseSecrets;
 
 public interface DatabaseConnector {
 
