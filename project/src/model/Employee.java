@@ -8,6 +8,7 @@ public abstract class Employee {
 	private String email;
 	private String name;
 	private String company;
+	private String shopId;
 	private DatabaseConnector db;
 	
 	public Order createOrder() {
@@ -40,6 +41,26 @@ public abstract class Employee {
 	
 	public int uncompleteOrder(String orderId) {
 		return -1;
+	}
+	
+	public String getCompanyName() {
+		return company;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public String getEmail() {
+		return email;
+	}
+	
+	public String getPhone() {
+		return phone;
+	}
+	
+	public String getShopId() {
+		return shopId;
 	}
 	
 }

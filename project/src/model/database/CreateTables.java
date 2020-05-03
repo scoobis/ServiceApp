@@ -25,7 +25,7 @@ Connection connection = null;
 	private void createSuperAdmin() {
 		try {
 			PreparedStatement create = connection.prepareStatement("CREATE TABLE IF NOT EXISTS super_admin"
-					+ "(id int, "
+					+ "(id int NOT NULL AUTO_INCREMENT, "
 					+ "company_name varchar(25), "
 					+ "phone varchar(25), "
 					+ "email varchar(155), "
@@ -38,7 +38,7 @@ Connection connection = null;
 	private void createAdmin() {
 		try {
 			PreparedStatement create = connection.prepareStatement("CREATE TABLE IF NOT EXISTS admin"
-					+ "(id int, "
+					+ "(id int NOT NULL AUTO_INCREMENT, "
 					+ "company_name varchar(25), "
 					+ "shop_id int, "
 					+ "phone varchar(25), "
@@ -52,7 +52,7 @@ Connection connection = null;
 	private void createUser() {
 		try {
 			PreparedStatement create = connection.prepareStatement("CREATE TABLE IF NOT EXISTS user"
-					+ "(id int, "
+					+ "(id int NOT NULL AUTO_INCREMENT, "
 					+ "company_name varchar(25), "
 					+ "shop_id int, "
 					+ "phone varchar(25), "
@@ -66,7 +66,7 @@ Connection connection = null;
 	private void createShop() {
 		try {
 			PreparedStatement create = connection.prepareStatement("CREATE TABLE IF NOT EXISTS shop"
-					+ "(id int, "
+					+ "(id int NOT NULL AUTO_INCREMENT, "
 					+ "company_name varchar(25), "
 					+ "adress varchar(128), "
 					+ "PRIMARY KEY(id))");
@@ -87,7 +87,7 @@ Connection connection = null;
 	private void createOrder() {
 		try {
 			PreparedStatement create = connection.prepareStatement("CREATE TABLE IF NOT EXISTS customer_order"
-					+ "(id int, "
+					+ "(id int NOT NULL AUTO_INCREMENT, "
 					+ "service_id int, "
 					+ "customer_id int, "
 					+ "shop_id int, "
@@ -103,7 +103,7 @@ Connection connection = null;
 	private void createService() {
 		try {
 			PreparedStatement create = connection.prepareStatement("CREATE TABLE IF NOT EXISTS service"
-					+ "(id int, "
+					+ "(id int NOT NULL AUTO_INCREMENT, "
 					+ "company_name varchar(64), "
 					+ "title varchar(64), "
 					+ "description TEXT, "
@@ -117,7 +117,7 @@ Connection connection = null;
 	private void createCustomer() {
 		try {
 			PreparedStatement create = connection.prepareStatement("CREATE TABLE IF NOT EXISTS customer"
-					+ "(id int, "
+					+ "(id int NOT NULL AUTO_INCREMENT, "
 					+ "phone varchar(25), "
 					+ "email varchar(155), "
 					+ "name varchar(128), "

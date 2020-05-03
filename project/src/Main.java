@@ -3,6 +3,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import model.database.CreateTables;
+import model.database.EmployeeDatabase;
 
 public class Main extends Application {
 	
