@@ -1,7 +1,9 @@
 package view;
 
+import javafx.stage.Stage;
+
 public interface IView {
 	
-	public void render();
+	public void render(Stage s);
 	
 }
