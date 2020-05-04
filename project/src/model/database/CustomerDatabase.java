@@ -8,7 +8,9 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Observer;
 
@@ -25,32 +27,58 @@ public class CustomerDatabase implements DatabaseConnector, DatabaseObserver, Da
 		return null;
 	}
 	
-	public Customer getCustomerById(String id) {
-		return null;
+	public Customer getCustomerById(String id) throws SQLException {
+		
+		String statement = "SELECT * FROM customer WHERE id=" + id + ";";
+		Statement query = connection.prepareStatement(statement);
+		ResultSet result = query.executeQuery(statement);
+		
+		int i = 0;
+		
+		while(result.next()) {
+			System.out.println(result.getString(i));
+			i++;
+		}
+		
+		Customer fetchedCustomer = new Customer();
+		
+		return fetchedCustomer;
 	}
 	
 	public void saveCustomer(Customer customer) throws NoSuchAlgorithmException, InvalidKeySpecException {
 		try {
 			
-			PreparedStatement create;
-			create = connection.prepareStatement("INSERT INTO customer (phone, email, name, address, active)"
+			PreparedStatement query;
+			query = connection.prepareStatement("INSERT INTO customer (phone, email, name, address, active)"
 						+ "VALUES ('"+ customer.getPhone() +"', "
 						+ customer.getEmail()+","
 						+ customer.getName()+","
 						+ "'"+ customer.getAddress() +"', "
 						+ "'"+ customer.isActive() +"', "
-						+ "'"+ customer.getPassword() +"')"); // TODO Add password??
-			create.executeUpdate();
+						+ "'"+ customer.getPassword() +"')");
+			query.executeUpdate();
 			
 		} catch (SQLException e1) { e1.printStackTrace(); }
 	}
 	
 	public int deleteCustomer(String id) {
-		return -1;
+		String statement = "DELETE FROM customer WHERE id=" + id + ";";
+		Statement query;
+		try {
+			query = connection.prepareStatement(statement);
+			query.executeQuery(statement);
+			return 1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return 0;
+		}
 	}
 	
-	public Customer editCustomer(String id, Customer c) {
-		return null;
+	public Customer editCustomer(String id, Customer c) throws NoSuchAlgorithmException, InvalidKeySpecException {
+		deleteCustomer(id);
+		saveCustomer(c);
+		
+		return c;
 	}
 	
 	@Override
