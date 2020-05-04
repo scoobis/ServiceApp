@@ -23,8 +23,20 @@ public class CustomerDatabase implements DatabaseConnector, DatabaseObserver, Da
 
 	Connection connection = DatabaseConnector.getConnection();
 	
-	public ArrayList<Customer> getAllCustomers() {
-		return null;
+	public ArrayList<Customer> getAllCustomers() throws SQLException {
+		
+		ArrayList<Customer> customers = new ArrayList<>();
+		
+		String statement = "SELECT id FROM customer ";
+		Statement query = connection.prepareStatement(statement);
+		ResultSet result = query.executeQuery(statement);
+		int i = 0;
+		while(result.next()) {
+			customers.add(getCustomerById(result.getString(i)));
+			i++;
+		}
+		
+		return customers;
 	}
 	
 	public Customer getCustomerById(String id) throws SQLException {
@@ -36,6 +48,7 @@ public class CustomerDatabase implements DatabaseConnector, DatabaseObserver, Da
 		int i = 0;
 		
 		while(result.next()) {
+			// Create a Customer here.
 			System.out.println(result.getString(i));
 			i++;
 		}
