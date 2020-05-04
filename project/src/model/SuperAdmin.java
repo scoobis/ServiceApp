@@ -2,7 +2,11 @@ package model;
 
 public class SuperAdmin extends Employee {
 
-	private String shopId;
+	public SuperAdmin(String phone, String email, String name, String company, int shopId, String status) {
+		super(phone, email, name, company, shopId, status);
+	}
+	
+	public SuperAdmin() {}
 	
 	public User createUser() {
 		return null;

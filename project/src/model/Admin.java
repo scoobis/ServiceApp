@@ -1,8 +1,15 @@
 package model;
 
 public class Admin extends Employee {
-
+	
 	private String shopId;
+
+	public Admin(String phone, String email, String name, String company, int shopId, String status) {
+		super(phone, email, name, company, shopId, status);
+
+	}
+	
+	public Admin() {}
 	
 	public User createUser() {
 		return null;

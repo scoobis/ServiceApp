@@ -30,6 +30,7 @@ Connection connection = null;
 					+ "phone varchar(25), "
 					+ "email varchar(155), "
 					+ "password varchar(512), "
+					+ "status varchar(25), "
 					+ "PRIMARY KEY(id))");
 			create.executeUpdate();
 		} catch(Exception e) { System.out.println(e); }
@@ -44,6 +45,7 @@ Connection connection = null;
 					+ "phone varchar(25), "
 					+ "email varchar(155), "
 					+ "password varchar(512), "
+					+ "status varchar(25), "
 					+ "PRIMARY KEY(id))");
 			create.executeUpdate();
 		} catch(Exception e) { System.out.println(e); }
@@ -58,6 +60,7 @@ Connection connection = null;
 					+ "phone varchar(25), "
 					+ "email varchar(155), "
 					+ "password varchar(512), "
+					+ "status varchar(25), "
 					+ "PRIMARY KEY(id))");
 			create.executeUpdate();
 		} catch(Exception e) { System.out.println(e); }
@@ -86,7 +89,7 @@ Connection connection = null;
 	
 	private void createOrder() {
 		try {
-			PreparedStatement create = connection.prepareStatement("CREATE TABLE IF NOT EXISTS customer_order"
+			PreparedStatement create = connection.prepareStatement("CREATE TABLE IF NOT EXISTS orders"
 					+ "(id int NOT NULL AUTO_INCREMENT, "
 					+ "service_id int, "
 					+ "customer_id int, "
@@ -94,7 +97,7 @@ Connection connection = null;
 					+ "company_name varchar(64), "
 					+ "price int, "
 					+ "completed boolean, "
-					+ "date DATE, "
+					+ "date varchar(75), "
 					+ "PRIMARY KEY(id))");
 			create.executeUpdate();
 		} catch(Exception e) { System.out.println(e); }
