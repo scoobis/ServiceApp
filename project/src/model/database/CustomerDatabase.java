@@ -1,11 +1,8 @@
 package model.database;
 
-import security.PasswordHasher;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,9 +10,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Observer;
-
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
 
 import model.Customer;
 
@@ -58,7 +52,7 @@ public class CustomerDatabase implements DatabaseConnector, DatabaseObserver, Da
 		return fetchedCustomer;
 	}
 	
-	public void saveCustomer(Customer customer) throws NoSuchAlgorithmException, InvalidKeySpecException {
+	public void saveCustomer(Customer customer) throws InvalidKeySpecException {
 		try {
 			
 			PreparedStatement query;
