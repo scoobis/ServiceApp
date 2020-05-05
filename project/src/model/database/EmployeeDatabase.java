@@ -145,6 +145,7 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 	}
 	
 	public void deleteEmployee(int id, String status) {
+		//test
 		try {
 			PreparedStatement create;
 			create = connection.prepareStatement("DELETE FROM "+ status.toLowerCase() +" WHERE id = " + id + ";");
