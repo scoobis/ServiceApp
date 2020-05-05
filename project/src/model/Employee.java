@@ -89,8 +89,8 @@ public abstract class Employee {
 		this.phone = phone;
 	}
 	
-	public void setShopId(int shopId) { this.shopId = shopId;}
 	public void setCompanyName(String company) { this.company = company;}
 	public void setStatus(String status) { this.status = status;}
+	public void setShopId(int shopId) { this.shopId = shopId; }
 	
 }

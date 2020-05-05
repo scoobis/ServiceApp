@@ -2,8 +2,13 @@ package model;
 
 public class SuperAdmin extends Employee {
 
-	public SuperAdmin(String phone, String email, String name, String company, int shopId, String status) {
-		super(phone, email, name, company, shopId, status);
+	public SuperAdmin(String phone, String email, String name, String company, String status) {
+		super();
+		this.setPhone(phone);
+		this.setEmail(email);
+		this.setName(name);
+		this.setCompanyName(company);
+		this.setStatus(status);
 	}
 	
 	public SuperAdmin() {}

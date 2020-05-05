@@ -7,7 +7,5 @@ public class User extends Employee {
 	}
 	
 	public User() {}
-
-	private String shopId;
 	
 }

@@ -21,11 +21,11 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 		ArrayList<Employee> employees = new ArrayList<>();
 		
 		try {
-		String statement = "SELECT * FROM user WHERE company_name = '" + companyName + "'"
+		String statement = "SELECT id, status FROM user WHERE user.company_name = '" + companyName + "' "
 				+ "UNION "
-				+ "SELECT * FROM admin WHERE company_name = '" + companyName + "'"
+				+ "SELECT id, status FROM admin WHERE company_name = '" + companyName + "' "
 				+ "UNION "
-				+ "SELECT *, '(dummy for union)' AS shop_id FROM super_admin WHERE company_name = '" + companyName + "';";
+				+ "SELECT id, status FROM super_admin WHERE company_name = '" + companyName + "';";
 		Statement query = connection.prepareStatement(statement);
 		ResultSet result = query.executeQuery(statement);
 		
@@ -42,13 +42,13 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 		return employees;
 		
 		} catch (SQLException e1) { 
-			e1.printStackTrace(); 
+			e1.printStackTrace();
 			return null;
 		}
 	}
 	
-	public Employee getUserById(int id) {
-		Employee user = new User();
+	public User getUserById(int id) {
+		User user = new User();
 		try {
 		String statement = "SELECT * FROM user WHERE id = "+ id +";";
 		Statement query = connection.prepareStatement(statement);
@@ -69,8 +69,8 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 		}
 	}
 	
-	public Employee getAdminById(int id) {
-		Employee admin = new Admin();
+	public Admin getAdminById(int id) {
+		Admin admin = new Admin();
 		try {
 		String statement = "SELECT * FROM admin WHERE id = "+ id +";";
 		Statement query = connection.prepareStatement(statement);
@@ -94,7 +94,7 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 	public Employee getSuperAdminById(int id) {
 		Employee superAdmin = new SuperAdmin();
 		try {
-		String statement = "SELECT * FROM admin WHERE id = "+ id +";";
+		String statement = "SELECT * FROM super_admin WHERE id = "+ id +";";
 		Statement query = connection.prepareStatement(statement);
 		ResultSet result = query.executeQuery(statement);
 		
@@ -123,7 +123,7 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 		create = connection.prepareStatement("INSERT INTO "+ e.getStatus().toLowerCase() +" (company_name, shop_id, phone, email, status, password)"
 				+ "VALUES ('"+ e.getCompanyName() +"', "
 				+ e.getShopId()+","
-				+ e.getPhone()+","
+				+ "'"+ e.getPhone()+"',"
 				+ "'"+ e.getEmail() +"', "
 				+ "'"+ e.getStatus().toLowerCase() +"', "
 				+ "'password')"); // TODO Add password??
@@ -134,10 +134,9 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 	private void saveSuperAdmin(Employee e) {
 		try {
 		PreparedStatement create;
-		create = connection.prepareStatement("INSERT INTO super_admin (company_name, shop_id, phone, email, status, password)"
+		create = connection.prepareStatement("INSERT INTO super_admin (company_name, phone, email, status, password)"
 				+ "VALUES ('"+ e.getCompanyName() +"', "
-				+ e.getShopId()+","
-				+ e.getPhone()+","
+				+ "'"+ e.getPhone() +"',"
 				+ "'"+ e.getEmail() +"', "
 				+ "'super_admin', "
 				+ "'password')"); // TODO Add password??
@@ -145,23 +144,39 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 			} catch (SQLException e1) { e1.printStackTrace(); }
 	}
 	
-	public void deleteEmployee(int id, Employee e) {
+	public void deleteEmployee(int id, String status) {
 		try {
 			PreparedStatement create;
-			create = connection.prepareStatement("DELETE FROM "+ e.getStatus().toLowerCase() +" WHERE id = " + id + ";");
+			create = connection.prepareStatement("DELETE FROM "+ status.toLowerCase() +" WHERE id = " + id + ";");
 			create.executeUpdate();
 			} catch (SQLException e1) { e1.printStackTrace(); }
 	}
 	
 	public void editEmployee(int id, Employee e) {
+			if (e.getStatus().equalsIgnoreCase("super_admin")) { editSuperAdmin(id, e); } 
+			else { editAdminOrUser(id, e); }
+	}
+	
+	private void editSuperAdmin(int id, Employee e) {
 		PreparedStatement edit;
 		try {
-			edit = connection.prepareStatement("UPDATE " + e.getStatus().toLowerCase()
-						+ "  SET shop_id = "+ e.getShopId() +","
-						+ "company_name = '"+ e.getPhone() +"', "
-						+ "company_name = '"+ e.getEmail() +"', "
-						+ "WHERE id = "+ id +";");
-			edit.executeUpdate();
+		edit = connection.prepareStatement("UPDATE " + e.getStatus().toLowerCase()
+				+ " SET phone = '"+ e.getPhone() +"', "
+				+ "email = '"+ e.getEmail() +"' "
+				+ "WHERE id = "+ id +";");
+		edit.executeUpdate();
+		} catch (SQLException e1) { e1.printStackTrace(); }
+	}
+	
+	private void editAdminOrUser(int id, Employee e) {
+		PreparedStatement edit;
+		try {
+		edit = connection.prepareStatement("UPDATE " + e.getStatus().toLowerCase()
+				+ " SET shop_id = "+ e.getShopId() +","
+				+ "phone = '"+ e.getPhone() +"', "
+				+ "email = '"+ e.getEmail() +"' "
+				+ "WHERE id = "+ id +";");
+		edit.executeUpdate();
 		} catch (SQLException e1) { e1.printStackTrace(); }
 	}
 	
