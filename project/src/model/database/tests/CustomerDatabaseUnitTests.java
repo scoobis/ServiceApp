@@ -33,18 +33,18 @@ class CustomerDatabaseUnitTests {
 		b.setName("Jesper Eriksson2");
 		b.setPhone("12344572");
 		
-		// db.deleteCustomer("3");
-		// db.saveCustomer(c);
+		db.saveCustomer(c);
 		ArrayList<Customer> customers = db.getAllCustomers();
 		
 		// Checking that the data in the database is correct to what we entered.
 		assertEquals("Jesper Eriksson", customers.get(0).getName());
-		assertEquals("je223gs@lnu.se2", customers.get(1).getEmail());
 		
-		db.editCustomer("1", b);
+		db.editCustomer("10", b);
 		
 		ArrayList<Customer> customers2 = db.getAllCustomers();
-		assertEquals("Jesper Eriksson2", customers2.get(1).getName());
+		assertEquals("Jesper Eriksson2", customers2.get(0).getName());
+		
+		db.deleteCustomer("10");
 	}
 	
 	// @Test

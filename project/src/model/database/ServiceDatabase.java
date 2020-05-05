@@ -18,13 +18,13 @@ public class ServiceDatabase implements DatabaseConnector, DatabaseObserver, Dat
 	public ArrayList<Service> getAllServices() throws SQLException {
 		ArrayList<Service> services = new ArrayList<>();
 		
-		String statement = "SELECT id FROM services ";
+		String statement = "SELECT id FROM service ";
 		Statement query = connection.prepareStatement(statement);
 		ResultSet result = query.executeQuery(statement);
-		int i = 0;
+	
 		while(result.next()) {
-			services.add(getServiceById(result.getString(i)));
-			i++;
+			services.add(getServiceById(result.getString("id")));
+			
 		}
 		
 		return services;
@@ -35,28 +35,30 @@ public class ServiceDatabase implements DatabaseConnector, DatabaseObserver, Dat
 		Statement query = connection.prepareStatement(statement);
 		ResultSet result = query.executeQuery(statement);
 		
-		int i = 0;
+		Service s = new Service();
 		
 		while(result.next()) {
-			// Create a Customer here.
-			System.out.println(result.getString(i));
-			i++;
+			s.setCompany(result.getString("company_name"));
+			s.setTitle(result.getString("title"));
+			s.setDescription(result.getString("description"));
+			s.setPrice(result.getInt("price"));
 		}
 		
-		Service fetchedService = new Service();
-		
-		return fetchedService;
+		return s;
 	}
 	
 	public void saveService(Service s) {
 		try {
 			
 			PreparedStatement query;
-			query = connection.prepareStatement("INSERT INTO service (company_name, title, description, price)"
-						+ "VALUES ('"+ s.getCompany() +"', "
-						+ s.getTitle()+","
-						+ s.getDescription()+","
-						+ "'"+ s.getPrice() +"')");
+			String statement = "INSERT INTO service (company_name, title, description, price)"
+					+ " VALUES ('" + s.getCompany() + 
+					"', '" + s.getTitle() + 
+					"', '" + s.getDescription()+ 
+					"', " + s.getPrice() + 
+					")";
+			
+			query = connection.prepareStatement(statement);
 			query.executeUpdate();
 			
 		} catch (SQLException e1) { e1.printStackTrace(); }
@@ -67,7 +69,7 @@ public class ServiceDatabase implements DatabaseConnector, DatabaseObserver, Dat
 		Statement query;
 		try {
 			query = connection.prepareStatement(statement);
-			query.executeQuery(statement);
+			query.executeUpdate(statement);
 			return 1;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -75,11 +77,17 @@ public class ServiceDatabase implements DatabaseConnector, DatabaseObserver, Dat
 		}
 	}
 	
-	public Service editService(String id, Service s) {
-		deleteService(id);
-		saveService(s);
-		
-		return s;
+	public void editService(String id, Service s) throws SQLException {
+		PreparedStatement query;
+		String statement = "UPDATE service SET " +
+				"company_name = '" + s.getCompany() + "', " + 
+				"title = '" + s.getTitle() + "', " + 
+				"description = '" + s.getDescription() + "', " + 
+				"price = " + s.getPrice() + 
+				" WHERE id='" + id + "';";
+		System.out.println(statement);
+		query = connection.prepareStatement(statement);
+		query.executeUpdate();
 	}
 	
 	@Override

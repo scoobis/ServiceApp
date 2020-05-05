@@ -71,6 +71,8 @@ public class CustomerDatabase implements DatabaseConnector, DatabaseObserver, Da
 		} catch (SQLException e1) { e1.printStackTrace(); }
 	}
 	
+	// TODO
+	// * Use TRUNCATE TABLE instead of DELETE, this will update the ids which makes it easier to test.
 	public int deleteCustomer(String id) {
 		String statement = "DELETE FROM customer WHERE id=" + id + ";";
 		Statement query;
