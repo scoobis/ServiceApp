@@ -24,10 +24,9 @@ public class CustomerDatabase implements DatabaseConnector, DatabaseObserver, Da
 		String statement = "SELECT id FROM customer ";
 		Statement query = connection.prepareStatement(statement);
 		ResultSet result = query.executeQuery(statement);
-		int i = 0;
+		
 		while(result.next()) {
-			customers.add(getCustomerById(result.getString(i)));
-			i++;
+			customers.add(getCustomerById(result.getString("id")));
 		}
 		
 		return customers;
@@ -41,28 +40,32 @@ public class CustomerDatabase implements DatabaseConnector, DatabaseObserver, Da
 		
 		int i = 0;
 		
+		Customer c = new Customer();
+		
 		while(result.next()) {
-			// Create a Customer here.
-			System.out.println(result.getString(i));
-			i++;
+			c.setActive(result.getBoolean("isActive"));
+			c.setAddress(result.getString("adress"));
+			c.setEmail(result.getString("email"));
+			c.setName(result.getString("name"));
+			c.setPhone(result.getString("phone"));
 		}
 		
-		Customer fetchedCustomer = new Customer();
-		
-		return fetchedCustomer;
+		return c;
 	}
 	
 	public void saveCustomer(Customer customer) throws InvalidKeySpecException {
 		try {
 			
 			PreparedStatement query;
-			query = connection.prepareStatement("INSERT INTO customer (phone, email, name, address, active)"
-						+ "VALUES ('"+ customer.getPhone() +"', "
-						+ customer.getEmail()+","
-						+ customer.getName()+","
-						+ "'"+ customer.getAddress() +"', "
-						+ "'"+ customer.isActive() +"', "
-						+ "'"+ customer.getPassword() +"')");
+			String statement = "INSERT INTO customer (phone, email, name, adress, isActive)"
+						+ " VALUES ('" + customer.getPhone() + 
+						"', '" + customer.getEmail() + 
+						"', '" + customer.getName()+ 
+						"', '" + customer.getAddress() + 
+						"'," +  customer.isActive() +")";
+			
+			System.out.println(statement);
+			query = connection.prepareStatement(statement);
 			query.executeUpdate();
 			
 		} catch (SQLException e1) { e1.printStackTrace(); }
@@ -73,7 +76,7 @@ public class CustomerDatabase implements DatabaseConnector, DatabaseObserver, Da
 		Statement query;
 		try {
 			query = connection.prepareStatement(statement);
-			query.executeQuery(statement);
+			query.executeUpdate(statement);
 			return 1;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -81,11 +84,18 @@ public class CustomerDatabase implements DatabaseConnector, DatabaseObserver, Da
 		}
 	}
 	
-	public Customer editCustomer(String id, Customer c) throws NoSuchAlgorithmException, InvalidKeySpecException {
-		deleteCustomer(id);
-		saveCustomer(c);
+	public void editCustomer(String id, Customer c) throws NoSuchAlgorithmException, InvalidKeySpecException, SQLException {
 		
-		return c;
+		String statement = "UPDATE customer SET phone = '" + c.getPhone() + "', " +
+							"email = '" + c.getEmail() + "', " + 
+							"name = '" + c.getName() + "', " + 
+							"adress = '" + c.getAddress() + "', " + 
+							"isActive = " + c.isActive() + 
+							" WHERE id='" + id + "';";
+		System.out.println(statement);
+		PreparedStatement query = connection.prepareStatement(statement);
+		query.executeUpdate(statement);
+		
 	}
 	
 	@Override
