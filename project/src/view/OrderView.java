@@ -5,6 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -13,34 +14,49 @@ import javafx.scene.text.Text;
 
 public class OrderView implements IView {
 
+	public String[] buttons = {"List", "Create", "Edit", "Remove"};
 	
-	Pane pane = new Pane();
+	public String[] getButtons() {
+		return buttons;
+	}
 
-	@Override
-	public Node getCenter() {
+	public GridPane getPane(int value) {
+		GridPane pane = new GridPane();
+		pane.getChildren().clear();
+		switch(value) {
+		case 0:
+		case 1:
+		case 2:
+		case 3:
+			pane.getChildren().add(new Text("Order" + buttons[value]));
+			break;
+		default:
+			break;
+		}
+		
 		return pane;
 	}
 
-	@Override
-	public VBox getBar() {
-		String[] buttonText = {"List", "Create", "Edit", "Remove"};
-		Button[] buttons = new Button[buttonText.length];
+	public BorderPane getCenter() {
+		BorderPane bp = new BorderPane();
+		bp.setLeft(getBar(bp));
+		bp.setCenter(getPane(0));
+		return bp;
+	}
+	
+	public VBox getBar(BorderPane bp) {
+		Button[] buttons = new Button[this.buttons.length];
 		VBox vBox = new VBox();
-		for(int i = 0; i < buttons.length; i++) {
-			buttons[i] = new Button(buttonText[i]);
-			buttons[i].prefWidthProperty().bind(vBox.widthProperty());
-		}
 		
-		buttons[0].setOnAction(e -> {
-			listPane();
-		});
+		for(int i = 0; i < buttons.length; i++) {
+			buttons[i] = new Button(this.buttons[i]);
+			int index = i;
+			buttons[i].setOnAction(e -> {
+				bp.setCenter(getPane(index));
+			});
+		}
 		
 		vBox.getChildren().addAll(buttons);
 		return vBox;
-	}
-	
-	private void listPane() {
-		pane.getChildren().clear();
-		pane.getChildren().add(new Text("list"));
 	}
 }
