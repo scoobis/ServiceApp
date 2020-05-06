@@ -1,9 +1,9 @@
 package view;
 
-import javafx.stage.Stage;
+import javafx.scene.Node;
+import javafx.scene.layout.VBox;
 
 public interface IView {
-	
-	public void render(Stage s);
-	
+	public Node getCenter();
+	public VBox getBar();
 }
