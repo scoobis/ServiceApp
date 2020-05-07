@@ -26,6 +26,7 @@ public class MainView {
 	private final int WIDTH = 1800;
 	private final int HEIGHT = 900;
 	private String[] menuText = {"Home", "Order", "Service", "Customer", "Employee"};
+	private int lastPressed = 0;
 	
 	HomeView hv = new HomeView();
 	OrderView ov = new OrderView();
@@ -43,20 +44,37 @@ public class MainView {
 			menuButtons[i] = new Button(menuText[i]);
 		}
 		
+		
+		
 		menuButtons[0].setOnAction(e -> {
-			pane.setCenter(hv.getCenter());
+			if(lastPressed != 0) {
+				pane.setCenter(hv.getCenter());
+				lastPressed = 0;
+			}
 		});
 		menuButtons[1].setOnAction(e -> {
-			pane.setCenter(ov.getCenter());
+			if(lastPressed != 1) {
+				pane.setCenter(ov.getCenter());
+				lastPressed = 1;
+			}
 		});
 		menuButtons[2].setOnAction(e -> {
-			pane.setCenter(sv.getCenter());
+			if(lastPressed != 2) {
+				pane.setCenter(sv.getCenter());
+				lastPressed = 2;
+			}
 		});
 		menuButtons[3].setOnAction(e -> {
-			pane.setCenter(cv.getCenter());
+			if(lastPressed != 3) {
+				pane.setCenter(cv.getCenter());
+				lastPressed = 3;
+			}
 		});
 		menuButtons[4].setOnAction(e -> {
-			pane.setCenter(ev.getCenter());
+			if(lastPressed != 4) {
+				pane.setCenter(ev.getCenter());
+				lastPressed = 4;
+			}
 		});
 		
 		ToolBar toolBarH = new ToolBar();
