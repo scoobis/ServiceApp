@@ -5,6 +5,8 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -27,16 +29,24 @@ public class OrderView implements IView {
 		GridPane pane = new GridPane();
 		pane.getChildren().clear();
 		switch(value) {
-		case 0:
-		case 1:
-		case 2:
-		case 3:
-			pane.getChildren().add(new Text("Order" + buttons[value]));
+		case 0: //List
+			pane.getChildren().add(new Text("Order " + buttons[value]));
+			break;
+		case 1: //Create
+			Button create = new Button("Create");
+			TextField orderField = new TextField();
+			pane.add(orderField, 0, 1);
+			pane.add(new Label("Order: "), 0, 0);
+			pane.add(create, 0, 6);
+			break;
+		case 2: //Edit
+		case 3: //Remove
+			pane.getChildren().add(new Text("Order " + buttons[value]));
 			break;
 		default:
 			break;
 		}
-		
+		pane.getStylesheets().add("view/css/pane.css");
 		return pane;
 	}
 

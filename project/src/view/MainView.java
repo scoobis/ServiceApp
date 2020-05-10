@@ -44,8 +44,6 @@ public class MainView {
 			menuButtons[i] = new Button(menuText[i]);
 		}
 		
-		
-		
 		menuButtons[0].setOnAction(e -> {
 			if(lastPressed != 0) {
 				pane.setCenter(hv.getCenter());
@@ -90,26 +88,4 @@ public class MainView {
 	    window.setTitle("Service Application");
 	    window.show();
 	}
-	
-	/*
-	private VBox setupVBox(VBox vb, Pane pane) {
-		VBox v = new VBox(vb);
-		vb.setAlignment(Pos.CENTER);
-		vb.setPadding(new Insets(0, 0, HEIGHT / 1.75, 0));
-		for(Node n : vb.getChildren())
-			if(n instanceof Button) {
-				((Button) n).prefHeightProperty().bind(v.heightProperty());
-			}
-		
-		v.prefWidthProperty().bind(pane.widthProperty().multiply(.15));
-		v.prefHeightProperty().bind(pane.heightProperty());
-		
-		Text text = new Text("Text here ...");
-		text.setFont(new Font(20));
-		v.getChildren().add(text);
-		
-		v.getStylesheets().add("view/css/buttons.css");
-		return v;
-	}
-	*/
 }

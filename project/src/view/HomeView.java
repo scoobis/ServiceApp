@@ -9,7 +9,9 @@ import javafx.scene.text.Text;
 
 public class HomeView implements IView {
 
-public String[] buttons = {"Homepage", "Information", "Help", "Settings"};
+	public String[] buttons = {"Homepage", "Information", "Settings", "Help"};
+	
+	private int lastPressed = 0;
 	
 	public String[] getButtons() {
 		return buttons;
@@ -23,12 +25,12 @@ public String[] buttons = {"Homepage", "Information", "Help", "Settings"};
 		case 1:
 		case 2:
 		case 3:
-			pane.getChildren().add(new Text("Home" + buttons[value]));
+			pane.getChildren().add(new Text("Home " + buttons[value]));
 			break;
 		default:
 			break;
 		}
-		
+		pane.getStylesheets().add("view/css/pane.css");
 		return pane;
 	}
 
@@ -43,15 +45,24 @@ public String[] buttons = {"Homepage", "Information", "Help", "Settings"};
 		Button[] buttons = new Button[this.buttons.length];
 		VBox vBox = new VBox();
 		
+		vBox.prefWidthProperty().bind(bp.widthProperty().multiply(.15));
+		
 		for(int i = 0; i < buttons.length; i++) {
 			buttons[i] = new Button(this.buttons[i]);
+			buttons[i].prefWidthProperty().bind(vBox.widthProperty());
+			buttons[i].prefHeightProperty().bind(vBox.heightProperty().multiply(.1));
+			
 			int index = i;
 			buttons[i].setOnAction(e -> {
-				bp.setCenter(getPane(index));
+				if(lastPressed != index) {
+					bp.setCenter(getPane(index));
+					lastPressed = index;
+				}
 			});
 		}
 		
 		vBox.getChildren().addAll(buttons);
+		vBox.getStylesheets().addAll("view/css/buttons.css", "view/css/bar.css");
 		return vBox;
 	}
 	
