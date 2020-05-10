@@ -11,6 +11,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Observer;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+
 import model.Customer;
 
 public class CustomerDatabase implements DatabaseConnector, DatabaseObserver, DatabaseSubject {
@@ -53,9 +55,7 @@ public class CustomerDatabase implements DatabaseConnector, DatabaseObserver, Da
 		return c;
 	}
 	
-	public void saveCustomer(Customer customer) throws InvalidKeySpecException {
-		try {
-			
+	public void saveCustomer(Customer customer) throws InvalidKeySpecException, SQLException {
 			PreparedStatement query;
 			String statement = "INSERT INTO customer (phone, email, name, adress, isActive)"
 						+ " VALUES ('" + customer.getPhone() + 
@@ -67,8 +67,6 @@ public class CustomerDatabase implements DatabaseConnector, DatabaseObserver, Da
 			System.out.println(statement);
 			query = connection.prepareStatement(statement);
 			query.executeUpdate();
-			
-		} catch (SQLException e1) { e1.printStackTrace(); }
 	}
 	
 	// TODO
@@ -98,6 +96,18 @@ public class CustomerDatabase implements DatabaseConnector, DatabaseObserver, Da
 		PreparedStatement query = connection.prepareStatement(statement);
 		query.executeUpdate(statement);
 		
+	}
+	
+	/**
+	 * Function used for testing to reset the auto_increment values after each test
+	 * @throws SQLException 
+	 */
+	
+	public void reset() throws SQLException {
+		String statement = "TRUNCATE TABLE customer";
+		PreparedStatement query = connection.prepareStatement(statement);
+		query.executeUpdate();
+
 	}
 	
 	@Override

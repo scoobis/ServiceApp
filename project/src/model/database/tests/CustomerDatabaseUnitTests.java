@@ -7,44 +7,60 @@ import java.security.spec.InvalidKeySpecException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.junit.Before;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 import model.Customer;
 import model.database.CustomerDatabase;
 
 class CustomerDatabaseUnitTests {
 
-	CustomerDatabase db = new CustomerDatabase();
+	CustomerDatabase db = new CustomerDatabase();;
+	Customer c;
+	Customer b;
+	
+	public void init() {
+		// Use Mockito here
+		c = new Customer();
+		c.setActive(true);
+		c.setAddress("Street 1");
+		c.setEmail("tom@email.com");
+		c.setName("TOM");
+		c.setPhone("123");
+		
+		
+		b = new Customer();
+		b.setActive(true);
+		b.setAddress("Street 2");
+		b.setEmail("john@email.com");
+		b.setName("JOHN");
+		b.setPhone("456");
+	}
 	
 	@Test
-	void mainTest() throws InvalidKeySpecException, SQLException, NoSuchAlgorithmException {
-		Customer c = new Customer();
-		c.setActive(true);
-		c.setAddress("Råstensvägen 2");
-		c.setEmail("je223gs@lnu.se");
-		c.setName("Jesper Eriksson");
-		c.setPhone("1234457");
+	void saveCustomerSuccess() throws InvalidKeySpecException, SQLException {
+			this.init();
 		
+			db.saveCustomer(c);
+			assertEquals("TOM", db.getCustomerById("1").getName()); // Checks that the retrieved name is equal to the saved one.
+			db.reset();
 		
-		Customer b = new Customer();
-		b.setActive(true);
-		b.setAddress("Råstensvägen 3");
-		b.setEmail("je223gs@lnu.se2");
-		b.setName("Jesper Eriksson2");
-		b.setPhone("12344572");
+	}
+	
+	@Test
+	void saveCustomerFailure() throws InvalidKeySpecException, SQLException {
+		this.init();
 		
-		db.saveCustomer(c);
-		ArrayList<Customer> customers = db.getAllCustomers();
+		assertThrows(MySQLIntegrityConstraintViolationException.class, () -> {
+			db.saveCustomer(c);
+			db.saveCustomer(c);
+		});
 		
-		// Checking that the data in the database is correct to what we entered.
-		assertEquals("Jesper Eriksson", customers.get(0).getName());
-		
-		db.editCustomer("10", b);
-		
-		ArrayList<Customer> customers2 = db.getAllCustomers();
-		assertEquals("Jesper Eriksson2", customers2.get(0).getName());
-		
-		db.deleteCustomer("10");
+		db.reset();
 	}
 	
 	// @Test
