@@ -1,6 +1,9 @@
 import javafx.application.Application;
 import javafx.stage.Stage;
+import model.Employee;
+import model.User;
 import model.database.CreateTables;
+import model.database.EmployeeDatabase;
 
 
 public class Main extends Application {
@@ -10,6 +13,9 @@ public class Main extends Application {
 		// Create new tables (if it does not already exists)
 		CreateTables newTables = new CreateTables();
 		newTables.executeCreateAllTables();
+		
+		//EmployeeDatabase d = new EmployeeDatabase();
+		//System.out.println(d.getAllEmployees("company"));
 		
 		launch(args);
 	}
