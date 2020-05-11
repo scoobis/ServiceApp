@@ -90,6 +90,13 @@ public class ServiceDatabase implements DatabaseConnector, DatabaseObserver, Dat
 		query.executeUpdate();
 	}
 	
+	public void reset() throws SQLException {
+		String statement = "TRUNCATE TABLE service";
+		PreparedStatement query = connection.prepareStatement(statement);
+		query.executeUpdate();
+
+	}
+	
 	@Override
 	public void attach(Observer o) {
 		

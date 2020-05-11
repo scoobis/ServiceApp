@@ -15,35 +15,74 @@ class ServiceDatabaseUnitTests {
 
 	Service a;
 	Service b;
-	ServiceDatabase db;
+	ServiceDatabase db = new ServiceDatabase();
 	
-	@Test
-	void mainTest() throws SQLException {
-		db = new ServiceDatabase();
+	
+	public void init() throws SQLException {
+		
+		db.reset();
+		
 		a = new Service();
 		
-		a.setCompany("Däckbyte AB");
-		a.setDescription("Vi byter dina däck.");
+		a.setCompany("Company A");
+		a.setDescription("Service A");
 		a.setPrice(100);
-		a.setTitle("Däckbyte");
+		a.setTitle("Service A");
 		
 	    b = new Service();
 		
-		b.setCompany("Däckbyte ABC");
-		b.setDescription("Vi byter dina däck.");
+		b.setCompany("Company B");
+		b.setDescription("Service B");
 		b.setPrice(100);
-		b.setTitle("Däckbyte");
-		
-		db.saveService(a); // SAVE WORKS
-		
-		// db.deleteService("1"); // DELETE WORKS
-		
-		// db.editService("1", b); // EDIT WORKS
-		
-		ArrayList<Service> services = db.getAllServices();
-		assertEquals("Däckbyte AB", services.get(0).getCompany());
-		
-		
+		b.setTitle("Service B");
 	}
+	
+	@Test
+	void testGetAllServices() throws SQLException {
+		this.init();
+		
+		db.saveService(a);
+		db.saveService(b);
+		
+		ArrayList<Service> testArr = db.getAllServices();
+		
+		assertEquals(a.getCompany(), testArr.get(0).getCompany());
+		assertEquals(b.getCompany(), testArr.get(1).getCompany());
+		
+		db.reset();
+	}
+	
+	@Test
+	void testSaveServiceSuccess() throws SQLException {
+		this.init();
+
+		db.saveService(a);
+		
+		assertEquals(a.getCompany(), db.getServiceById("1").getCompany());
+		
+		db.reset();
+	}
+	
+	@Test
+	void testDeleteService() throws SQLException {
+		this.init();
+
+		db.saveService(a);
+		
+		assertEquals(1, db.deleteService("1"));
+		
+		db.reset();
+	}
+	
+	@Test
+	void testEditService() throws SQLException {
+		this.init();
+		
+		db.saveService(a);
+		db.editService("1", b);
+		
+		assertEquals(b.getCompany(), db.getServiceById("1").getCompany());
+	}
+
 
 }

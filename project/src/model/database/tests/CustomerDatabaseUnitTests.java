@@ -100,6 +100,7 @@ class CustomerDatabaseUnitTests {
 			db.editCustomer("1", c); // Invalid ID 2.
 		});
 		
+		
 		db.reset();
 	
 	}
@@ -118,12 +119,5 @@ class CustomerDatabaseUnitTests {
 		
 		db.reset();
 	}
-	
-	// @Test
-	/* void checkThatGetCustomerByIdReturnsACustomer(Customer c) throws InvalidKeySpecException, SQLException {
-		db.saveCustomer(c);
-		Customer dummy = new Customer();
-		assertEquals(dummy.getClass(), db.getCustomerById(c.getId()).getClass());
-	}*/
 
 }
