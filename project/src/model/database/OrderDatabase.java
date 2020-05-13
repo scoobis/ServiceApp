@@ -94,6 +94,13 @@ public class OrderDatabase implements DatabaseConnector, DatabaseObserver, Datab
 		} catch (SQLException e1) { e1.printStackTrace(); }
 	}
 	
+	public void reset() throws SQLException {
+		String statement = "TRUNCATE TABLE orders";
+		PreparedStatement query = connection.prepareStatement(statement);
+		query.executeUpdate();
+
+	}
+	
 	@Override
 	public void attach(Observer o) {
 		

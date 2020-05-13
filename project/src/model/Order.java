@@ -10,6 +10,7 @@ public class Order {
 	private int price;
 	private boolean completed;
 	
+	// Company ID String?
 	public Order(int customerId, int serviceId, String date, int shopId, String companyId, int price, boolean completed) {
 		this.customerId = customerId;
 		this.serviceId = serviceId;

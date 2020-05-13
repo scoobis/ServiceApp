@@ -13,6 +13,15 @@ import model.Employee;
 import model.SuperAdmin;
 import model.User;
 
+
+/**
+ * TODO:
+ * Admins:
+ * - "Name" variable isn't in the "admin" database but in the admin class.
+ * Users:
+ * - "Name" variable isn't in the "user" database but in the user class.
+ */
+
 public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, DatabaseSubject {
 	
 	private Connection connection = DatabaseConnector.getConnection();
@@ -200,6 +209,31 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 			e1.printStackTrace(); 
 		}
 		return false;
+	}
+	
+	// TEST METHODS
+	
+	public void resetAdmin() throws SQLException {
+		System.out.println("HELLO");
+		String statement = "TRUNCATE TABLE admin";
+		System.out.println(statement);
+		PreparedStatement query = connection.prepareStatement(statement);
+		query.executeUpdate();
+
+	}
+	
+	public void resetSuperAdmin() throws SQLException {
+		String statement = "TRUNCATE TABLE super_admin";
+		PreparedStatement query = connection.prepareStatement(statement);
+		query.executeUpdate();
+
+	}
+	
+	public void resetUser() throws SQLException {
+		String statement = "TRUNCATE TABLE user";
+		PreparedStatement query = connection.prepareStatement(statement);
+		query.executeUpdate();
+
 	}
 	
 	@Override

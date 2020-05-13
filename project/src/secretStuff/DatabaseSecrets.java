@@ -1,4 +1,4 @@
-package model.database;
+package secretStuff;
 
 public class DatabaseSecrets {
 	private String url = "jdbc:mysql://161.35.39.128:3306/service";
