@@ -1,84 +1,134 @@
 package view;
 
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.EventType;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
-public class OrderView implements IView {
-
-	public String[] buttons = {"List", "Create", "Edit", "Remove"};
+public class OrderView {
 	
-	private int lastPressed = 0;
+	private ArrayList<Cell> list = new ArrayList<Cell>();
+	private ObservableList<Cell> obsList;
+	private ListView<Cell> lv;
 	
-	public String[] getButtons() {
-		return buttons;
-	}
-
-	public GridPane getPane(int value) {
-		GridPane pane = new GridPane();
-		pane.getChildren().clear();
-		switch(value) {
-		case 0: //List
-			pane.getChildren().add(new Text("Order " + buttons[value]));
-			break;
-		case 1: //Create
-			Button create = new Button("Create");
-			TextField orderField = new TextField();
-			pane.add(orderField, 0, 1);
-			pane.add(new Label("Order: "), 0, 0);
-			pane.add(create, 0, 6);
-			break;
-		case 2: //Edit
-		case 3: //Remove
-			pane.getChildren().add(new Text("Order " + buttons[value]));
-			break;
-		default:
-			break;
-		}
-		pane.getStylesheets().add("view/css/pane.css");
-		return pane;
-	}
-
 	public BorderPane getCenter() {
+		for(int i = 0; i < 100; i++) {
+			list.add(new Cell(i, ThreadLocalRandom.current().nextInt(0, Integer.MAX_VALUE)));
+		}
+		
 		BorderPane bp = new BorderPane();
-		bp.setLeft(getBar(bp));
-		bp.setCenter(getPane(0));
+		
+		lv = new ListView<Cell>();
+		obsList = FXCollections.observableList(list);
+		lv.setItems(obsList);
+		bp.setCenter(lv);
 		return bp;
 	}
 	
-	public VBox getBar(BorderPane bp) {
-		Button[] buttons = new Button[this.buttons.length];
-		VBox vBox = new VBox();
+	private void edit(Cell cell) {
+		GridPane pane = new GridPane();
+		Button button = new Button("Edit");
+		TextField orderIdField = new TextField("" + cell.getOrderId());
+		TextField customerIdField = new TextField("" + cell.getCustomerId());
 		
-		vBox.prefWidthProperty().bind(bp.widthProperty().multiply(.15));
+		pane.add(new Label("Order Id:"), 0, 0);
+		pane.add(orderIdField, 0, 1);
+		pane.add(new Label("Customer Id:"), 0, 2);
+		pane.add(customerIdField, 0, 3);
+		pane.add(button, 0, 4);
 		
-		for(int i = 0; i < buttons.length; i++) {
-			buttons[i] = new Button(this.buttons[i]);
-			buttons[i].prefWidthProperty().bind(vBox.widthProperty());
-			buttons[i].prefHeightProperty().bind(vBox.heightProperty().multiply(.1));
+		Scene scene = new Scene(pane, 300, 600);
+		Stage window = new Stage();
+		
+		button.setOnAction(e -> {
+			Cell newCell = new Cell(Integer.parseInt(orderIdField.getText()), Integer.parseInt(customerIdField.getText()));
+			obsList.set(obsList.indexOf(cell), newCell);
+			lv.refresh();
+			window.close();
+			//TODO Call controller here
+		});
+		window.setTitle("Edit " + cell.getOrderId());
+		window.setScene(scene);
+		window.show();
+	}
+	
+	private void remove(Cell cell) {
+		//TODO Call controller here
+		obsList.remove(cell);
+	}
+	
+	public class Cell extends HBox {
+		Label orderLabel = new Label();
+		Label customerLabel = new Label();
+		Button editButton = new Button("Edit");
+		Button removeButton = new Button("Remove");
+		int orderId;
+		int customerId;
+		
+		Cell(int orderId, int customerId) {
+			super();
 			
-			int index = i;
-			buttons[i].setOnAction(e -> {
-				if(lastPressed != index) {
-					bp.setCenter(getPane(index));
-					lastPressed = index;
-				}
+			this.orderId = orderId;
+			orderLabel.setText("Order id: " + orderId);
+			orderLabel.setMaxWidth(Double.MAX_VALUE);
+			HBox.setHgrow(orderLabel, Priority.ALWAYS);
+			
+			this.customerId = customerId;
+			customerLabel.setText("Customer id: " + customerId);
+			customerLabel.setMaxWidth(Double.MAX_VALUE);
+			HBox.setHgrow(customerLabel, Priority.ALWAYS);
+			
+			editButton.setOnAction(e -> {
+				edit(this);
 			});
+			
+			removeButton.setOnAction(e -> {
+				remove(this);
+			});
+			
+			this.getChildren().addAll(orderLabel, customerLabel, editButton, removeButton);
+		}
+
+		public int getOrderId() {
+			return orderId;
+		}
+
+		public void setOrderId(int orderId) {
+			this.orderId = orderId;
+		}
+
+		public int getCustomerId() {
+			return customerId;
+		}
+
+		public void setCustomerId(int customerId) {
+			this.customerId = customerId;
 		}
 		
-		vBox.getChildren().addAll(buttons);
-		vBox.getStylesheets().addAll("view/css/buttons.css", "view/css/bar.css");
-		return vBox;
 	}
 }

@@ -25,7 +25,9 @@ public class ServiceView implements IView {
 		GridPane pane = new GridPane();
 		pane.getChildren().clear();
 		switch(value) {
-		case 0:
+		case 0: //list
+			pane.getChildren().add(new Text("fjnds"));
+			break;
 		case 1:
 		case 2:
 		case 3:
