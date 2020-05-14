@@ -121,26 +121,30 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 		}
 	}
 	
-	public void saveEmployee(Employee e) {
-			if (e.getStatus().equalsIgnoreCase("Admin") || e.getStatus().equalsIgnoreCase("User")) { saveUserOrAdmin(e); }
-			else { saveSuperAdmin(e);  }
+	public boolean saveEmployee(Employee e) {
+			if (e instanceof Admin || e instanceof User) { return saveUserOrAdmin(e); }
+			else { return saveSuperAdmin(e);  }
 	}
 	
-	private void saveUserOrAdmin(Employee e) {
+	private boolean saveUserOrAdmin(Employee e) {
 		try {
 		PreparedStatement create;
-		create = connection.prepareStatement("INSERT INTO "+ e.getStatus().toLowerCase() +" (company_name, shop_id, phone, email, status, password)"
+		create = connection.prepareStatement("INSERT INTO "+ e.getStatus() +" (company_name, shop_id, phone, email, status, password)"
 				+ "VALUES ('"+ e.getCompanyName() +"', "
 				+ e.getShopId()+","
 				+ "'"+ e.getPhone()+"',"
 				+ "'"+ e.getEmail() +"', "
-				+ "'"+ e.getStatus().toLowerCase() +"', "
-				+ "'password')"); // TODO Add password??
+				+ "'"+ e.getStatus() +"', "
+				+ "'"+ e.getPassword() +"')");
 			create.executeUpdate();
-			} catch (SQLException e1) { e1.printStackTrace(); }
+			return true;
+			} catch (SQLException e1) {
+				e1.printStackTrace(); 
+				return false;
+				}
 	}
 	
-	private void saveSuperAdmin(Employee e) {
+	private boolean saveSuperAdmin(Employee e) {
 		try {
 		PreparedStatement create;
 		create = connection.prepareStatement("INSERT INTO super_admin (company_name, phone, email, status, password)"
@@ -148,50 +152,64 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 				+ "'"+ e.getPhone() +"',"
 				+ "'"+ e.getEmail() +"', "
 				+ "'super_admin', "
-				+ "'password')"); // TODO Add password??
+				+ "'"+ e.getPassword() +"')");
 			create.executeUpdate();
-			} catch (SQLException e1) { e1.printStackTrace(); }
+			return true;
+			} catch (SQLException e1) { 
+				e1.printStackTrace();
+				return false;
+				}
 	}
 	
-	public void deleteEmployee(int id, String status) {
-		//test
+	public boolean deleteEmployee(Employee e) {
 		try {
 			PreparedStatement create;
-			create = connection.prepareStatement("DELETE FROM "+ status.toLowerCase() +" WHERE id = " + id + ";");
+			create = connection.prepareStatement("DELETE FROM "+ e.getStatus() +" WHERE id = " + e.getId() + ";");
 			create.executeUpdate();
-			} catch (SQLException e1) { e1.printStackTrace(); }
+			return true;
+			} catch (SQLException e1) { 
+				e1.printStackTrace();
+				return false;
+				}
 	}
 	
-	public void editEmployee(int id, Employee e) {
-			if (e.getStatus().equalsIgnoreCase("super_admin")) { editSuperAdmin(id, e); } 
-			else { editAdminOrUser(id, e); }
+	public boolean editEmployee(Employee e) {
+			if (e instanceof SuperAdmin) { return editSuperAdmin(e); } 
+			else { return editAdminOrUser(e); }
 	}
 	
-	private void editSuperAdmin(int id, Employee e) {
+	private boolean editSuperAdmin(Employee e) {
 		PreparedStatement edit;
 		try {
-		edit = connection.prepareStatement("UPDATE " + e.getStatus().toLowerCase()
+		edit = connection.prepareStatement("UPDATE super_admin"
 				+ " SET phone = '"+ e.getPhone() +"', "
 				+ "email = '"+ e.getEmail() +"' "
-				+ "WHERE id = "+ id +";");
+				+ "WHERE id = "+ e.getId() +";");
 		edit.executeUpdate();
-		} catch (SQLException e1) { e1.printStackTrace(); }
+		return true;
+		} catch (SQLException e1) { 
+			e1.printStackTrace(); 
+			return false;
+			}
 	}
 	
-	private void editAdminOrUser(int id, Employee e) {
+	private boolean editAdminOrUser(Employee e) {
 		PreparedStatement edit;
 		try {
-		edit = connection.prepareStatement("UPDATE " + e.getStatus().toLowerCase()
+		edit = connection.prepareStatement("UPDATE " + e.getStatus()
 				+ " SET shop_id = "+ e.getShopId() +","
 				+ "phone = '"+ e.getPhone() +"', "
 				+ "email = '"+ e.getEmail() +"' "
-				+ "WHERE id = "+ id +";");
+				+ "WHERE id = "+ e.getId() +";");
 		edit.executeUpdate();
-		} catch (SQLException e1) { e1.printStackTrace(); }
+		return true;
+		} catch (SQLException e1) { 
+			e1.printStackTrace();
+			return false;
+			}
 	}
 	
 	public boolean validateEmployee(String email, String password) {
-		System.out.println(email);
 		try {
 		String statement = "SELECT password FROM user WHERE email = '" + email + "' "
 				+ "UNION "
@@ -203,7 +221,7 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 		ResultSet result = query.executeQuery(statement);
 		
 		while(result.next()) {
-			return password.equalsIgnoreCase(result.getString("password"));	
+			if (password.equalsIgnoreCase(result.getString("password"))) return true;	
 		}
 		} catch (SQLException e1) { 
 			e1.printStackTrace(); 

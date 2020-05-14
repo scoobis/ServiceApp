@@ -8,10 +8,13 @@ public class SuperAdmin extends Employee {
 		this.setEmail(email);
 		this.setName(name);
 		this.setCompanyName(company);
-		this.setStatus(status);
+		
+		this.setStatus("super_admin");
 	}
 	
-	public SuperAdmin() {}
+	public SuperAdmin() {
+		this.setStatus("super_admin");
+	}
 	
 	public User createUser() {
 		return null;
