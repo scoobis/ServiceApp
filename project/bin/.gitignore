@@ -1,4 +1,4 @@
-/Main.class
+ *.class
 /controller/
 /model/
 /security/
