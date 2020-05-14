@@ -2,8 +2,8 @@ package model;
 
 public class User extends Employee {
 
-	public User(String phone, String email, String name, String company, int shopId, int id) {
-		super(phone, email, name, company, shopId);
+	public User(String phone, String email, String name, String company, int shopId, String password) {
+		super(phone, email, name, company, shopId, password);
 		
 		this.setStatus("user");
 		

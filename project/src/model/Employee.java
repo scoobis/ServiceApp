@@ -8,17 +8,19 @@ public abstract class Employee {
 	private String company;
 	private int shopId;
 	private int id;
+	private String password;
 	
 	private String status;
 	
 	
-	public Employee(String phone, String email, String name, String company, int shopId) {
+	public Employee(String phone, String email, String name, String company, int shopId, String password) {
 		this.status = "";
 		this.phone = phone;
 		this.email = email;
 		this.name = name;
 		this.company = company;
 		this.shopId = shopId;
+		this.password = password;
 	}
 	
 	public Employee() { this.status = ""; }
@@ -61,6 +63,8 @@ public abstract class Employee {
 	
 	public int getId() { return id; }
 	
+	public String getPassword() { return password; }
+	
 	public void setName(String name) { this.name = name; }
 	
 	public void setEmail(String email) { this.email = email; }
@@ -74,5 +78,7 @@ public abstract class Employee {
 	public void setShopId(int shopId) { this.shopId = shopId; }
 	
 	public void setId(int id) { this.id = id; }
+	
+	public void setPassword(String password) { this.password = password; }
 	
 }

@@ -2,8 +2,8 @@ package model;
 
 public class Admin extends Employee {
 
-	public Admin(String phone, String email, String name, String company, int shopId, int id) {
-		super(phone, email, name, company, shopId);
+	public Admin(String phone, String email, String name, String company, int shopId, String password) {
+		super(phone, email, name, company, shopId, password);
 		
 		this.setStatus("admin");
 	}

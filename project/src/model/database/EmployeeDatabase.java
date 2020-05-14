@@ -126,7 +126,7 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 				+ "'"+ e.getPhone()+"',"
 				+ "'"+ e.getEmail() +"', "
 				+ "'"+ e.getStatus() +"', "
-				+ "'password')"); // TODO Add password??
+				+ "'"+ e.getPassword() +"')");
 			create.executeUpdate();
 			return true;
 			} catch (SQLException e1) {
@@ -143,7 +143,7 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 				+ "'"+ e.getPhone() +"',"
 				+ "'"+ e.getEmail() +"', "
 				+ "'super_admin', "
-				+ "'password')"); // TODO Add password??
+				+ "'"+ e.getPassword() +"')");
 			create.executeUpdate();
 			return true;
 			} catch (SQLException e1) { 
@@ -212,7 +212,7 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 		ResultSet result = query.executeQuery(statement);
 		
 		while(result.next()) {
-			return password.equalsIgnoreCase(result.getString("password"));	
+			if (password.equalsIgnoreCase(result.getString("password"))) return true;	
 		}
 		} catch (SQLException e1) { 
 			e1.printStackTrace(); 
