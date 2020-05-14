@@ -1,6 +1,7 @@
 import javafx.application.Application;
 import javafx.stage.Stage;
 import model.database.CreateTables;
+import view.LoginView;
 
 
 public class Main extends Application {
@@ -18,5 +19,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		//MainView mainView = new MainView();
 		//mainView.render(primaryStage);
+		LoginView log = new LoginView();
+		log.render(primaryStage);
 	}
 }

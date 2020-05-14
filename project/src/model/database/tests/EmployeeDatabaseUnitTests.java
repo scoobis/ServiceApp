@@ -22,7 +22,6 @@ class EmployeeDatabaseUnitTests {
 		Employee user1 = new User();
 		Employee user2 = new User();
 		
-		user1.
 	}
 
 }
