@@ -1,29 +1,23 @@
 package model.database;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Observer;
-
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 import model.Customer;
 
-public class CustomerDatabase implements DatabaseConnector, DatabaseObserver, DatabaseSubject {
+public class CustomerDatabase implements DatabaseConnector {
 
 	Connection connection = DatabaseConnector.getConnection();
 	
-	public ArrayList<Customer> getAllCustomers() throws SQLException {
+	public ArrayList<Customer> getAllCustomers(String companyName) throws SQLException {
 		
 		ArrayList<Customer> customers = new ArrayList<>();
 		
-		String statement = "SELECT id FROM customer ";
+		String statement = "SELECT id FROM customer WHERE company_name = " + companyName;
 		Statement query = connection.prepareStatement(statement);
 		ResultSet result = query.executeQuery(statement);
 		
@@ -55,46 +49,61 @@ public class CustomerDatabase implements DatabaseConnector, DatabaseObserver, Da
 		return c;
 	}
 	
-	public void saveCustomer(Customer customer) throws InvalidKeySpecException, SQLException {
+	public boolean saveCustomer(Customer customer) {
+		try {
 			PreparedStatement query;
-			String statement = "INSERT INTO customer (phone, email, name, adress, isActive)"
+			String statement = "INSERT INTO customer (phone, email, name, adress, company_name, isActive)"
 						+ " VALUES ('" + customer.getPhone() + 
 						"', '" + customer.getEmail() + 
 						"', '" + customer.getName()+ 
-						"', '" + customer.getAddress() + 
+						"', '" + customer.getAddress() +
+						"', '" + customer.getCompany() + 
 						"'," +  customer.isActive() +")";
 			
 			System.out.println(statement);
 			query = connection.prepareStatement(statement);
 			query.executeUpdate();
+			return true;
+		} catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
 	// TODO
 	// * Use TRUNCATE TABLE instead of DELETE, this will update the ids which makes it easier to test.
-	public int deleteCustomer(String id) {
+	public boolean deleteCustomer(int id) {
 		String statement = "DELETE FROM customer WHERE id=" + id + ";";
 		Statement query;
 		try {
 			query = connection.prepareStatement(statement);
 			query.executeUpdate(statement);
-			return 1;
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return 0;
+			return false;
 		}
 	}
 	
-	public void editCustomer(String id, Customer c) throws NoSuchAlgorithmException, InvalidKeySpecException, SQLException {
-		
+	public boolean editCustomer(Customer c) {
+	
+		try {
 		String statement = "UPDATE customer SET phone = '" + c.getPhone() + "', " +
 							"email = '" + c.getEmail() + "', " + 
 							"name = '" + c.getName() + "', " + 
 							"adress = '" + c.getAddress() + "', " + 
 							"isActive = " + c.isActive() + 
-							" WHERE id='" + id + "';";
+							" WHERE id='" + c.getId() + "';";
 		System.out.println(statement);
 		PreparedStatement query = connection.prepareStatement(statement);
 		query.executeUpdate(statement);
+		
+		return true;
+		
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 		
 	}
 	
@@ -108,21 +117,6 @@ public class CustomerDatabase implements DatabaseConnector, DatabaseObserver, Da
 		PreparedStatement query = connection.prepareStatement(statement);
 		query.executeUpdate();
 
-	}
-	
-	@Override
-	public void attach(Observer o) {
-		
-	}
-
-	@Override
-	public void detach(Observer o) {
-		
-	}
-
-	@Override
-	public void update() {
-		
 	}
 
 }

@@ -1,5 +1,2 @@
- *.class
-/controller/
 /model/
-/security/
-/view/
+/controller/

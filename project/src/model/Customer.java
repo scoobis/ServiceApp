@@ -3,12 +3,13 @@ package model;
 public class Customer {
 
 	private String email;
-	private String id;
+	private int id;
 	private String phone;
 	private String name;
 	private String address;
 	private String password; // Added password to customer, when registering a customer use the PasswordHashed to immidietaly hash the password.
 	private boolean active;
+	private String company;
 	
 	public String getEmail() {
 		return email;
@@ -18,17 +19,19 @@ public class Customer {
 		this.email = email;
 	}
 	
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 	
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	
 	public String getAddress() {
 		return address;
 	}
+	
+	public String getCompany() { return company; }
 	
 	public void setAddress(String address) {
 		this.address = address;
@@ -64,6 +67,10 @@ public class Customer {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public void setCompany(String comapny) {
+		this.company = comapny;
 	}
 	
 }

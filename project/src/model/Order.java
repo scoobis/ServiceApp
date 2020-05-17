@@ -9,9 +9,10 @@ public class Order {
 	private String companyId;
 	private int price;
 	private boolean completed;
+	private int id;
 	
 	// Company ID String?
-	public Order(int customerId, int serviceId, String date, int shopId, String companyId, int price, boolean completed) {
+	public Order(int customerId, int serviceId, String date, int shopId, String companyId, int price, boolean completed, int id) {
 		this.customerId = customerId;
 		this.serviceId = serviceId;
 		this.date = date;
@@ -19,6 +20,7 @@ public class Order {
 		this.companyId = companyId;
 		this.price = price;
 		this.completed = completed;
+		this.id = id;
 	}
 	
 	public Order() {}
@@ -38,6 +40,8 @@ public class Order {
 	public void setCompanyId(String companyId) { this.companyId = companyId; }
 	public void setPrice(int price) { this.price = price; }
 	public void setCompleted(boolean completed) { this.completed = completed; }
+	public void setId(int id) { this.id = id; }
+
 	
 	public int getCustomerId() { return customerId; }
 	public int getServiceId() { return serviceId; }
@@ -46,5 +50,6 @@ public class Order {
 	public String getCompanyId() { return companyId; }
 	public int getPrice() { return price; }
 	public boolean getCompleted() { return completed; }
+	public int getId( ) { return id; }
 	
 }
