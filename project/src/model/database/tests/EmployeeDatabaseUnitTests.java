@@ -93,7 +93,7 @@ class EmployeeDatabaseUnitTests {
 		
 		db.saveEmployee(user1);
 		
-		db.editEmployee(1, user2);
+		db.editEmployee(user2);
 		
 		assertEquals(user2.getName(), db.getUserById(1).getName());
 	}

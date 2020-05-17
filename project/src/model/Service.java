@@ -5,9 +5,16 @@ public class Service {
 	private String company;
 	private String title;
 	private String description;
-	private String id;
-	private int price;
+	private int id;
+	private float price;
 	
+	public Service(String company, String title, String description, float price) {
+		this.company = company;
+		this.title = title;
+		this.description = description;
+		this.price = price;
+		
+	}
 	public String getCompany() {
 		return company;
 	}
@@ -26,16 +33,16 @@ public class Service {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public String getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
-	public int getPrice() {
+	public float getPrice() {
 		return price;
 	}
-	public void setPrice(int price) {
+	public void setPrice(float price) {
 		this.price = price;
 	}
 	
