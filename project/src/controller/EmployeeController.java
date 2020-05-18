@@ -14,10 +14,14 @@ import view.LoginView;
 
 public class EmployeeController {
 
-	private IView view;
-	private Employee employee;
-	private EmployeeDatabase data = new EmployeeDatabase();
-	private PasswordHasher hash = new PasswordHasher();
+	private EmployeeDatabase employeeDatabase;
+	private PasswordHasher hash;
+	
+	public EmployeeController() {
+		employeeDatabase = new EmployeeDatabase();
+		hash = new PasswordHasher();
+	}
+	
 	public void newSuperAdmin(ArrayList<String> list) {
 		Employee superAdmin = new SuperAdmin();
 		superAdmin.setEmail(list.get(0));
@@ -31,52 +35,110 @@ public class EmployeeController {
 			e.printStackTrace();
 		}
 		superAdmin.setStatus("Super_Admin");
-		data.saveEmployee(superAdmin);
+		employeeDatabase.saveEmployee(superAdmin);
 	}
 	
-	public void newUser(User u) {
-		
-	}
+	public String newUser(String name, String email, String phone, String password, String companyName, int shopId) {
+        if (name.equalsIgnoreCase("")) return "Name is missing!";
+        else if (email.equalsIgnoreCase("")) return "Email is missing!";
+        else if (phone.equalsIgnoreCase("")) return "Phone is missing!";
+        else if (shopId == 0 || companyName.equalsIgnoreCase("")) return "ops, something went wrong!";
+        else  if (password.equalsIgnoreCase("")) return "Password is missing!";
+
+        User user = new User();
+        user.setName(name);
+        user.setEmail(email);
+        user.setPhone(phone);
+        user.setPassword(password);
+        user.setCompanyName(companyName);
+        user.setShopId(shopId);
+
+        boolean isSaved = employeeDatabase.saveEmployee(user);
+
+        if (!isSaved) return "ops, something went wrong!";
+        return "User created successfully";
+    }
 	
-	public void deleteUser(String id) {
-		
-	}
+	public String deleteUser(Employee e) {
+        boolean isDeleted = employeeDatabase.deleteEmployee(e);
+
+        if (isDeleted) return e.getName() + " Deleted!";
+        return "ops, something went wrong!";
+    }
 	
-	public User editUser(String id, User newUser) {
-		return null;
-	}
+	public String editUser(String phone, String email, String name, int shopId, int id) {
+        if (name.equalsIgnoreCase("")) return "Name is missing!";
+        else if (email.equalsIgnoreCase("")) return "Email is missing!";
+        else if (phone.equalsIgnoreCase("")) return "Phone is missing!";
+        else if (shopId == 0) return "ops, something went wrong!";
+
+        User user = new User();
+        user.setPhone(phone);
+        user.setEmail(email);
+        user.setName(name);
+        user.setShopId(shopId);
+        user.setId(id);
+
+        boolean isEdited = employeeDatabase.editEmployee(user);
+        if (isEdited) return "User edited successfully";
+        return "Ops, something went wrong!";
+    }
 	
-	public void newAdmin(Admin a) {
-		
-	}
+	public String newAdmin(String name, String email, String phone, String password, String companyName, int shopId) {
+        if (name.equalsIgnoreCase("")) return "Name is missing!";
+        else if (email.equalsIgnoreCase("")) return "Email is missing!";
+        else if (phone.equalsIgnoreCase("")) return "Phone is missing!";
+        else if (shopId == 0 || companyName.equalsIgnoreCase("")) return "ops, something went wrong!";
+        else if (password.equalsIgnoreCase("")) return "Password is missing!";
+
+        Admin admin = new Admin();
+        admin.setName(name);
+        admin.setEmail(email);
+        admin.setPhone(phone);
+        admin.setPassword(password);
+        admin.setCompanyName(companyName);
+        admin.setShopId(shopId);
+
+        boolean isSaved = employeeDatabase.saveEmployee(admin);
+
+        if (!isSaved) return "ops, something went wrong!";
+        return "Admin created successfully";
+    }
 	
-	public void deleteAdmin(String id) {
-		
-	}
+	public String deleteAdmin(Employee e) {
+        boolean isDeleted = employeeDatabase.deleteEmployee(e);
+
+        if (isDeleted) return e.getName() + " Deleted!";
+        return "ops, something went wrong!";
+    }
 	
-	public Admin editAdmin(String id, Admin newAdmin) {
-		return null;
-	}
+	public String editAdmin(String phone, String email, String name, int shopId, int id) {
+        if (name.equalsIgnoreCase("")) return "Name is missing!";
+        else if (email.equalsIgnoreCase("")) return "Email is missing!";
+        else if (phone.equalsIgnoreCase("")) return "Phone is missing!";
+        else if (shopId == 0) return "ops, something went wrong!";
+
+        Admin admin = new Admin();
+        admin.setPhone(phone);
+        admin.setEmail(email);
+        admin.setName(name);
+        admin.setShopId(shopId);
+        admin.setId(id);
+
+        boolean isEdited = employeeDatabase.editEmployee(admin);
+        if (isEdited) return "Admin edited successfully";
+        return "Ops, something went wrong!";
+    }
 	
-	public void listEmployees() {
-		
-	}
+	public ArrayList<Employee> getAllEmployees(String companyName) {
+        return employeeDatabase.getAllEmployees(companyName);
+    }
 	
 	public boolean validateEmployee(Employee e, String p) {
 			return false;
 	}
 
 	public boolean login(String email, String password) {
-		//När password variablen är fixad
-		//String hashedPassword = hash.hashPassword(password);
-		/*if(data.validateEmployee(email, hashedPassword))
-			return true;
-		else
-			return false;	 */
-		
-		if(data.validateEmployee(email, password))
-			return true;
-		else
-			return false;
+		return false;
 	}	
 }

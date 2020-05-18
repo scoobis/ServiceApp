@@ -6,19 +6,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Observer;
-
-import model.Customer;
 import model.Service;
 
-public class ServiceDatabase implements DatabaseConnector, DatabaseObserver, DatabaseSubject {
+public class ServiceDatabase implements DatabaseConnector {
 	
 	Connection connection = DatabaseConnector.getConnection();
 
-	public ArrayList<Service> getAllServices() throws SQLException {
+	public ArrayList<Service> getAllServices(String companyName) throws SQLException {
 		ArrayList<Service> services = new ArrayList<>();
 		
-		String statement = "SELECT id FROM service ";
+		String statement = "SELECT id FROM service WHER company_name = " + companyName;
 		Statement query = connection.prepareStatement(statement);
 		ResultSet result = query.executeQuery(statement);
 	
@@ -47,7 +44,7 @@ public class ServiceDatabase implements DatabaseConnector, DatabaseObserver, Dat
 		return s;
 	}
 	
-	public void saveService(Service s) {
+	public boolean saveService(Service s) {
 		try {
 			
 			PreparedStatement query;
@@ -60,34 +57,48 @@ public class ServiceDatabase implements DatabaseConnector, DatabaseObserver, Dat
 			
 			query = connection.prepareStatement(statement);
 			query.executeUpdate();
+			return true;
 			
-		} catch (SQLException e1) { e1.printStackTrace(); }
+		} catch (SQLException e1) { 
+			e1.printStackTrace();
+			return false;
+			}
 	}
 	
-	public int deleteService(String id) {
+	public boolean deleteService(int id) {
 		String statement = "DELETE FROM service WHERE id=" + id + ";";
 		Statement query;
 		try {
 			query = connection.prepareStatement(statement);
 			query.executeUpdate(statement);
-			return 1;
+			
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return 0;
+			return false;
 		}
 	}
 	
-	public void editService(String id, Service s) throws SQLException {
+	public boolean editService(Service s) {
+		
+		try {
 		PreparedStatement query;
 		String statement = "UPDATE service SET " +
 				"company_name = '" + s.getCompany() + "', " + 
 				"title = '" + s.getTitle() + "', " + 
 				"description = '" + s.getDescription() + "', " + 
 				"price = " + s.getPrice() + 
-				" WHERE id='" + id + "';";
+				" WHERE id='" + s.getId() + "';";
 		System.out.println(statement);
 		query = connection.prepareStatement(statement);
 		query.executeUpdate();
+		
+		return true;
+		
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
 	public void reset() throws SQLException {
@@ -96,20 +107,4 @@ public class ServiceDatabase implements DatabaseConnector, DatabaseObserver, Dat
 		query.executeUpdate();
 
 	}
-	
-	@Override
-	public void attach(Observer o) {
-		
-	}
-
-	@Override
-	public void detach(Observer o) {
-		
-	}
-
-	@Override
-	public void update() {
-		
-	}
-
 }

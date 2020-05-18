@@ -6,10 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Observer;
 import model.Order;
 
-public class OrderDatabase implements DatabaseConnector, DatabaseObserver, DatabaseSubject {
+public class OrderDatabase implements DatabaseConnector {
 	
 	private Connection connection = DatabaseConnector.getConnection();
 
@@ -55,7 +54,7 @@ public class OrderDatabase implements DatabaseConnector, DatabaseObserver, Datab
 		return null;
 	}
 	
-	public void saveOrder(Order o) {
+	public boolean saveOrder(Order o) {
 		PreparedStatement create;
 		try {
 			create = connection.prepareStatement("INSERT INTO orders (service_id, customer_id, shop_id, company_name, price, completed, date)"
@@ -67,18 +66,30 @@ public class OrderDatabase implements DatabaseConnector, DatabaseObserver, Datab
 						+ o.getCompleted() +","
 						+ "'"+ o.getDate() +"');");
 			create.executeUpdate();
-		} catch (SQLException e1) { e1.printStackTrace(); }
+			
+			return true;
+			
+		} catch (SQLException e1) {
+			e1.printStackTrace(); 
+			return false;
+			}
 	}
 	
-	public void deleteOrder(int id) {
+	public boolean deleteOrder(int id) {
 		PreparedStatement create;
 		try {
 			create = connection.prepareStatement("DELETE FROM orders WHERE id = " + id + ";");
 			create.executeUpdate();
-		} catch (SQLException e1) { e1.printStackTrace(); }
+			
+			return true;
+			
+		} catch (SQLException e1) { 
+			e1.printStackTrace();
+			return false;
+			}
 	}
 	
-	public void editOrder(int id, Order o) {
+	public boolean editOrder(Order o) {
 		PreparedStatement edit;
 		try {
 			edit = connection.prepareStatement("UPDATE orders "
@@ -89,9 +100,47 @@ public class OrderDatabase implements DatabaseConnector, DatabaseObserver, Datab
 						+ "price = "+ o.getPrice() +","
 						+ "completed = "+ o.getCompleted() +","
 						+ "date = '"+ o.getDate() +"' "
+						+ "WHERE id = "+ o.getId() +";");
+			edit.executeUpdate();
+			
+			return true;
+			
+		} catch (SQLException e1) { 
+			e1.printStackTrace();
+			return false;
+			}
+	}
+	
+	public boolean setOrderToCompleted(int id) {
+		PreparedStatement edit;
+		try {
+			edit = connection.prepareStatement("UPDATE orders "
+						+ "SET completed = true, "
 						+ "WHERE id = "+ id +";");
 			edit.executeUpdate();
-		} catch (SQLException e1) { e1.printStackTrace(); }
+			
+			return true;
+			
+		} catch (SQLException e1) { 
+			e1.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean setOrderToUnCompleted(int id) {
+		PreparedStatement edit;
+		try {
+			edit = connection.prepareStatement("UPDATE orders "
+						+ "SET completed = false, "
+						+ "WHERE id = "+ id +";");
+			edit.executeUpdate();
+			
+			return true;
+			
+		} catch (SQLException e1) { 
+			e1.printStackTrace();
+			return false;
+		}
 	}
 	
 	public void reset() throws SQLException {
@@ -99,21 +148,6 @@ public class OrderDatabase implements DatabaseConnector, DatabaseObserver, Datab
 		PreparedStatement query = connection.prepareStatement(statement);
 		query.executeUpdate();
 
-	}
-	
-	@Override
-	public void attach(Observer o) {
-		
-	}
-
-	@Override
-	public void detach(Observer o) {
-		
-	}
-
-	@Override
-	public void update() {
-		
 	}
 
 }
