@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import model.Customer;
 import model.User;
 import model.database.CustomerDatabase;
-import view.IView;
 
 public class CustomerController {
 
@@ -22,16 +21,9 @@ public class CustomerController {
         else if (phone.equalsIgnoreCase("")) return "Phone is missing!";
         else if (address.equalsIgnoreCase("")) return "Address is missing!";
 
-        Customer customer = new Customer();
-        customer.setName(name);
-        customer.setEmail(email);
-        customer.setPhone(phone);
-        customer.setAddress(address);
-        customer.setCompany(company);
-        
-        customer.setActive(true); // always true?
+        User user = new User();
 
-        boolean customerIsSaved = customerDatabase.saveCustomer(customer);
+        boolean customerIsSaved = customerDatabase.saveCustomer(user.createCustomer(name, email, phone, address, company));
 
         if (!customerIsSaved) return "ops, something went wrong!";
 
@@ -52,16 +44,11 @@ public class CustomerController {
         else if (address.equalsIgnoreCase("")) return "Address is missing!";
         else if (isActive == true || isActive == false) return  "Active status is missing!";
 
-        Customer customer = new Customer();
-        customer.setName(name);
-        customer.setEmail(email);
-        customer.setPhone(phone);
-        customer.setAddress(address);
-        customer.setId(id);
+        User user = new User();
 
-        boolean isDeleted = customerDatabase.editCustomer(customer);
+        boolean isDeleted = customerDatabase.editCustomer(user.editCustomer(name, email, phone, address, isActive, id));
 
-        if (isDeleted) return customer.getName() + " Edited!";
+        if (isDeleted) return name + " Edited!";
         return "ops, something went wrong!";
 
     }

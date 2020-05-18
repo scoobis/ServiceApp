@@ -6,11 +6,8 @@ import java.util.ArrayList;
 import model.Admin;
 import model.Employee;
 import model.SuperAdmin;
-import model.User;
 import model.database.EmployeeDatabase;
 import security.PasswordHasher;
-import view.IView;
-import view.LoginView;
 
 public class EmployeeController {
 
@@ -43,17 +40,11 @@ public class EmployeeController {
         else if (email.equalsIgnoreCase("")) return "Email is missing!";
         else if (phone.equalsIgnoreCase("")) return "Phone is missing!";
         else if (shopId == 0 || companyName.equalsIgnoreCase("")) return "ops, something went wrong!";
-        else  if (password.equalsIgnoreCase("")) return "Password is missing!";
+        else if (password.equalsIgnoreCase("")) return "Password is missing!";
+        
+        Admin admin = new Admin();
 
-        User user = new User();
-        user.setName(name);
-        user.setEmail(email);
-        user.setPhone(phone);
-        user.setPassword(password);
-        user.setCompanyName(companyName);
-        user.setShopId(shopId);
-
-        boolean isSaved = employeeDatabase.saveEmployee(user);
+        boolean isSaved = employeeDatabase.saveEmployee(admin.createUser(name, email, phone, password, companyName, shopId));
 
         if (!isSaved) return "ops, something went wrong!";
         return "User created successfully";
@@ -71,15 +62,10 @@ public class EmployeeController {
         else if (email.equalsIgnoreCase("")) return "Email is missing!";
         else if (phone.equalsIgnoreCase("")) return "Phone is missing!";
         else if (shopId == 0) return "ops, something went wrong!";
+        
+        Admin admin = new Admin();
 
-        User user = new User();
-        user.setPhone(phone);
-        user.setEmail(email);
-        user.setName(name);
-        user.setShopId(shopId);
-        user.setId(id);
-
-        boolean isEdited = employeeDatabase.editEmployee(user);
+        boolean isEdited = employeeDatabase.editEmployee(admin.editUser(phone, email, name, shopId, id));
         if (isEdited) return "User edited successfully";
         return "Ops, something went wrong!";
     }
@@ -91,15 +77,9 @@ public class EmployeeController {
         else if (shopId == 0 || companyName.equalsIgnoreCase("")) return "ops, something went wrong!";
         else if (password.equalsIgnoreCase("")) return "Password is missing!";
 
-        Admin admin = new Admin();
-        admin.setName(name);
-        admin.setEmail(email);
-        admin.setPhone(phone);
-        admin.setPassword(password);
-        admin.setCompanyName(companyName);
-        admin.setShopId(shopId);
+        SuperAdmin superAdmin = new SuperAdmin();
 
-        boolean isSaved = employeeDatabase.saveEmployee(admin);
+        boolean isSaved = employeeDatabase.saveEmployee(superAdmin.createAdmin(name, email, phone, password, companyName, shopId));
 
         if (!isSaved) return "ops, something went wrong!";
         return "Admin created successfully";
@@ -117,15 +97,10 @@ public class EmployeeController {
         else if (email.equalsIgnoreCase("")) return "Email is missing!";
         else if (phone.equalsIgnoreCase("")) return "Phone is missing!";
         else if (shopId == 0) return "ops, something went wrong!";
+        
+        SuperAdmin superAdmin = new SuperAdmin();
 
-        Admin admin = new Admin();
-        admin.setPhone(phone);
-        admin.setEmail(email);
-        admin.setName(name);
-        admin.setShopId(shopId);
-        admin.setId(id);
-
-        boolean isEdited = employeeDatabase.editEmployee(admin);
+        boolean isEdited = employeeDatabase.editEmployee(superAdmin.editAdmin(phone, email, name, shopId, id));
         if (isEdited) return "Admin edited successfully";
         return "Ops, something went wrong!";
     }

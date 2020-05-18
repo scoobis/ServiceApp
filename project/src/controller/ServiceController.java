@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import model.Service;
+import model.SuperAdmin;
 import model.database.ServiceDatabase;
 
 public class ServiceController {
@@ -21,13 +22,9 @@ public class ServiceController {
     	else if (price == -1 ) return "Price is missing!"; // make sure to pass in -1 if price is missing
     	else if (description.equalsIgnoreCase("")) return "Description is missing!";
 
-        Service service = new Service();
-        service.setCompany(companyName);
-        service.setTitle(title);
-        service.setDescription(description);
-        service.setPrice(price);
+        SuperAdmin superAdmin = new SuperAdmin();
 
-        boolean isSaved = serviceDatabase.saveService(service);
+        boolean isSaved = serviceDatabase.saveService(superAdmin.createService(companyName, title, description, price));
 
         if (!isSaved) return "ops, something went wrong!";
         return "Service saved successfully";
@@ -43,14 +40,9 @@ public class ServiceController {
         if (description.equalsIgnoreCase("")) return "Description is missing!";
         if (companyName.equalsIgnoreCase("")) return "Ops, something went wrong!";
 
-        Service service = new Service();
-        service.setCompany(companyName);
-        service.setTitle(title);
-        service.setDescription(description);
-        service.setPrice(price);
-        service.setId(id);
-
-        boolean isEdited = serviceDatabase.editService(service);
+        SuperAdmin superAdmin = new SuperAdmin();
+        
+        boolean isEdited = serviceDatabase.editService(superAdmin.editService(companyName, title, description, price, id));
         if (isEdited) return "Service edited successfully";
         return "Ops, something went wrong!";
     }

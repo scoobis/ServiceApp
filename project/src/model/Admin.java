@@ -12,16 +12,31 @@ public class Admin extends Employee {
 		this.setStatus("admin");
 	}
 	
-	public User createUser() {
-		return null;
+	public User createUser(String name, String email, String phone, String password, String companyName, int shopId) {
+		User user = new User();
+        user.setName(name);
+        user.setEmail(email);
+        user.setPhone(phone);
+        user.setPassword(password);
+        user.setCompanyName(companyName);
+        user.setShopId(shopId);
+        
+        return user;
 	}
 	
 	public int removeUser() {
 		return -1;
 	}
 	
-	public User editUser() {
-		return null;
+	public User editUser(String phone, String email, String name, int shopId, int id) {
+		User user = new User();
+        user.setPhone(phone);
+        user.setEmail(email);
+        user.setName(name);
+        user.setShopId(shopId);
+        user.setId(id);
+        
+        return user;
 	}
 	
 	public Service createService() {
