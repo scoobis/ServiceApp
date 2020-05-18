@@ -1,6 +1,16 @@
 package model;
 
-public abstract class Employee {
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public abstract class Employee implements Serializable {
 
 	private String phone;
 	private String email;
@@ -21,6 +31,35 @@ public abstract class Employee {
 		this.company = company;
 		this.shopId = shopId;
 		this.password = password;
+	}
+	
+	public static Employee getLoggedInUser() throws IOException, ClassNotFoundException {
+		File f = new File("LoggedInUser.txt");
+		FileInputStream fis = new FileInputStream(f);
+		ObjectInputStream ois = new ObjectInputStream(fis);
+		Employee e = (Employee) ois.readObject();
+		ois.close();
+		return e;
+		
+	}
+	
+	/**
+	 * Saves the Logged in Employee Object to a text file located in model.
+	 * Each time we log in a Employee the .txt file will be overwritten which means there can only be one logged in Employee at the time.
+	 * When we check log in credentials and get the Employee back, we can simply use Employee.logInUser(TheUserWeGotBack).
+	 * And everytime we need to check for status we simply use Employee.getLoggedInUser();
+	 * 
+	 * + The solotuion doesnt require any further dependencies because its located as a static funtion in Employee.
+	 * - We need to make sure the text isn't vulnerable for modification by any user. If so a User could rewrite her/himself to be a Admin.
+	 * @param e
+	 * @throws IOException
+	 */
+	public static void logInUser(Employee e) throws IOException {
+		File f = new File("LoggedInUser.txt");
+		FileOutputStream fos = new FileOutputStream(f);
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+		oos.writeObject(e);
+		oos.close();
 	}
 	
 	public Employee() { this.status = ""; }
