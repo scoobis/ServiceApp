@@ -13,7 +13,6 @@ public class Service {
 		this.title = title;
 		this.description = description;
 		this.price = price;
-		
 	}
 	public String getCompany() {
 		return company;
