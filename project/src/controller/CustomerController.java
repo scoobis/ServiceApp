@@ -4,22 +4,24 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import model.Customer;
+import model.InputValidator;
 import model.User;
 import model.database.CustomerDatabase;
 
 public class CustomerController {
 
     private CustomerDatabase customerDatabase;
+    private InputValidator inputValidator;
 
     public CustomerController() {
         customerDatabase = new CustomerDatabase();
+        inputValidator = new InputValidator();
     }
 
     public String createCustomer(String name, String email, String phone, String address, String company) {
-        if (name.equalsIgnoreCase("")) return "Name is missing!";
-        else if (email.equalsIgnoreCase("")) return "Email is missing!";
-        else if (phone.equalsIgnoreCase("")) return "Phone is missing!";
-        else if (address.equalsIgnoreCase("")) return "Address is missing!";
+    	String inputCheck = inputValidator.validateCustomerInput(name, email, phone, address, 1); // id as stub
+
+    	if (!inputCheck.equalsIgnoreCase("")) return inputCheck;
 
         User user = new User();
 
@@ -38,12 +40,10 @@ public class CustomerController {
     }
 
     public String editCustomer(String name, String email, String phone, String address, boolean isActive, int id) {
-        if (name.equalsIgnoreCase("")) return "Name is missing!";
-        else if (email.equalsIgnoreCase("")) return "Email is missing!";
-        else if (phone.equalsIgnoreCase("")) return "Phone is missing!";
-        else if (address.equalsIgnoreCase("")) return "Address is missing!";
-        else if (isActive == true || isActive == false) return  "Active status is missing!";
+    	String inputCheck = inputValidator.validateCustomerInput(name, email, phone, address, id);
 
+    	if (!inputCheck.equalsIgnoreCase("")) return inputCheck;
+    	
         User user = new User();
 
         boolean isDeleted = customerDatabase.editCustomer(user.editCustomer(name, email, phone, address, isActive, id));

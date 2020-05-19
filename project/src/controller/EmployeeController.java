@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import model.Admin;
 import model.Employee;
+import model.InputValidator;
 import model.SuperAdmin;
 import model.database.EmployeeDatabase;
 import security.PasswordHasher;
@@ -14,9 +15,13 @@ public class EmployeeController {
 	private EmployeeDatabase employeeDatabase;
 	private PasswordHasher hash;
 	
+	private InputValidator inputValidator;
+	
 	public EmployeeController() {
 		employeeDatabase = new EmployeeDatabase();
 		hash = new PasswordHasher();
+		
+		inputValidator = new InputValidator();
 	}
 	
 	public void newSuperAdmin(ArrayList<String> list) {
@@ -36,11 +41,10 @@ public class EmployeeController {
 	}
 	
 	public String newUser(String name, String email, String phone, String password, String companyName, int shopId) {
-        if (name.equalsIgnoreCase("")) return "Name is missing!";
-        else if (email.equalsIgnoreCase("")) return "Email is missing!";
-        else if (phone.equalsIgnoreCase("")) return "Phone is missing!";
-        else if (shopId == 0 || companyName.equalsIgnoreCase("")) return "ops, something went wrong!";
-        else if (password.equalsIgnoreCase("")) return "Password is missing!";
+		
+		String inputCheck = inputValidator.validateEmployeeInput(name, email, phone, password, companyName, shopId, 1); // id as stub
+
+    	if (!inputCheck.equalsIgnoreCase("")) return inputCheck;
         
         Admin admin = new Admin();
 
@@ -51,6 +55,7 @@ public class EmployeeController {
     }
 	
 	public String deleteUser(Employee e) {
+		
         boolean isDeleted = employeeDatabase.deleteEmployee(e);
 
         if (isDeleted) return e.getName() + " Deleted!";
@@ -58,10 +63,10 @@ public class EmployeeController {
     }
 	
 	public String editUser(String phone, String email, String name, int shopId, int id) {
-        if (name.equalsIgnoreCase("")) return "Name is missing!";
-        else if (email.equalsIgnoreCase("")) return "Email is missing!";
-        else if (phone.equalsIgnoreCase("")) return "Phone is missing!";
-        else if (shopId == 0) return "ops, something went wrong!";
+		
+		String inputCheck = inputValidator.validateEmployeeInput(name, email, phone, "password", "company", shopId, id); // password and company as stub
+
+    	if (!inputCheck.equalsIgnoreCase("")) return inputCheck;
         
         Admin admin = new Admin();
 
@@ -71,11 +76,10 @@ public class EmployeeController {
     }
 	
 	public String newAdmin(String name, String email, String phone, String password, String companyName, int shopId) {
-        if (name.equalsIgnoreCase("")) return "Name is missing!";
-        else if (email.equalsIgnoreCase("")) return "Email is missing!";
-        else if (phone.equalsIgnoreCase("")) return "Phone is missing!";
-        else if (shopId == 0 || companyName.equalsIgnoreCase("")) return "ops, something went wrong!";
-        else if (password.equalsIgnoreCase("")) return "Password is missing!";
+		
+		String inputCheck = inputValidator.validateEmployeeInput(name, email, phone, password, companyName, shopId, 1); // id as stub
+
+    	if (!inputCheck.equalsIgnoreCase("")) return inputCheck;
 
         SuperAdmin superAdmin = new SuperAdmin();
 
@@ -86,6 +90,7 @@ public class EmployeeController {
     }
 	
 	public String deleteAdmin(Employee e) {
+		
         boolean isDeleted = employeeDatabase.deleteEmployee(e);
 
         if (isDeleted) return e.getName() + " Deleted!";
@@ -93,10 +98,10 @@ public class EmployeeController {
     }
 	
 	public String editAdmin(String phone, String email, String name, int shopId, int id) {
-        if (name.equalsIgnoreCase("")) return "Name is missing!";
-        else if (email.equalsIgnoreCase("")) return "Email is missing!";
-        else if (phone.equalsIgnoreCase("")) return "Phone is missing!";
-        else if (shopId == 0) return "ops, something went wrong!";
+		
+		String inputCheck = inputValidator.validateEmployeeInput(name, email, phone, "password", "company", shopId, id); // password and company as stub
+
+    	if (!inputCheck.equalsIgnoreCase("")) return inputCheck;
         
         SuperAdmin superAdmin = new SuperAdmin();
 
