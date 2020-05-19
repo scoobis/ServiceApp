@@ -8,6 +8,7 @@ import model.Order;
 
 class OrderTests {
 
+	//TODO NEEDS FIXING
 	Order order = new Order(1, 1, "testString", 1, 1, 300, false);
 	@Test
 	void testCustomerIdGetter() {

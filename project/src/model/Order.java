@@ -11,8 +11,9 @@ public class Order {
 	private boolean completed;
 	private int id;
 	
+	//TODO How are id's supposed to be created? Like should the employee just set the number or should it be generated automatically?
 	// Company ID String?
-	public Order(int customerId, int serviceId, String date, int shopId, String companyId, int price, boolean completed, int id) {
+	public Order(int customerId, int serviceId, String date, int shopId, int companyId, float price, boolean completed, int id) {
 		this.customerId = customerId;
 		this.serviceId = serviceId;
 		this.date = date;

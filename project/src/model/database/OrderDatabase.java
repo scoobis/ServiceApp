@@ -43,7 +43,7 @@ public class OrderDatabase implements DatabaseConnector {
 				order.setServiceId(result.getInt("service_id"));
 				order.setCustomerId(result.getInt("customer_id"));
 				order.setShopId(result.getInt("shop_id"));
-				order.setCompanyId(result.getString("company_name"));
+				order.setCompanyId(result.getInt("company_name"));
 				order.setPrice(result.getInt("price"));
 				order.setCompleted(result.getBoolean("completed"));
 				order.setDate(result.getString("date"));

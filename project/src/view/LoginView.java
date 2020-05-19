@@ -15,9 +15,9 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 
-public class LoginView implements IView{
+public class LoginView {
 	Stage window = null;
-	IView mainView = new MainView();
+	MainView mainView = new MainView();
 	IView regView = new RegisterView();
 	EmployeeController cont = new EmployeeController();
 	
@@ -59,8 +59,9 @@ public class LoginView implements IView{
 		pane.add(boxButtons, 0, 5);
 		
 		buttons[0].setOnAction(e -> {
-			
-			if(cont.login(usernameField.getText(), passwordField.getText()))
+			//TODO Just temporary to work on views
+			mainView.render(stage);
+			/*if(cont.login(usernameField.getText(), passwordField.getText()))
 				mainView.render(stage);
 			else {
 				Alert alert = new Alert(AlertType.INFORMATION);
@@ -68,7 +69,7 @@ public class LoginView implements IView{
 				alert.setHeaderText(null);
 				alert.setContentText("Wrong password");
 				alert.showAndWait();
-			}
+			}*/
 				
 		});
 		

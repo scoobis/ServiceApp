@@ -7,7 +7,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-public class HomeView implements IView {
+public class HomeView {
 
 	public String[] buttons = {"Homepage", "Information", "Settings", "Help"};
 	

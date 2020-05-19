@@ -81,7 +81,7 @@ public class RegisterView implements IView{
 					list.add(passwordField.getText());
 					EmployeeController cont = new EmployeeController();
 					cont.newSuperAdmin(list);
-					IView log = new LoginView();
+					LoginView log = new LoginView();
 					log.render(window);
 				}
 				else {
@@ -95,7 +95,7 @@ public class RegisterView implements IView{
 		
 		
 		backButton.setOnAction(e -> {
-			IView log = new LoginView();
+			LoginView log = new LoginView();
 			log.render(window);
 		});
 		

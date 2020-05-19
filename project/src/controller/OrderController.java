@@ -13,13 +13,13 @@ public class OrderController {
         orderDatabase = new OrderDatabase();
     }
 
-    public String newOrder(int customerId, int serviceId, String date, int shopId, String company, int price) {
+    public String newOrder(int customerId, int serviceId, String date, int shopId, int company, int price) {
         if (customerId <= 0) return "ops, something went wrong!";
         else if (serviceId <= 0) return "ops, something went wrong!";
         else if (date.equalsIgnoreCase("")) return "ops, something went wrong!";
         else if (shopId <= 0) return "ops, something went wrong!";
         else if (date.equalsIgnoreCase("")) return "ops, something went wrong!";
-        else if (company.equalsIgnoreCase("")) return "ops, something went wrong!";
+        else if (company <= 0) return "ops, something went wrong!";
 
         // TODO solve price is not set
         // TODO we need to get it from service, what's the best approach?

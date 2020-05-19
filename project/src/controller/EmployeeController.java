@@ -134,6 +134,7 @@ public class EmployeeController {
         return employeeDatabase.getAllEmployees(companyName);
     }
 	
+	//TODO These needs implementation
 	public boolean validateEmployee(Employee e, String p) {
 			return false;
 	}
