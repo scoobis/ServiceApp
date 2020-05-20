@@ -3,31 +3,29 @@ package controller;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import model.InputValidator;
 import model.Service;
+import model.SuperAdmin;
 import model.database.ServiceDatabase;
 
 public class ServiceController {
 
     private ServiceDatabase serviceDatabase;
+    private InputValidator inputValidator;
 
     public ServiceController() {
         serviceDatabase = new ServiceDatabase();
+        inputValidator = new InputValidator();
     }
 
     public String newService(String companyName, String title, String description, int price) {
+    	String inputCheck = inputValidator.validateServiceInput(companyName, title, description, price);
 
-    	if (companyName.equalsIgnoreCase("")) return "ops, something went wrong!";
-    	if (title.equalsIgnoreCase("")) return "Title is missing!";
-    	else if (price == -1 ) return "Price is missing!"; // make sure to pass in -1 if price is missing
-    	else if (description.equalsIgnoreCase("")) return "Description is missing!";
+    	if (!inputCheck.equalsIgnoreCase("")) return inputCheck;
+    	
+        SuperAdmin superAdmin = new SuperAdmin();
 
-        Service service = new Service();
-        service.setCompany(companyName);
-        service.setTitle(title);
-        service.setDescription(description);
-        service.setPrice(price);
-
-        boolean isSaved = serviceDatabase.saveService(service);
+        boolean isSaved = serviceDatabase.saveService(superAdmin.createService(companyName, title, description, price));
 
         if (!isSaved) return "ops, something went wrong!";
         return "Service saved successfully";
@@ -38,19 +36,15 @@ public class ServiceController {
     }
 
     public String editService(String companyName, String title, String description, int price, int id) {
-        if (title.equalsIgnoreCase("")) return "Title is missing!";
-        if (price == -1 ) return "Price is missing!"; // make sure to pass in -1 if price is missing
-        if (description.equalsIgnoreCase("")) return "Description is missing!";
-        if (companyName.equalsIgnoreCase("")) return "Ops, something went wrong!";
+    	if (id == 0) return "Ops, something went wrong!";
+    	
+    	String inputCheck = inputValidator.validateServiceInput(companyName, title, description, price);
 
-        Service service = new Service();
-        service.setCompany(companyName);
-        service.setTitle(title);
-        service.setDescription(description);
-        service.setPrice(price);
-        service.setId(id);
+    	if (!inputCheck.equalsIgnoreCase("")) return inputCheck;
 
-        boolean isEdited = serviceDatabase.editService(service);
+        SuperAdmin superAdmin = new SuperAdmin();
+        
+        boolean isEdited = serviceDatabase.editService(superAdmin.editService(companyName, title, description, price, id));
         if (isEdited) return "Service edited successfully";
         return "Ops, something went wrong!";
     }

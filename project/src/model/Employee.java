@@ -64,25 +64,58 @@ public abstract class Employee implements Serializable {
 	
 	public Employee() { this.status = ""; }
 	
-	public Order createOrder() {
-		return null;
+	public Order createOrder(int customerId, int serviceId, String date, int shopId, String company, int price) {
+		Order order = new Order();
+        order.setCustomerId(customerId);
+        order.setServiceId(serviceId);
+        order.setDate(date);
+        order.setShopId(shopId);
+        order.setCompanyId(company);
+        order.setPrice(price);
+        order.setCompleted(false);
+        
+        return order;
 	}
 	
 	public int removeOrder(String id) {
 		return -1;
 	}
 	
-	public Order editOrder(String id) {
-		return null;
+	public Order editOrder(int id, int customerId, int serviceId, int price) {
+		Order order = new Order();
+        order.setId(id);
+        order.setCustomerId(customerId);
+        order.setServiceId(serviceId);
+        order.setPrice(price);
+        
+        return order;
 	}
 	
-	public Customer createCustomer() {
-		return null;
+	public Customer createCustomer(String name, String email, String phone, String address, String company) {
+		Customer customer = new Customer();
+        customer.setName(name);
+        customer.setEmail(email);
+        customer.setPhone(phone);
+        customer.setAddress(address);
+        customer.setCompany(company);
+        
+        customer.setActive(true); // always true?
+        
+        return customer;
 	}
 	
 	public int removeCustomer(String id) { return -1; }
 	
-	public Customer editCustomer(String id) { return null; }
+	public Customer editCustomer(String name, String email, String phone, String address, boolean isActive, int id) { 
+	Customer customer = new Customer();
+    customer.setName(name);
+    customer.setEmail(email);
+    customer.setPhone(phone);
+    customer.setAddress(address);
+    customer.setId(id); 
+    
+    return customer;
+	}
 	
 	public int completeOrder(String orderId) { return -1; }
 	

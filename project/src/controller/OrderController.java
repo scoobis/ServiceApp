@@ -3,6 +3,7 @@ package controller;
 import java.util.ArrayList;
 
 import model.Order;
+import model.User;
 import model.database.OrderDatabase;
 
 public class OrderController {
@@ -24,16 +25,9 @@ public class OrderController {
         // TODO solve price is not set
         // TODO we need to get it from service, what's the best approach?
 
-        Order order = new Order();
-        order.setCustomerId(customerId);
-        order.setServiceId(serviceId);
-        order.setDate(date);
-        order.setShopId(shopId);
-        order.setCompanyId(company);
-        order.setPrice(price);
-        order.setCompleted(false);
+        User user = new User();
 
-        boolean isSaved = orderDatabase.saveOrder(order);
+        boolean isSaved = orderDatabase.saveOrder(user.createOrder(customerId, serviceId, date, shopId, company, price));
 
         if (!isSaved) return "ops, something went wrong!";
         return "Order saved successfully!";
@@ -51,13 +45,9 @@ public class OrderController {
         else if (serviceId <= 0) return "ops, something went wrong!";
         else if (id <= 0) return "ops, something went wrong!";
 
-        Order order = new Order();
-        order.setId(id);
-        order.setCustomerId(customerId);
-        order.setServiceId(serviceId);
-        order.setPrice(price);
+        User user = new User();
 
-        boolean isDeleted = orderDatabase.editOrder(order);
+        boolean isDeleted = orderDatabase.editOrder(user.editOrder(id, customerId, serviceId, price));
 
         if (isDeleted) return "Order Edited!";
         return "ops, something went wrong!";

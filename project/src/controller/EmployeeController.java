@@ -5,21 +5,23 @@ import java.util.ArrayList;
 
 import model.Admin;
 import model.Employee;
+import model.InputValidator;
 import model.SuperAdmin;
-import model.User;
 import model.database.EmployeeDatabase;
 import security.PasswordHasher;
-import view.IView;
-import view.LoginView;
 
 public class EmployeeController {
 
 	private EmployeeDatabase employeeDatabase;
 	private PasswordHasher hash;
 	
+	private InputValidator inputValidator;
+	
 	public EmployeeController() {
 		employeeDatabase = new EmployeeDatabase();
 		hash = new PasswordHasher();
+		
+		inputValidator = new InputValidator();
 	}
 	
 	public void newSuperAdmin(ArrayList<String> list) {
@@ -39,27 +41,21 @@ public class EmployeeController {
 	}
 	
 	public String newUser(String name, String email, String phone, String password, String companyName, int shopId) {
-        if (name.equalsIgnoreCase("")) return "Name is missing!";
-        else if (email.equalsIgnoreCase("")) return "Email is missing!";
-        else if (phone.equalsIgnoreCase("")) return "Phone is missing!";
-        else if (shopId == 0 || companyName.equalsIgnoreCase("")) return "ops, something went wrong!";
-        else  if (password.equalsIgnoreCase("")) return "Password is missing!";
+		
+		String inputCheck = inputValidator.validateEmployeeInput(name, email, phone, password, companyName, shopId, 1); // id as stub
 
-        User user = new User();
-        user.setName(name);
-        user.setEmail(email);
-        user.setPhone(phone);
-        user.setPassword(password);
-        user.setCompanyName(companyName);
-        user.setShopId(shopId);
+    	if (!inputCheck.equalsIgnoreCase("")) return inputCheck;
+        
+        Admin admin = new Admin();
 
-        boolean isSaved = employeeDatabase.saveEmployee(user);
+        boolean isSaved = employeeDatabase.saveEmployee(admin.createUser(name, email, phone, password, companyName, shopId));
 
         if (!isSaved) return "ops, something went wrong!";
         return "User created successfully";
     }
 	
 	public String deleteUser(Employee e) {
+		
         boolean isDeleted = employeeDatabase.deleteEmployee(e);
 
         if (isDeleted) return e.getName() + " Deleted!";
@@ -67,45 +63,34 @@ public class EmployeeController {
     }
 	
 	public String editUser(String phone, String email, String name, int shopId, int id) {
-        if (name.equalsIgnoreCase("")) return "Name is missing!";
-        else if (email.equalsIgnoreCase("")) return "Email is missing!";
-        else if (phone.equalsIgnoreCase("")) return "Phone is missing!";
-        else if (shopId == 0) return "ops, something went wrong!";
+		
+		String inputCheck = inputValidator.validateEmployeeInput(name, email, phone, "password", "company", shopId, id); // password and company as stub
 
-        User user = new User();
-        user.setPhone(phone);
-        user.setEmail(email);
-        user.setName(name);
-        user.setShopId(shopId);
-        user.setId(id);
+    	if (!inputCheck.equalsIgnoreCase("")) return inputCheck;
+        
+        Admin admin = new Admin();
 
-        boolean isEdited = employeeDatabase.editEmployee(user);
+        boolean isEdited = employeeDatabase.editEmployee(admin.editUser(phone, email, name, shopId, id));
         if (isEdited) return "User edited successfully";
         return "Ops, something went wrong!";
     }
 	
 	public String newAdmin(String name, String email, String phone, String password, String companyName, int shopId) {
-        if (name.equalsIgnoreCase("")) return "Name is missing!";
-        else if (email.equalsIgnoreCase("")) return "Email is missing!";
-        else if (phone.equalsIgnoreCase("")) return "Phone is missing!";
-        else if (shopId == 0 || companyName.equalsIgnoreCase("")) return "ops, something went wrong!";
-        else if (password.equalsIgnoreCase("")) return "Password is missing!";
+		
+		String inputCheck = inputValidator.validateEmployeeInput(name, email, phone, password, companyName, shopId, 1); // id as stub
 
-        Admin admin = new Admin();
-        admin.setName(name);
-        admin.setEmail(email);
-        admin.setPhone(phone);
-        admin.setPassword(password);
-        admin.setCompanyName(companyName);
-        admin.setShopId(shopId);
+    	if (!inputCheck.equalsIgnoreCase("")) return inputCheck;
 
-        boolean isSaved = employeeDatabase.saveEmployee(admin);
+        SuperAdmin superAdmin = new SuperAdmin();
+
+        boolean isSaved = employeeDatabase.saveEmployee(superAdmin.createAdmin(name, email, phone, password, companyName, shopId));
 
         if (!isSaved) return "ops, something went wrong!";
         return "Admin created successfully";
     }
 	
 	public String deleteAdmin(Employee e) {
+		
         boolean isDeleted = employeeDatabase.deleteEmployee(e);
 
         if (isDeleted) return e.getName() + " Deleted!";
@@ -113,19 +98,14 @@ public class EmployeeController {
     }
 	
 	public String editAdmin(String phone, String email, String name, int shopId, int id) {
-        if (name.equalsIgnoreCase("")) return "Name is missing!";
-        else if (email.equalsIgnoreCase("")) return "Email is missing!";
-        else if (phone.equalsIgnoreCase("")) return "Phone is missing!";
-        else if (shopId == 0) return "ops, something went wrong!";
+		
+		String inputCheck = inputValidator.validateEmployeeInput(name, email, phone, "password", "company", shopId, id); // password and company as stub
 
-        Admin admin = new Admin();
-        admin.setPhone(phone);
-        admin.setEmail(email);
-        admin.setName(name);
-        admin.setShopId(shopId);
-        admin.setId(id);
+    	if (!inputCheck.equalsIgnoreCase("")) return inputCheck;
+        
+        SuperAdmin superAdmin = new SuperAdmin();
 
-        boolean isEdited = employeeDatabase.editEmployee(admin);
+        boolean isEdited = employeeDatabase.editEmployee(superAdmin.editAdmin(phone, email, name, shopId, id));
         if (isEdited) return "Admin edited successfully";
         return "Ops, something went wrong!";
     }
