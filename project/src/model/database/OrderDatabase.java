@@ -47,6 +47,7 @@ public class OrderDatabase implements DatabaseConnector {
 				order.setPrice(result.getInt("price"));
 				order.setCompleted(result.getBoolean("completed"));
 				order.setDate(result.getString("date"));
+				order.setId(result.getInt("id"));
 			}
 			return order;
 			
@@ -95,11 +96,8 @@ public class OrderDatabase implements DatabaseConnector {
 			edit = connection.prepareStatement("UPDATE orders "
 						+ "SET service_id = "+ o.getServiceId() +", "
 						+ "customer_id = "+ o.getCustomerId() +","
-						+ "shop_id = " + o.getShopId() +","
-						+ "company_name = '"+ o.getcompanyName() +"', "
 						+ "price = "+ o.getPrice() +","
-						+ "completed = "+ o.getCompleted() +","
-						+ "date = '"+ o.getDate() +"' "
+						+ "completed = "+ o.getCompleted() +" "
 						+ "WHERE id = "+ o.getId() +";");
 			edit.executeUpdate();
 			

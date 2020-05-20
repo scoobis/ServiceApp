@@ -98,7 +98,7 @@ Connection connection = null;
 					+ "customer_id int, "
 					+ "shop_id int, "
 					+ "company_name varchar(64), "
-					+ "price int, "
+					+ "price DOUBLE, "
 					+ "completed boolean, "
 					+ "date varchar(75), "
 					+ "PRIMARY KEY(id))");
@@ -113,7 +113,7 @@ Connection connection = null;
 					+ "company_name varchar(64), "
 					+ "title varchar(64), "
 					+ "description TEXT, "
-					+ "price int, "
+					+ "price DOUBLE, "
 					+ "uniques boolean, "
 					+ "PRIMARY KEY(id))");
 			create.executeUpdate();

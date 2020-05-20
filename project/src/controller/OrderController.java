@@ -33,10 +33,10 @@ public class OrderController {
         return "Order saved successfully!";
     }
 
-    public String deleteOrder(Order order) {
-        boolean isDeleted = orderDatabase.deleteOrder(order.getId());
+    public String deleteOrder(int id) {
+        boolean isDeleted = orderDatabase.deleteOrder(id);
 
-        if (isDeleted) return order.getId() + " Deleted!";
+        if (isDeleted) return id + " Deleted!";
         return "ops, something went wrong!";
     }
 
