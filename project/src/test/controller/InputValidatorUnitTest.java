@@ -12,7 +12,7 @@ class inputValidator {
 	private InputValidator inputValidator;
 	
 	private String companyName, title, description;
-	private int price;
+	private double price;
 	
 	private String name, email, phone, address;
 	private int id;

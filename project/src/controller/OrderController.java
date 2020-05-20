@@ -14,7 +14,7 @@ public class OrderController {
         orderDatabase = new OrderDatabase();
     }
 
-    public String newOrder(int customerId, int serviceId, String date, int shopId, String company, int price) {
+    public String newOrder(int customerId, int serviceId, String date, int shopId, String company, double price) {
         if (customerId <= 0) return "ops, something went wrong!";
         else if (serviceId <= 0) return "ops, something went wrong!";
         else if (date.equalsIgnoreCase("")) return "ops, something went wrong!";
@@ -40,7 +40,7 @@ public class OrderController {
         return "ops, something went wrong!";
     }
 
-    public String editOrder(int id, int customerId, int serviceId, int price) {
+    public String editOrder(int id, int customerId, int serviceId, double price) {
         if (customerId <= 0) return "ops, something went wrong!";
         else if (serviceId <= 0) return "ops, something went wrong!";
         else if (id <= 0) return "ops, something went wrong!";

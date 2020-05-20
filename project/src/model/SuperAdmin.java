@@ -28,7 +28,7 @@ public class SuperAdmin extends Employee {
 		return null;
 	}
 	
-	public Service createService(String companyName, String title, String description, int price) {
+	public Service createService(String companyName, String title, String description, double price) {
 		Service service = new Service();
         service.setCompany(companyName);
         service.setTitle(title);
@@ -42,7 +42,7 @@ public class SuperAdmin extends Employee {
 		return -1;
 	}
 	
-	public Service editService(String companyName, String title, String description, int price, int id) {
+	public Service editService(String companyName, String title, String description, double price, int id) {
 		Service service = new Service();
         service.setCompany(companyName);
         service.setTitle(title);

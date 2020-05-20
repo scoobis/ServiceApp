@@ -2,7 +2,7 @@ package model;
 
 public class InputValidator {
 	
-	public String validateServiceInput(String companyName, String title, String description, int price) {
+	public String validateServiceInput(String companyName, String title, String description, double price) {
 		
 		if (companyName.equalsIgnoreCase("")) return "Ops, something went wrong!";
 		else if (title.equalsIgnoreCase("")) return "Title is missing!";

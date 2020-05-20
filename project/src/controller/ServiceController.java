@@ -18,7 +18,7 @@ public class ServiceController {
         inputValidator = new InputValidator();
     }
 
-    public String newService(String companyName, String title, String description, int price) {
+    public String newService(String companyName, String title, String description, double price) {
     	String inputCheck = inputValidator.validateServiceInput(companyName, title, description, price);
 
     	if (!inputCheck.equalsIgnoreCase("")) return inputCheck;
@@ -35,7 +35,7 @@ public class ServiceController {
         return serviceDatabase.getAllServices(companyName);
     }
 
-    public String editService(String companyName, String title, String description, int price, int id) {
+    public String editService(String companyName, String title, String description, double price, int id) {
     	if (id == 0) return "Ops, something went wrong!";
     	
     	String inputCheck = inputValidator.validateServiceInput(companyName, title, description, price);

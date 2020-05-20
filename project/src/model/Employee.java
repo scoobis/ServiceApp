@@ -64,7 +64,7 @@ public abstract class Employee implements Serializable {
 	
 	public Employee() { this.status = ""; }
 	
-	public Order createOrder(int customerId, int serviceId, String date, int shopId, String company, int price) {
+	public Order createOrder(int customerId, int serviceId, String date, int shopId, String company, double price) {
 		Order order = new Order();
         order.setCustomerId(customerId);
         order.setServiceId(serviceId);
@@ -81,7 +81,7 @@ public abstract class Employee implements Serializable {
 		return -1;
 	}
 	
-	public Order editOrder(int id, int customerId, int serviceId, int price) {
+	public Order editOrder(int id, int customerId, int serviceId, double price) {
 		Order order = new Order();
         order.setId(id);
         order.setCustomerId(customerId);
