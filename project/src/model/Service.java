@@ -6,13 +6,13 @@ public class Service {
 	private String title;
 	private String description;
 	private int id;
-	private float price;
+	private double price;
 	
 	public Service() {
 		
 	}
 	
-	public Service(String company, String title, String description, float price) {
+	public Service(String company, String title, String description, double price) {
 		this.company = company;
 		this.title = title;
 		this.description = description;
@@ -42,10 +42,10 @@ public class Service {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public float getPrice() {
+	public double getPrice() {
 		return price;
 	}
-	public void setPrice(float price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
 	
