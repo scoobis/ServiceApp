@@ -41,6 +41,7 @@ public class OrderView {
 	private OrderDatabase db = new OrderDatabase();
 	private ArrayList<Order> dbList;
 	
+	//TODO take from controller not db
 	public BorderPane getCenter() {
 		//TODO How do we handle what shopid to check?
 		dbList = db.getAllOrders(1);
