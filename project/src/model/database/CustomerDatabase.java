@@ -13,11 +13,13 @@ public class CustomerDatabase implements DatabaseConnector {
 
 	Connection connection = DatabaseConnector.getConnection();
 	
-	public ArrayList<Customer> getAllCustomers(String companyName) throws SQLException {
+	public ArrayList<Customer> getAllCustomers(String companyName) {
 		
 		ArrayList<Customer> customers = new ArrayList<>();
 		
-		String statement = "SELECT id FROM customer WHERE company_name = " + companyName;
+		try {
+		
+		String statement = "SELECT id FROM customer WHERE company_name = '" + companyName + "'";
 		Statement query = connection.prepareStatement(statement);
 		ResultSet result = query.executeQuery(statement);
 		
@@ -26,9 +28,16 @@ public class CustomerDatabase implements DatabaseConnector {
 		}
 		
 		return customers;
+		
+		} catch(SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
-	public Customer getCustomerById(String id) throws SQLException {
+	public Customer getCustomerById(String id) {
+		
+		try {
 		
 		String statement = "SELECT * FROM customer WHERE id=" + id + ";";
 		Statement query = connection.prepareStatement(statement);
@@ -39,20 +48,25 @@ public class CustomerDatabase implements DatabaseConnector {
 		Customer c = new Customer();
 		
 		while(result.next()) {
-			c.setActive(result.getBoolean("isActive"));
+			c.setActive(result.getBoolean("status"));
 			c.setAddress(result.getString("adress"));
 			c.setEmail(result.getString("email"));
 			c.setName(result.getString("name"));
 			c.setPhone(result.getString("phone"));
+			c.setId(result.getInt("id"));
 		}
-		
 		return c;
+		
+		} catch(SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public boolean saveCustomer(Customer customer) {
 		try {
 			PreparedStatement query;
-			String statement = "INSERT INTO customer (phone, email, name, adress, company_name, isActive)"
+			String statement = "INSERT INTO customer (phone, email, name, adress, company_name, status)"
 						+ " VALUES ('" + customer.getPhone() + 
 						"', '" + customer.getEmail() + 
 						"', '" + customer.getName()+ 
@@ -92,7 +106,7 @@ public class CustomerDatabase implements DatabaseConnector {
 							"email = '" + c.getEmail() + "', " + 
 							"name = '" + c.getName() + "', " + 
 							"adress = '" + c.getAddress() + "', " + 
-							"isActive = " + c.isActive() + 
+							"status = " + c.isActive() + 
 							" WHERE id='" + c.getId() + "';";
 		System.out.println(statement);
 		PreparedStatement query = connection.prepareStatement(statement);

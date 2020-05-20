@@ -31,7 +31,7 @@ public class ServiceController {
         return "Service saved successfully";
     }
 
-    public ArrayList<Service> getAllServices(String companyName) throws SQLException {
+    public ArrayList<Service> getAllServices(String companyName) {
         return serviceDatabase.getAllServices(companyName);
     }
 
@@ -49,10 +49,10 @@ public class ServiceController {
         return "Ops, something went wrong!";
     }
 
-    public String deleteService(Service service) {
-        boolean isDeleted = serviceDatabase.deleteService(service.getId());
+    public String deleteService(int id, String title) {
+        boolean isDeleted = serviceDatabase.deleteService(id);
 
-        if (isDeleted) return service.getTitle() + " Deleted!";
+        if (isDeleted) return title + " Deleted!";
         return "ops, something went wrong!";
     }
 }

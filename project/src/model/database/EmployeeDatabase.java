@@ -69,6 +69,8 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 			user.setPhone(result.getString("phone"));
 			user.setEmail(result.getString("email"));
 			user.setStatus(result.getString("status"));
+			user.setId(result.getInt("id"));
+			user.setName(result.getString("name"));
 		}
 		return user;
 		
@@ -91,6 +93,8 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 			admin.setPhone(result.getString("phone"));
 			admin.setEmail(result.getString("email"));
 			admin.setStatus(result.getString("status"));
+			admin.setId(result.getInt("id"));
+			admin.setName(result.getString("name"));
 		}
 		return admin;
 		
@@ -112,6 +116,8 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 			superAdmin.setPhone(result.getString("phone"));
 			superAdmin.setEmail(result.getString("email"));
 			superAdmin.setStatus(result.getString("status"));
+			superAdmin.setId(result.getInt("id"));
+			superAdmin.setName(result.getString("name"));
 		}
 		return superAdmin;
 		
@@ -129,12 +135,13 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 	private boolean saveUserOrAdmin(Employee e) {
 		try {
 		PreparedStatement create;
-		create = connection.prepareStatement("INSERT INTO "+ e.getStatus() +" (company_name, shop_id, phone, email, status, password)"
+		create = connection.prepareStatement("INSERT INTO "+ e.getStatus() +" (company_name, shop_id, phone, email, status, name, password)"
 				+ "VALUES ('"+ e.getCompanyName() +"', "
 				+ e.getShopId()+","
 				+ "'"+ e.getPhone()+"',"
 				+ "'"+ e.getEmail() +"', "
 				+ "'"+ e.getStatus() +"', "
+				+ "'"+ e.getName() +"', "
 				+ "'"+ e.getPassword() +"')");
 			create.executeUpdate();
 			return true;
@@ -147,11 +154,12 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 	private boolean saveSuperAdmin(Employee e) {
 		try {
 		PreparedStatement create;
-		create = connection.prepareStatement("INSERT INTO super_admin (company_name, phone, email, status, password)"
+		create = connection.prepareStatement("INSERT INTO super_admin (company_name, phone, email, status, name, password)"
 				+ "VALUES ('"+ e.getCompanyName() +"', "
 				+ "'"+ e.getPhone() +"',"
 				+ "'"+ e.getEmail() +"', "
 				+ "'super_admin', "
+				+ "'"+ e.getStatus() +"', "
 				+ "'"+ e.getPassword() +"')");
 			create.executeUpdate();
 			return true;
@@ -183,7 +191,8 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 		try {
 		edit = connection.prepareStatement("UPDATE super_admin"
 				+ " SET phone = '"+ e.getPhone() +"', "
-				+ "email = '"+ e.getEmail() +"' "
+				+ "email = '"+ e.getEmail() +"', "
+				+ "name = '"+ e.getName() +"' "
 				+ "WHERE id = "+ e.getId() +";");
 		edit.executeUpdate();
 		return true;
@@ -199,6 +208,7 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 		edit = connection.prepareStatement("UPDATE " + e.getStatus()
 				+ " SET shop_id = "+ e.getShopId() +","
 				+ "phone = '"+ e.getPhone() +"', "
+				+ "name = '"+ e.getName() +"', "
 				+ "email = '"+ e.getEmail() +"' "
 				+ "WHERE id = "+ e.getId() +";");
 		edit.executeUpdate();

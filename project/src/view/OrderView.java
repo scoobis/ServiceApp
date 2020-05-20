@@ -22,21 +22,20 @@ import model.Order;
 
 public class OrderView {
 	
-	private ArrayList<Cell> list = new ArrayList<Cell>();
-	private ObservableList<Cell> obsList;
+	private ArrayList<Cell> list;
 	private ListView<Cell> lv;
-	private OrderController orderController = new OrderController();
-	private ArrayList<Order> allOrders;
+	
+	private OrderController orderController;
+	
+	public OrderView() {
+		orderController = new OrderController();
+		list = new ArrayList<Cell>();
+	}
 	
 	public BorderPane getCenter() {
-		allOrders = orderController.getAllOrders(1);
+		ObservableList<Cell> obsList;
 		
-		// instead of checking
-		list.clear();
-		
-			for(Order o : allOrders) {
-				list.add(new Cell(o.getCustomerId(), o.getPrice(), o.getCompleted(), o.getServiceId(), o.getDate(), o.getShopId(), o.getcompanyName(), o.getId()));
-			}
+		setList();
 			
 		BorderPane bp = new BorderPane();
 		Button createButton = new Button("Create");
@@ -49,6 +48,17 @@ public class OrderView {
 		bp.setCenter(lv);
 		bp.setTop(createButton);
 		return bp;
+	}
+	
+	private void setList() {
+		
+		ArrayList<Order> allOrders = orderController.getAllOrders(1); // TODO get shopId from logged in user
+		
+		list.clear();
+		
+			for(Order o : allOrders) {
+				list.add(new Cell(o.getCustomerId(), o.getPrice(), o.getCompleted(), o.getServiceId(), o.getDate(), o.getShopId(), o.getcompanyName(), o.getId()));
+			}
 	}
 	
 	private void create() {
@@ -99,7 +109,7 @@ public class OrderView {
 			String message = orderController.newOrder(customerId, serviceId, date, shopId, companyName, price);
 			
 			// update view
-			getCenter();
+			setList();
 		});
 		
 		window.setTitle("Create new order");
@@ -154,7 +164,7 @@ public class OrderView {
 			String message = orderController.editOrder(id, customerId, serviceId, price);
 			
 			// update view
-			getCenter();
+			setList();
 		});
 		
 		window.setTitle("Edit " + cell.getCustomerId() + "'s order");
@@ -166,8 +176,10 @@ public class OrderView {
 		//TODO display message
 		String message = orderController.deleteOrder(cell.getID());
 		
-		// update view TODO does not updated properly
-		getCenter();
+		lv.refresh();
+		
+		// update view
+		setList();
 	}
 	
 	private String getTodaysDate() {

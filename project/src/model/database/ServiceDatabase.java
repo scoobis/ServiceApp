@@ -12,10 +12,11 @@ public class ServiceDatabase implements DatabaseConnector {
 	
 	Connection connection = DatabaseConnector.getConnection();
 
-	public ArrayList<Service> getAllServices(String companyName) throws SQLException {
+	public ArrayList<Service> getAllServices(String companyName) {
 		ArrayList<Service> services = new ArrayList<>();
 		
-		String statement = "SELECT id FROM service WHER company_name = " + companyName;
+		try {
+		String statement = "SELECT id FROM service WHERE company_name = '" + companyName + "'";
 		Statement query = connection.prepareStatement(statement);
 		ResultSet result = query.executeQuery(statement);
 	
@@ -25,6 +26,10 @@ public class ServiceDatabase implements DatabaseConnector {
 		}
 		
 		return services;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public Service getServiceById(String id) throws SQLException {
@@ -38,7 +43,8 @@ public class ServiceDatabase implements DatabaseConnector {
 			s.setCompany(result.getString("company_name"));
 			s.setTitle(result.getString("title"));
 			s.setDescription(result.getString("description"));
-			s.setPrice(result.getInt("price"));
+			s.setPrice(result.getDouble("price"));
+			s.setId(result.getInt("id"));
 		}
 		
 		return s;

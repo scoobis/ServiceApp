@@ -2,38 +2,37 @@ package view;
 
 import java.util.ArrayList;
 
+import controller.CustomerController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Orientation;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import view.EmployeeView.Cell;
+import model.Customer;
 
 public class CustomerView {
 	
-	private ArrayList<Cell> list = new ArrayList<Cell>();
-	private ObservableList<Cell> obsList;
+	private ArrayList<Cell> list;
 	private ListView<Cell> lv;
 	
+	private CustomerController customerController;
+	
+	public CustomerView() {
+		list = new ArrayList<Cell>();
+		customerController = new CustomerController();
+	}
+	
 	public BorderPane getCenter() {
-		//TODO Put info from database into "list" here instead of random loop
-		for(int i = 0; i < 100; i++) {
-			list.add(new Cell(Integer.toString(i), "name123", "email123", "phone123", "address123"));
-		}
+		ObservableList<Cell> obsList;
+		
+		setList();
 		
 		BorderPane bp = new BorderPane();
 		Button createButton = new Button("Create");
@@ -48,6 +47,18 @@ public class CustomerView {
 		return bp;
 	}
 	
+	private void setList() {
+		
+		ArrayList<Customer> allCustomers = customerController.getAllCustomers("company"); // TODO get company from logged in user
+		
+		list.clear();
+		
+		for (Customer customer : allCustomers) {
+			list.add(new Cell(customer.getId(), customer.getName(), customer.getEmail(), customer.getPhone(), customer.getAddress()));
+		}
+		
+	}
+	
 	private void create() {
 		GridPane pane = new GridPane();
 		Button button = new Button("Create");
@@ -57,6 +68,7 @@ public class CustomerView {
 		TextField phoneField = new TextField();
 		TextField addressField = new TextField();
 		
+		// TODO remove id
 		pane.add(new Label("Id:"), 0, 0);
 		pane.add(idField, 0, 1);
 		pane.add(new Label("Name:"), 0, 2);
@@ -73,11 +85,22 @@ public class CustomerView {
 		Stage window = new Stage();
 		
 		button.setOnAction(e -> {
-			Cell cell = new Cell(idField.getText(), nameField.getText(), emailField.getText(), 
-								 phoneField.getText(), addressField.getText());
-			obsList.add(cell);
+			
+			String email = emailField.getText();
+			String phone = phoneField.getText();
+			String name = nameField.getText();
+			String address = addressField.getText();
+			String companyName = "company"; // TODO get company from logged in user;
+			
+			// TODO display message
+			String message = customerController.createCustomer(name, email, phone, address, companyName);
+			
+			lv.refresh();
 			window.close();
 			//TODO Call controller here
+			
+			// update view
+			setList();
 		});
 		window.setTitle("Create new customer");
 		window.setScene(scene);
@@ -93,6 +116,8 @@ public class CustomerView {
 		TextField phoneField = new TextField("" + cell.getPhone());
 		TextField addressField = new TextField("" + cell.getAddress());
 		
+		// TODO remove id
+		// TODO add isActive check
 		pane.add(new Label("Id:"), 0, 0);
 		pane.add(idField, 0, 1);
 		pane.add(new Label("Name:"), 0, 2);
@@ -109,12 +134,22 @@ public class CustomerView {
 		Stage window = new Stage();
 		
 		button.setOnAction(e -> {
-			Cell newCell = new Cell(idField.getText(), nameField.getText(), emailField.getText(), 
-									phoneField.getText(), addressField.getText());
-			obsList.set(obsList.indexOf(cell), newCell);
+			
+			int id = cell.getID();
+			String email = emailField.getText();
+			String phone = phoneField.getText();
+			String name = nameField.getText();
+			String address = addressField.getText();
+			
+			// TODO set isActive
+			// TODO display message
+			String message = customerController.editCustomer(name, email, phone, address, true, id);
+			
 			lv.refresh();
 			window.close();
-			//TODO Call controller here
+			
+			// update view
+			setList();
 		});
 		window.setTitle("Edit " + cell.getID());
 		window.setScene(scene);
@@ -122,8 +157,13 @@ public class CustomerView {
 	}
 	
 	private void remove(Cell cell) {
-		//TODO Call controller here
-		obsList.remove(cell);
+		//TODO display message
+		String message = customerController.deleteCustomer(cell.getID(), cell.getName());
+				
+		lv.refresh();
+				
+		// update view
+		setList();
 	}
 	
 	public class Cell extends HBox {
@@ -132,13 +172,13 @@ public class CustomerView {
 		Label emailLabel = new Label();
 		Button editButton = new Button("Edit");
 		Button removeButton = new Button("Remove");
-		String id;
+		int id;
 		String name;
 		String email;
 		String phone;
 		String address;
 
-		Cell(String id, String name, String email, String phone, String address) {
+		Cell(int id, String name, String email, String phone, String address) {
 			super();
 			
 			this.phone = phone;
@@ -155,7 +195,7 @@ public class CustomerView {
 			HBox.setHgrow(nameLabel, Priority.ALWAYS);
 			
 			this.email = email;
-			emailLabel.setText("Shop Id: " + email);
+			emailLabel.setText("Email: " + email);
 			emailLabel.setMaxWidth(Double.MAX_VALUE);
 			HBox.setHgrow(emailLabel, Priority.ALWAYS);
 			
@@ -170,11 +210,11 @@ public class CustomerView {
 			this.getChildren().addAll(idLabel, nameLabel, emailLabel, editButton, removeButton);
 		}
 
-		public String getID() {
+		public int getID() {
 			return id;
 		}
 
-		public void setID(String id) {
+		public void setID(int id) {
 			this.id = id;
 		}
 

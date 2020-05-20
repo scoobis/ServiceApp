@@ -3,6 +3,7 @@ package view;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
+import controller.EmployeeController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
@@ -23,19 +24,25 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import model.Employee;
 import view.ServiceView.Cell;
 
 public class EmployeeView {
 	
-	private ArrayList<Cell> list = new ArrayList<Cell>();
-	private ObservableList<Cell> obsList;
+	private ArrayList<Cell> list;
 	private ListView<Cell> lv;
 	
+	private EmployeeController employeeController;
+	
+	public EmployeeView() {
+		list = new ArrayList<Cell>();
+		employeeController = new EmployeeController();
+	}
+	
 	public BorderPane getCenter() {
-		//TODO Put info from database into "list" here instead of random loop
-		for(int i = 0; i < 100; i++) {
-			list.add(new Cell("name" + i, "email123", "phone123", "company123", "shopid123"));
-		}
+		ObservableList<Cell> obsList;
+		
+		setList();
 		
 		BorderPane bp = new BorderPane();
 		Button createButton = new Button("Create");
@@ -51,6 +58,16 @@ public class EmployeeView {
 		return bp;
 	}
 	
+	private void setList() {
+		ArrayList<Employee> allEmployees = employeeController.getAllEmployees("company"); // TODO get company from logged in user
+		
+		list.clear();
+		
+		for (Employee employee : allEmployees) {
+			list.add(new Cell(employee.getName(), employee.getEmail(), employee.getPhone(), employee.getCompanyName(), employee.getShopId(), employee.getId(), employee.getStatus()));
+		}
+	}
+	
 	private void create() {
 		GridPane pane = new GridPane();
 		Button button = new Button("Create");
@@ -60,6 +77,8 @@ public class EmployeeView {
 		TextField emailField = new TextField();
 		TextField phoneField = new TextField();
 		
+		// TODO remove shop id
+		// TODO add password, status
 		pane.add(new Label("Name:"), 0, 0);
 		pane.add(nameField, 0, 1);
 		pane.add(new Label("Company:"), 0, 2);
@@ -76,11 +95,29 @@ public class EmployeeView {
 		Stage window = new Stage();
 		
 		button.setOnAction(e -> {
-			Cell cell = new Cell(nameField.getText(), companyField.getText(), shopIdField.getText(), 
-					emailField.getText(), phoneField.getText());
-			obsList.add(cell);
+			
+			String phone = phoneField.getText();
+			String email = emailField.getText();
+			String name = nameField.getText();
+			String companyName = "company"; // TODO get company from logged in user
+			int shopId = 1; // TODO get shopId from logged in user
+			String password = "password"; // TODO set password
+			String status = "user"; // TODO set status
+			
+			lv.refresh();
 			window.close();
-			//TODO Call controller here
+			
+			String message = "";
+			
+			if (status.equalsIgnoreCase("user"))
+				message = employeeController.newUser(name, email, phone, password, companyName, shopId);
+			else if (status.equalsIgnoreCase("admin"))
+				message = employeeController.newAdmin(name, email, phone, password, companyName, shopId);
+			else
+				message = "No such status";
+				
+			// update view
+			setList();
 		});
 		window.setTitle("Create new employee");
 		window.setScene(scene);
@@ -96,6 +133,7 @@ public class EmployeeView {
 		TextField emailField = new TextField("" + cell.getEmail());
 		TextField phoneField = new TextField("" + cell.getPhone());
 		
+		// TODO remove company
 		pane.add(new Label("Name:"), 0, 0);
 		pane.add(nameField, 0, 1);
 		pane.add(new Label("Company:"), 0, 2);
@@ -112,12 +150,30 @@ public class EmployeeView {
 		Stage window = new Stage();
 		
 		button.setOnAction(e -> {
-			Cell newCell = new Cell(nameField.getText(), companyField.getText(), shopIdField.getText(), 
-									emailField.getText(), phoneField.getText());
-			obsList.set(obsList.indexOf(cell), newCell);
+			
+			int id = cell.getID();
+			String phone = phoneField.getText();
+			String email = emailField.getText();
+			String name = nameField.getText();
+			int shopId = Integer.parseInt(shopIdField.getText());
+			
+			// TODO display message
+			String message = "";
+			
+			if (cell.getStatus().equalsIgnoreCase("user"))
+				message = employeeController.editUser(phone, email, name, shopId, id);
+			else if (cell.getStatus().equalsIgnoreCase("admin"))
+				message = employeeController.editAdmin(phone, email, name, shopId, id);
+			else
+				message = "No such status";
+			
+			System.out.println(message);
+			
 			lv.refresh();
 			window.close();
-			//TODO Call controller here
+			
+			// update view
+			setList();
 		});
 		window.setTitle("Edit " + cell.getName());
 		window.setScene(scene);
@@ -125,8 +181,7 @@ public class EmployeeView {
 	}
 	
 	private void remove(Cell cell) {
-		//TODO Call controller here
-		obsList.remove(cell);
+		// TODO add remove
 	}
 	
 	public class Cell extends HBox {
@@ -139,13 +194,17 @@ public class EmployeeView {
 		String email;
 		String phone;
 		String company;
-		String shopId;
+		int shopId;
+		int id;
+		String status;
 
-		Cell(String name, String email, String phone, String company, String shopId) {
+		Cell(String name, String email, String phone, String company, int shopId, int id, String status) {
 			super();
 			
 			this.email = email;
 			this.phone = phone;
+			this.id = id;
+			this.status = status;
 			
 			this.name = name;
 			nameLabel.setText("Name: " + name);
@@ -176,6 +235,10 @@ public class EmployeeView {
 		public String getName() {
 			return name;
 		}
+		
+		public String getStatus() {
+			return status;
+		}
 
 		public void setName(String name) {
 			this.name = name;
@@ -200,16 +263,20 @@ public class EmployeeView {
 		public String getCompany() {
 			return company;
 		}
+		
+		public int getID() {
+			return id;
+		}
 
 		public void setCompany(String company) {
 			this.company = company;
 		}
 
-		public String getShopId() {
+		public int getShopId() {
 			return shopId;
 		}
 
-		public void setShopId(String shopId) {
+		public void setShopId(int shopId) {
 			this.shopId = shopId;
 		}
 		

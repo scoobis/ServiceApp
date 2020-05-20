@@ -32,10 +32,10 @@ public class CustomerController {
         return "Customer successfully added!";
     }
 
-    public String deleteCustomer(Customer customer) {
-        boolean isDeleted = customerDatabase.deleteCustomer(customer.getId());
+    public String deleteCustomer(int id, String name) {
+        boolean isDeleted = customerDatabase.deleteCustomer(id);
 
-        if (isDeleted) return customer.getName() + " Deleted!";
+        if (isDeleted) return name + " Deleted!";
         return "ops, something went wrong!";
     }
 
@@ -53,7 +53,7 @@ public class CustomerController {
 
     }
 
-    public ArrayList<Customer> getAllCustomers(String company) throws SQLException {
+    public ArrayList<Customer> getAllCustomers(String company) {
 
         ArrayList<Customer> customers = customerDatabase.getAllCustomers(company);
 
