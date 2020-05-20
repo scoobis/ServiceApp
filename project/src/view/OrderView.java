@@ -43,11 +43,10 @@ public class OrderView {
 	
 	//TODO take from controller not db
 	public BorderPane getCenter() {
-		//TODO How do we handle what shopid to check?
 		dbList = db.getAllOrders(1);
 		if(list.isEmpty()) {
 			for(Order o : dbList) {
-				list.add(new Cell(o.getCustomerId(), o.getPrice(), o.getCompleted(), o.getServiceId(), o.getDate(), o.getShopId(), o.getCompanyId(), o.getId()));
+				list.add(new Cell(o.getCustomerId(), o.getPrice(), o.getCompleted(), o.getServiceId(), o.getDate(), o.getShopId(), o.getcompanyName()));
 			}
 		}
 			
@@ -74,7 +73,6 @@ public class OrderView {
 		TextField dateField = new TextField();
 		TextField shopIdField = new TextField();
 		TextField companyIdField = new TextField();
-		TextField idField = new TextField();
 		
 		pane.add(new Label("Customer Id:"), 0, 0);
 		pane.add(customerIdField, 0, 1);
@@ -90,9 +88,7 @@ public class OrderView {
 		pane.add(shopIdField, 0, 11);
 		pane.add(new Label("Company Id:"), 0, 12);
 		pane.add(companyIdField, 0, 13);
-		pane.add(new Label("Id:"), 0, 14);
-		pane.add(idField, 0, 15);
-		pane.add(button, 0, 16);
+		pane.add(button, 0, 14);
 		
 		Scene scene = new Scene(pane, 300, 600);
 		Stage window = new Stage();
@@ -100,7 +96,7 @@ public class OrderView {
 		button.setOnAction(e -> {
 			Cell cell = new Cell(Integer.parseInt(customerIdField.getText()), Integer.parseInt(priceField.getText()), completedBox.isSelected(), 
 					Integer.parseInt(serviceIdField.getText()), dateField.getText(), Integer.parseInt(shopIdField.getText()), 
-					Integer.parseInt(companyIdField.getText()), Integer.parseInt(idField.getText()));
+					companyIdField.getText());
 			obsList.add(cell);
 			window.close();
 			db.saveOrder(cell.getAsOrder());
@@ -120,8 +116,7 @@ public class OrderView {
 		TextField serviceIdField = new TextField("" + cell.getServiceId());
 		TextField dateField = new TextField("" + cell.getDate());
 		TextField shopIdField = new TextField("" + cell.getShopId());
-		TextField companyIdField = new TextField("" + cell.getCompanyId());
-		TextField idField = new TextField("" + cell.getID());
+		TextField companyIdField = new TextField("" + cell.getCompanyName());
 		
 		pane.add(new Label("Customer Id:"), 0, 0);
 		pane.add(customerIdField, 0, 1);
@@ -137,9 +132,7 @@ public class OrderView {
 		pane.add(shopIdField, 0, 11);
 		pane.add(new Label("Company Id:"), 0, 12);
 		pane.add(companyIdField, 0, 13);
-		pane.add(new Label("Id:"), 0, 14);
-		pane.add(idField, 0, 15);
-		pane.add(button, 0, 16);
+		pane.add(button, 0, 14);
 		
 		Scene scene = new Scene(pane, 300, 600);
 		Stage window = new Stage();
@@ -147,12 +140,12 @@ public class OrderView {
 		button.setOnAction(e -> {
 			Cell newCell = new Cell(Integer.parseInt(customerIdField.getText()), Float.parseFloat(priceField.getText()), completedBox.isSelected(), 
 					Integer.parseInt(serviceIdField.getText()), dateField.getText(), Integer.parseInt(shopIdField.getText()), 
-					Integer.parseInt(companyIdField.getText()), Integer.parseInt(idField.getText()));
+					companyIdField.getText());
 			obsList.set(obsList.indexOf(cell), newCell);
 			lv.refresh();
 			window.close();
-			Order o = db.getOrderById(Integer.parseInt(idField.getText()));
-			o.setCompanyId(Integer.parseInt(companyIdField.getText()));
+			Order o = db.getOrderById(cell.getID());
+			o.setcompanyName(companyIdField.getText());
 			o.setCompleted(completedBox.isSelected());
 			o.setCustomerId(Integer.parseInt(customerIdField.getText()));
 			o.setDate(dateField.getText());
@@ -185,17 +178,16 @@ public class OrderView {
 		int serviceId;
 		String date;
 		int shopId;
-		int companyId;
+		String companyName;
 		int id;
 
-		Cell(int customerId, float price, boolean completed, int serviceId, String date, int shopId, int companyId, int id) {
+		Cell(int customerId, float price, boolean completed, int serviceId, String date, int shopId, String companyName) {
 			super();
 			
 			this.serviceId = serviceId;
 			this.date = date;
 			this.shopId = shopId;
-			this.companyId = companyId;
-			this.id = id;
+			this.companyName = companyName;
 			
 			this.customerId = customerId;
 			customerLabel.setText("Customer id: " + customerId);
@@ -271,24 +263,20 @@ public class OrderView {
 			this.shopId = shopId;
 		}
 
-		public int getCompanyId() {
-			return companyId;
+		public String getCompanyName() {
+			return companyName;
 		}
 
-		public void setCompanyId(int companyId) {
-			this.companyId = companyId;
+		public void setCompanyName(String companyName) {
+			this.companyName = companyName;
 		}
 		
 		public int getID() {
 			return id;
 		}
 		
-		public void setID(int id) {
-			this.id = id;
-		}
-		
 		public Order getAsOrder() {
-			return new Order(customerId, serviceId, date, shopId, companyId, price, completed, id);
+			return new Order(customerId, serviceId, date, shopId, companyName, price, completed);
 		}
 	}
 }

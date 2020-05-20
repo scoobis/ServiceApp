@@ -43,7 +43,7 @@ public class OrderDatabase implements DatabaseConnector {
 				order.setServiceId(result.getInt("service_id"));
 				order.setCustomerId(result.getInt("customer_id"));
 				order.setShopId(result.getInt("shop_id"));
-				order.setCompanyId(result.getInt("company_name"));
+				order.setcompanyName(result.getString("company_name"));
 				order.setPrice(result.getInt("price"));
 				order.setCompleted(result.getBoolean("completed"));
 				order.setDate(result.getString("date"));
@@ -61,7 +61,7 @@ public class OrderDatabase implements DatabaseConnector {
 						+ "VALUES ("+ o.getServiceId() +", "
 						+ o.getCustomerId() +","
 						+ o.getShopId() +","
-						+ "'"+ o.getCompanyId() +"', "
+						+ "'"+ o.getcompanyName() +"', "
 						+ o.getPrice() +","
 						+ o.getCompleted() +","
 						+ "'"+ o.getDate() +"');");
@@ -96,7 +96,7 @@ public class OrderDatabase implements DatabaseConnector {
 						+ "SET service_id = "+ o.getServiceId() +", "
 						+ "customer_id = "+ o.getCustomerId() +","
 						+ "shop_id = " + o.getShopId() +","
-						+ "company_name = '"+ o.getCompanyId() +"', "
+						+ "company_name = '"+ o.getcompanyName() +"', "
 						+ "price = "+ o.getPrice() +","
 						+ "completed = "+ o.getCompleted() +","
 						+ "date = '"+ o.getDate() +"' "

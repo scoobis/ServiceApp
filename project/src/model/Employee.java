@@ -70,7 +70,7 @@ public abstract class Employee implements Serializable {
         order.setServiceId(serviceId);
         order.setDate(date);
         order.setShopId(shopId);
-        order.setCompanyId(company);
+        order.setcompanyName(company);
         order.setPrice(price);
         order.setCompleted(false);
         
