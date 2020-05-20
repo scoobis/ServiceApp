@@ -8,6 +8,10 @@ public class Service {
 	private int id;
 	private float price;
 	
+	public Service() {
+		
+	}
+	
 	public Service(String company, String title, String description, float price) {
 		this.company = company;
 		this.title = title;

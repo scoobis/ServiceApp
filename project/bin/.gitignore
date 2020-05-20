@@ -1,4 +1,4 @@
+/controller/
 /model/
 /security/
-/controller/
-*.class
+/view/

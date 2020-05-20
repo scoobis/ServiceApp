@@ -8,6 +8,7 @@ import model.Employee;
 
 class EmployeeTests {
 
+	//TODO NEEDS FIXING
 	Employee employee = new Employee("0760721684", "je223gs@student.lnu.se", "Jesper", "LNU", 1, "password");
 	@Test
 	void test() {

@@ -8,6 +8,7 @@ import model.Customer;
 
 class CustomerTests {
 
+	//TODO NEEDS FIXING
 	Customer customer = new Customer("customer@email.se", "01234567", "Customer", "Customer street 1", true);
 	
 	@Test

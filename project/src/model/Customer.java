@@ -11,7 +11,11 @@ public class Customer {
 	private boolean active;
 	private String company;
 	
-	public Customer(String email, String phone, String name, String address, boolean active) {
+	public Customer() {
+		
+	}
+	
+	public Customer(String email, String phone, String name, String address, boolean active, int id) {
 		this.email = email;
 		this.id = id;
 		this.phone = phone;
