@@ -35,9 +35,12 @@ public abstract class Employee implements Serializable {
 	
 	public static Employee getLoggedInUser() throws IOException, ClassNotFoundException {
 		File f = new File("LoggedInUser.txt");
+		f.setWritable(true, true);
 		FileInputStream fis = new FileInputStream(f);
 		ObjectInputStream ois = new ObjectInputStream(fis);
 		Employee e = (Employee) ois.readObject();
+		f.setWritable(false);
+		f.setReadable(true);
 		ois.close();
 		return e;
 		
@@ -56,10 +59,13 @@ public abstract class Employee implements Serializable {
 	 */
 	public static void logInUser(Employee e) throws IOException {
 		File f = new File("LoggedInUser.txt");
+		f.setWritable(true, true);
 		FileOutputStream fos = new FileOutputStream(f);
 		ObjectOutputStream oos = new ObjectOutputStream(fos);
 		oos.writeObject(e);
 		oos.close();
+		f.setWritable(false);
+		f.setReadable(true);
 	}
 	
 	public Employee() { this.status = ""; }
