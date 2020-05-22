@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 import controller.EmployeeController;
+import controller.ShopController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
@@ -11,6 +12,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
@@ -25,6 +27,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.Employee;
+import model.Shop;
 import view.ServiceView.Cell;
 
 public class EmployeeView {
@@ -32,11 +35,13 @@ public class EmployeeView {
 	private ArrayList<Cell> list;
 	private ListView<Cell> lv;
 	
+	private ShopController shopController;
 	private EmployeeController employeeController;
 	
 	public EmployeeView() {
 		list = new ArrayList<Cell>();
 		employeeController = new EmployeeController();
+		shopController = new ShopController();
 	}
 	
 	public BorderPane getCenter() {
@@ -73,10 +78,21 @@ public class EmployeeView {
 		Button button = new Button("Create");
 		TextField nameField = new TextField();
 		TextField passwordField = new TextField();
-		TextField statusField = new TextField();
+		ComboBox<String> statusBox = new ComboBox<>();
 		TextField emailField = new TextField();
-		TextField shopField = new TextField();
+		ComboBox<String> shopBox = new ComboBox<>();
 		TextField phoneField = new TextField();
+		
+		ArrayList<Shop> allShops = shopController.getAllShops("company"); // TODO get company name from loggedin user
+		int i = 1;
+		for (Shop s : allShops) {
+			shopBox.getItems().add(i + ". " + s.getName() + "  |  " + s.getAddress());
+			if (i == 1) shopBox.setValue(i + ". " + s.getName() + "  |  " + s.getAddress());
+		i++;
+		}
+		
+		statusBox.getItems().addAll("User", "Admin");
+		statusBox.setValue("User");
 		
 		pane.add(new Label("Name:"), 0, 0);
 		pane.add(nameField, 0, 1);
@@ -85,9 +101,9 @@ public class EmployeeView {
 		pane.add(new Label("Phone:"), 0, 4);
 		pane.add(phoneField, 0, 5);
 		pane.add(new Label("Status:"), 0, 6);
-		pane.add(statusField, 0, 7);
+		pane.add(statusBox, 0, 7);
 		pane.add(new Label("Shop:"), 0, 8);
-		pane.add(shopField, 0, 9);
+		pane.add(shopBox, 0, 9);
 		pane.add(new Label("Password:"), 0, 10);
 		pane.add(passwordField, 0, 11);
 		pane.add(button, 0, 12);
@@ -97,13 +113,16 @@ public class EmployeeView {
 		
 		button.setOnAction(e -> {
 			
+			int val = shopBox.getValue().indexOf(".");
+			val = Integer.parseInt(shopBox.getValue().substring(0, val)) - 1;
+			
 			String phone = phoneField.getText();
 			String email = emailField.getText();
 			String name = nameField.getText();
 			String companyName = "company"; // TODO get company from logged in user
-			int shopId = 1; // TODO get shopId from logged in user
+			int shopId = allShops.get(val).getId();
 			String password = "password"; // TODO set password
-			String status = "user"; // TODO set status
+			String status = statusBox.getValue();
 			
 			lv.refresh();
 			window.close();
@@ -129,14 +148,22 @@ public class EmployeeView {
 		GridPane pane = new GridPane();
 		Button button = new Button("Edit");
 		TextField nameField = new TextField("" + cell.getName());
-		TextField shopIdField = new TextField("" + cell.getShopId());
+		ComboBox<String> shopBox = new ComboBox<>();
 		TextField emailField = new TextField("" + cell.getEmail());
 		TextField phoneField = new TextField("" + cell.getPhone());
+		
+		ArrayList<Shop> allShops = shopController.getAllShops("company"); // TODO get company name from loggedin user
+		int i = 1;
+		for (Shop s : allShops) {
+			shopBox.getItems().add(i + ". " + s.getName() + "  |  " + s.getAddress());
+			if (cell.getShopId() == s.getId()) shopBox.setValue(i + ". " + s.getName() + "  |  " + s.getAddress());
+		i++;
+		}
 		
 		pane.add(new Label("Name:"), 0, 0);
 		pane.add(nameField, 0, 1);
 		pane.add(new Label("Shop Id:"), 0, 2);
-		pane.add(shopIdField, 0, 3);
+		pane.add(shopBox, 0, 3);
 		pane.add(new Label("Email:"), 0, 4);
 		pane.add(emailField, 0, 5);
 		pane.add(new Label("Phone:"), 0, 6);
@@ -148,11 +175,14 @@ public class EmployeeView {
 		
 		button.setOnAction(e -> {
 			
+			int val = shopBox.getValue().indexOf(".");
+			val = Integer.parseInt(shopBox.getValue().substring(0, val)) - 1;
+			
 			int id = cell.getID();
 			String phone = phoneField.getText();
 			String email = emailField.getText();
 			String name = nameField.getText();
-			int shopId = Integer.parseInt(shopIdField.getText());
+			int shopId = allShops.get(val).getId();
 			
 			// TODO display message
 			String message = "";
