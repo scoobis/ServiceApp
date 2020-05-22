@@ -74,7 +74,8 @@ Connection connection = null;
 			PreparedStatement create = connection.prepareStatement("CREATE TABLE IF NOT EXISTS shop"
 					+ "(id int NOT NULL AUTO_INCREMENT, "
 					+ "company_name varchar(25), "
-					+ "adress varchar(128), "
+					+ "address varchar(128), "
+					+ "name varchar(128), "
 					+ "PRIMARY KEY(id))");
 			create.executeUpdate();
 		} catch(Exception e) { System.out.println(e); }

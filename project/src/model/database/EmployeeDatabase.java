@@ -170,9 +170,34 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 	}
 	
 	public boolean deleteEmployee(Employee e) {
+		// Not used anymore!
 		try {
 			PreparedStatement create;
 			create = connection.prepareStatement("DELETE FROM "+ e.getStatus() +" WHERE id = " + e.getId() + ";");
+			create.executeUpdate();
+			return true;
+			} catch (SQLException e1) { 
+				e1.printStackTrace();
+				return false;
+				}
+	}
+	
+	public boolean deleteUser(int id) {
+		try {
+			PreparedStatement create;
+			create = connection.prepareStatement("DELETE FROM user WHERE id = " + id + ";");
+			create.executeUpdate();
+			return true;
+			} catch (SQLException e1) { 
+				e1.printStackTrace();
+				return false;
+				}
+	}
+	
+	public boolean deleteAdmin(int id) {
+		try {
+			PreparedStatement create;
+			create = connection.prepareStatement("DELETE FROM admin WHERE id = " + id + ";");
 			create.executeUpdate();
 			return true;
 			} catch (SQLException e1) { 

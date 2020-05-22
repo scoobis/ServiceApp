@@ -12,7 +12,7 @@ public class MainView {
 	Stage window = null;
 	private final int WIDTH = 1800;
 	private final int HEIGHT = 900;
-	private String[] menuText = {"Home", "Order", "Service", "Customer", "Employee"};
+	private String[] menuText = {"Home", "Order", "Service", "Customer", "Employee", "Shop"};
 	private int lastPressed = 0;
 	
 	HomeView hv = new HomeView();
@@ -20,6 +20,7 @@ public class MainView {
 	EmployeeView ev = new EmployeeView();
 	CustomerView cv = new CustomerView();
 	ServiceView sv = new ServiceView();
+	ShopView shopView = new ShopView();
 	
 	public void render(Stage primaryStage) {
 		window = primaryStage;
@@ -59,6 +60,12 @@ public class MainView {
 			if(lastPressed != 4) {
 				pane.setCenter(ev.getCenter());
 				lastPressed = 4;
+			}
+		});
+		menuButtons[5].setOnAction(e -> {
+			if(lastPressed != 5) {
+				pane.setCenter(shopView.getCenter());
+				lastPressed = 5;
 			}
 		});
 		

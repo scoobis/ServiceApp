@@ -72,24 +72,25 @@ public class EmployeeView {
 		GridPane pane = new GridPane();
 		Button button = new Button("Create");
 		TextField nameField = new TextField();
-		TextField companyField = new TextField();
-		TextField shopIdField = new TextField();
+		TextField passwordField = new TextField();
+		TextField statusField = new TextField();
 		TextField emailField = new TextField();
+		TextField shopField = new TextField();
 		TextField phoneField = new TextField();
 		
-		// TODO remove shop id
-		// TODO add password, status
 		pane.add(new Label("Name:"), 0, 0);
 		pane.add(nameField, 0, 1);
-		pane.add(new Label("Company:"), 0, 2);
-		pane.add(companyField, 0, 3);
-		pane.add(new Label("Shop Id:"), 0, 4);
-		pane.add(shopIdField, 0, 5);
-		pane.add(new Label("Email:"), 0, 6);
-		pane.add(emailField, 0, 7);
-		pane.add(new Label("Phone:"), 0, 8);
-		pane.add(phoneField, 0, 9);
-		pane.add(button, 0, 10);
+		pane.add(new Label("Email:"), 0, 2);
+		pane.add(emailField, 0, 3);
+		pane.add(new Label("Phone:"), 0, 4);
+		pane.add(phoneField, 0, 5);
+		pane.add(new Label("Status:"), 0, 6);
+		pane.add(statusField, 0, 7);
+		pane.add(new Label("Shop:"), 0, 8);
+		pane.add(shopField, 0, 9);
+		pane.add(new Label("Password:"), 0, 10);
+		pane.add(passwordField, 0, 11);
+		pane.add(button, 0, 12);
 		
 		Scene scene = new Scene(pane, 300, 600);
 		Stage window = new Stage();
@@ -128,23 +129,19 @@ public class EmployeeView {
 		GridPane pane = new GridPane();
 		Button button = new Button("Edit");
 		TextField nameField = new TextField("" + cell.getName());
-		TextField companyField = new TextField("" + cell.getCompany());
 		TextField shopIdField = new TextField("" + cell.getShopId());
 		TextField emailField = new TextField("" + cell.getEmail());
 		TextField phoneField = new TextField("" + cell.getPhone());
 		
-		// TODO remove company
 		pane.add(new Label("Name:"), 0, 0);
 		pane.add(nameField, 0, 1);
-		pane.add(new Label("Company:"), 0, 2);
-		pane.add(companyField, 0, 3);
-		pane.add(new Label("Shop Id:"), 0, 4);
-		pane.add(shopIdField, 0, 5);
-		pane.add(new Label("Email:"), 0, 6);
-		pane.add(emailField, 0, 7);
-		pane.add(new Label("Phone:"), 0, 8);
-		pane.add(phoneField, 0, 9);
-		pane.add(button, 0, 10);
+		pane.add(new Label("Shop Id:"), 0, 2);
+		pane.add(shopIdField, 0, 3);
+		pane.add(new Label("Email:"), 0, 4);
+		pane.add(emailField, 0, 5);
+		pane.add(new Label("Phone:"), 0, 6);
+		pane.add(phoneField, 0, 7);
+		pane.add(button, 0, 8);
 		
 		Scene scene = new Scene(pane, 300, 600);
 		Stage window = new Stage();
@@ -167,8 +164,6 @@ public class EmployeeView {
 			else
 				message = "No such status";
 			
-			System.out.println(message);
-			
 			lv.refresh();
 			window.close();
 			
@@ -181,13 +176,25 @@ public class EmployeeView {
 	}
 	
 	private void remove(Cell cell) {
-		// TODO add remove
+		// TODO display message
+		String message = "";
+		if (cell.getStatus().equalsIgnoreCase("user"))
+			message = employeeController.deleteUser(cell.getID(), cell.getName());
+		else if (cell.getStatus().equalsIgnoreCase("admin"))
+			message = employeeController.deleteAdmin(cell.getID(), cell.getName());
+		else message = "No such status";
+		
+		lv.refresh();
+		
+		// update view
+		setList();
 	}
 	
 	public class Cell extends HBox {
 		Label nameLabel = new Label();
-		Label companyLabel = new Label();
-		Label shopIdLabel = new Label();
+		Label statusLabel = new Label();
+		Label emailLabel = new Label();
+		Label phoneLabel = new Label();
 		Button editButton = new Button("Edit");
 		Button removeButton = new Button("Remove");
 		String name;
@@ -201,25 +208,29 @@ public class EmployeeView {
 		Cell(String name, String email, String phone, String company, int shopId, int id, String status) {
 			super();
 			
-			this.email = email;
-			this.phone = phone;
 			this.id = id;
-			this.status = status;
+			this.company = company;
+			this.shopId = shopId;
 			
 			this.name = name;
 			nameLabel.setText("Name: " + name);
 			nameLabel.setMaxWidth(Double.MAX_VALUE);
 			HBox.setHgrow(nameLabel, Priority.ALWAYS);
 			
-			this.company = company;
-			companyLabel.setText("Company: " + company);
-			companyLabel.setMaxWidth(Double.MAX_VALUE);
-			HBox.setHgrow(companyLabel, Priority.ALWAYS);
+			this.status = status;
+			statusLabel.setText("Status: " + status);
+			statusLabel.setMaxWidth(Double.MAX_VALUE);
+			HBox.setHgrow(statusLabel, Priority.ALWAYS);
 			
-			this.shopId = shopId;
-			shopIdLabel.setText("Shop Id: " + shopId);
-			shopIdLabel.setMaxWidth(Double.MAX_VALUE);
-			HBox.setHgrow(shopIdLabel, Priority.ALWAYS);
+			this.email = email;
+			emailLabel.setText("Email: " + email);
+			emailLabel.setMaxWidth(Double.MAX_VALUE);
+			HBox.setHgrow(emailLabel, Priority.ALWAYS);
+			
+			this.phone = phone;
+			phoneLabel.setText("Phone: " + phone);
+			phoneLabel.setMaxWidth(Double.MAX_VALUE);
+			HBox.setHgrow(phoneLabel, Priority.ALWAYS);
 			
 			editButton.setOnAction(e -> {
 				edit(this);
@@ -229,7 +240,7 @@ public class EmployeeView {
 				remove(this);
 			});
 			
-			this.getChildren().addAll(nameLabel, companyLabel, shopIdLabel, editButton, removeButton);
+			this.getChildren().addAll(nameLabel, statusLabel, emailLabel, phoneLabel, editButton, removeButton);
 		}
 
 		public String getName() {

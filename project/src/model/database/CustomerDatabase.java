@@ -43,8 +43,6 @@ public class CustomerDatabase implements DatabaseConnector {
 		Statement query = connection.prepareStatement(statement);
 		ResultSet result = query.executeQuery(statement);
 		
-		int i = 0;
-		
 		Customer c = new Customer();
 		
 		while(result.next()) {
@@ -74,7 +72,6 @@ public class CustomerDatabase implements DatabaseConnector {
 						"', '" + customer.getCompany() + 
 						"'," +  customer.isActive() +")";
 			
-			System.out.println(statement);
 			query = connection.prepareStatement(statement);
 			query.executeUpdate();
 			return true;

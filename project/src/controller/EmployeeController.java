@@ -54,11 +54,11 @@ public class EmployeeController {
         return "User created successfully";
     }
 	
-	public String deleteUser(Employee e) {
+	public String deleteUser(int id, String name) {
 		
-        boolean isDeleted = employeeDatabase.deleteEmployee(e);
+        boolean isDeleted = employeeDatabase.deleteUser(id);
 
-        if (isDeleted) return e.getName() + " Deleted!";
+        if (isDeleted) return name + " Deleted!";
         return "ops, something went wrong!";
     }
 	
@@ -89,11 +89,11 @@ public class EmployeeController {
         return "Admin created successfully";
     }
 	
-	public String deleteAdmin(Employee e) {
+	public String deleteAdmin(int id, String name) {
 		
-        boolean isDeleted = employeeDatabase.deleteEmployee(e);
+        boolean isDeleted = employeeDatabase.deleteAdmin(id);
 
-        if (isDeleted) return e.getName() + " Deleted!";
+        if (isDeleted) return name + " Deleted!";
         return "ops, something went wrong!";
     }
 	
