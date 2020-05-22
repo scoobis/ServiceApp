@@ -16,7 +16,7 @@ public class OrderDatabase implements DatabaseConnector {
 		ArrayList<Order> orders = new ArrayList<>();
 		
 		try {
-			String statement = "SELECT * FROM orders WHERE shop_id = " + shopId + ";";
+			String statement = "SELECT id FROM orders WHERE shop_id = " + shopId + ";";
 			Statement query = connection.prepareStatement(statement);
 			ResultSet result = query.executeQuery(statement);
 			
@@ -113,7 +113,7 @@ public class OrderDatabase implements DatabaseConnector {
 		PreparedStatement edit;
 		try {
 			edit = connection.prepareStatement("UPDATE orders "
-						+ "SET completed = true, "
+						+ "SET completed = true "
 						+ "WHERE id = "+ id +";");
 			edit.executeUpdate();
 			
@@ -129,7 +129,7 @@ public class OrderDatabase implements DatabaseConnector {
 		PreparedStatement edit;
 		try {
 			edit = connection.prepareStatement("UPDATE orders "
-						+ "SET completed = false, "
+						+ "SET completed = false "
 						+ "WHERE id = "+ id +";");
 			edit.executeUpdate();
 			

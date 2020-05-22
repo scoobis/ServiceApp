@@ -1,3 +1,41 @@
 GridPane {
 	-fx-alignment: center;
 }
+
+#companyHeader, #loggedInAsHeader, #orderHeader, #serviceHeader, #customerHeader, #employeeHeader, #otherHeader {
+	-fx-font-size: 25px;
+}
+
+#lineChart .chart-series-line {
+	-fx-stroke: black;
+}
+
+.chart-title 
+{
+    -fx-font-family: "Aeial";
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.chart-legend 
+{
+    -fx-background-color: lightgray;
+}
+
+
+.chart-legend-item 
+{
+    -fx-font-size: 16px;
+}
+.chart-legend-item-symbol 
+{
+    -fx-shape: "M0 -3.5 v7 l 4 -3.5z";
+}
+
+#informationHeader {
+	-fx-font-size: 25px;
+}
+
+#informationText {
+	-fx-text-align: center;
+}
