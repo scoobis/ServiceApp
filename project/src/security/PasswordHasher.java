@@ -6,7 +6,10 @@ import java.security.SecureRandom;
 
 public class PasswordHasher {
 	
-	public String hashPassword(String password) throws NoSuchAlgorithmException {
+	// made it static
+	public static String hashPassword(String password) {
+		
+		try {
 		MessageDigest md = MessageDigest.getInstance("MD5");
 		md.update(password.getBytes());
 		byte[] b = md.digest();
@@ -16,6 +19,10 @@ public class PasswordHasher {
 		}
 		System.out.println(sb.toString());
 		return sb.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	

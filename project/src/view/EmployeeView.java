@@ -11,13 +11,16 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -28,6 +31,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.Employee;
 import model.Shop;
+import security.PasswordHasher;
 import view.ServiceView.Cell;
 
 public class EmployeeView {
@@ -38,10 +42,14 @@ public class EmployeeView {
 	private ShopController shopController;
 	private EmployeeController employeeController;
 	
+	Employee loggedInUser;
+	
 	public EmployeeView() {
 		list = new ArrayList<Cell>();
 		employeeController = new EmployeeController();
 		shopController = new ShopController();
+		
+		loggedInUser = Employee.getLoggedInUser();
 	}
 	
 	public BorderPane getCenter() {
@@ -52,8 +60,12 @@ public class EmployeeView {
 		BorderPane bp = new BorderPane();
 		Button createButton = new Button("Create");
 		
-		//TODO Make this check permissions
-		createButton.setOnAction(e -> create());
+		createButton.setOnAction(e -> {
+			if (loggedInUser.getStatus().equalsIgnoreCase("admin") || loggedInUser.getStatus().equalsIgnoreCase("super_admin"))
+				create();
+			else
+				displayErrorMessage("You do not have permission to create users!");
+		});
 		
 		lv = new ListView<Cell>();
 		obsList = FXCollections.observableList(list);
@@ -64,7 +76,7 @@ public class EmployeeView {
 	}
 	
 	private void setList() {
-		ArrayList<Employee> allEmployees = employeeController.getAllEmployees("company"); // TODO get company from logged in user
+		ArrayList<Employee> allEmployees = employeeController.getAllEmployees(Employee.getLoggedInUser().getCompanyName());
 		
 		list.clear();
 		
@@ -77,7 +89,7 @@ public class EmployeeView {
 		GridPane pane = new GridPane();
 		Button button = new Button("Create");
 		TextField nameField = new TextField();
-		TextField passwordField = new TextField();
+		TextField passwordField = new PasswordField();
 		ComboBox<String> statusBox = new ComboBox<>();
 		TextField emailField = new TextField();
 		ComboBox<String> shopBox = new ComboBox<>();
@@ -121,7 +133,7 @@ public class EmployeeView {
 			String name = nameField.getText();
 			String companyName = "company"; // TODO get company from logged in user
 			int shopId = allShops.get(val).getId();
-			String password = "password"; // TODO set password
+			String password = PasswordHasher.hashPassword(passwordField.getText());
 			String status = statusBox.getValue();
 			
 			lv.refresh();
@@ -138,6 +150,12 @@ public class EmployeeView {
 				
 			// update view
 			setList();
+			
+			// must display message last
+			if (message.contains("successfully"))
+				displaySuccessMessage(message);
+			else
+				displayErrorMessage(message);
 		});
 		window.setTitle("Create new employee");
 		window.setScene(scene);
@@ -184,7 +202,6 @@ public class EmployeeView {
 			String name = nameField.getText();
 			int shopId = allShops.get(val).getId();
 			
-			// TODO display message
 			String message = "";
 			
 			if (cell.getStatus().equalsIgnoreCase("user"))
@@ -199,14 +216,37 @@ public class EmployeeView {
 			
 			// update view
 			setList();
+			
+			// must display message last
+			if (message.contains("successfully"))
+				displaySuccessMessage(message);
+			else
+				displayErrorMessage(message);
 		});
 		window.setTitle("Edit " + cell.getName());
 		window.setScene(scene);
 		window.show();
 	}
 	
+	private void displaySuccessMessage(String message) {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Information Dialog");
+		alert.setHeaderText(null);
+		alert.setContentText(message);
+
+		alert.showAndWait();
+	}
+	
+	private void displayErrorMessage(String message) {
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle("Information Dialog");
+		alert.setHeaderText(null);
+		alert.setContentText(message);
+
+		alert.showAndWait();
+	}
+	
 	private void remove(Cell cell) {
-		// TODO display message
 		String message = "";
 		if (cell.getStatus().equalsIgnoreCase("user"))
 			message = employeeController.deleteUser(cell.getID(), cell.getName());
@@ -218,6 +258,9 @@ public class EmployeeView {
 		
 		// update view
 		setList();
+		
+		// must display message last
+		displayErrorMessage(message);
 	}
 	
 	public class Cell extends HBox {
@@ -263,11 +306,17 @@ public class EmployeeView {
 			HBox.setHgrow(phoneLabel, Priority.ALWAYS);
 			
 			editButton.setOnAction(e -> {
-				edit(this);
+				if (loggedInUser.getStatus().equalsIgnoreCase("admin") || loggedInUser.getStatus().equalsIgnoreCase("super_admin"))
+					edit(this);
+				else
+					displayErrorMessage("You do not have permission to edit users!");
 			});
 			
 			removeButton.setOnAction(e -> {
-				remove(this);
+				if (loggedInUser.getStatus().equalsIgnoreCase("admin") || loggedInUser.getStatus().equalsIgnoreCase("super_admin"))
+					remove(this);
+				else
+					displayErrorMessage("You do not have permission to remove users!");
 			});
 			
 			this.getChildren().addAll(nameLabel, statusLabel, emailLabel, phoneLabel, editButton, removeButton);

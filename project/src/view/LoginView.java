@@ -13,6 +13,8 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import model.Employee;
+import security.PasswordHasher;
 
 
 public class LoginView {
@@ -58,18 +60,23 @@ public class LoginView {
 		boxButtons.getChildren().addAll(buttons);
 		pane.add(boxButtons, 0, 5);
 		
+		Employee test = Employee.getLoggedInUser();
+		if (test != null) {
+			usernameField.setText(test.getEmail());
+		}
+		
 		buttons[0].setOnAction(e -> {
-			//TODO Just temporary to work on views
-			mainView.render(stage);
-			/*if(cont.login(usernameField.getText(), passwordField.getText()))
+			Employee employee = cont.login(usernameField.getText(), PasswordHasher.hashPassword(passwordField.getText()));
+			if(employee != null) {
+				Employee.logInUser(employee);
 				mainView.render(stage);
-			else {
+			} else {
 				Alert alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("Login Failed");
 				alert.setHeaderText(null);
-				alert.setContentText("Wrong password");
+				alert.setContentText("Wrong password or username");
 				alert.showAndWait();
-			}*/
+			}
 				
 		});
 		

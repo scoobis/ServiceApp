@@ -2,15 +2,19 @@ package controller;
 
 import java.util.ArrayList;
 
+import model.InputValidator;
 import model.Shop;
+import model.SuperAdmin;
 import model.database.ShopDatabase;
 
 public class ShopController {
 	
 	ShopDatabase shopDatabase;
+	InputValidator inputValidator;
 	
 	public ShopController() {
 		shopDatabase = new ShopDatabase();
+		inputValidator = new InputValidator();
 	}
 	
 	public ArrayList<Shop> getAllShops(String companyName) {
@@ -18,38 +22,29 @@ public class ShopController {
 	}
 	
 	public String newShop(String name, String address, String companyName) {
-		// TODO move to validate input
-		if (name.equalsIgnoreCase("")) return "Name is missing!";
-		else if (address.equalsIgnoreCase("")) return "Address is missing!";
-		else if (companyName.equalsIgnoreCase("")) return "Company is missing!";
+		String inputCheck = inputValidator.validateShopInput(name, address, companyName);
 		
-		// TODO move to super Admin
-		Shop shop = new Shop();
-		shop.setName(name);
-		shop.setAddress(address);
-		shop.setCompanyName(companyName);
+		if (!inputCheck.equalsIgnoreCase("")) return inputCheck;
 		
-		boolean isSaved = shopDatabase.saveShop(shop);
+		SuperAdmin superAdmin = new SuperAdmin();
+		
+		boolean isSaved = shopDatabase.saveShop(superAdmin.createShop(name, address, companyName));
 		
 		if (isSaved) return "Shop created successfully";
 		return "Ops, something went wrong!";	
 	}
 	
 	public String editShop(int id, String name, String address) {
-		// TODO move to validate input
-		if (name.equalsIgnoreCase("")) return "Name is missing!";
-		else if (address.equalsIgnoreCase("")) return "Address is missing!";
-		else if (id == 0) return "Ops, something went wrong!";
+		String inputCheck = inputValidator.validateShopInput(name, address, "co"); // co as stub
+		if (!inputCheck.equalsIgnoreCase("")) return inputCheck;
+		if (id == 0) return "Ops, something went wrong!";
 		
-		// TODO move to super Admin
-		Shop shop = new Shop();
-		shop.setName(name);
-		shop.setAddress(address);
-		shop.setId(id);
 		
-		boolean isSaved = shopDatabase.editShop(shop);
+		SuperAdmin superAdmin = new SuperAdmin();
 		
-		if (isSaved) return "Shop created successfully";
+		boolean isSaved = shopDatabase.editShop(superAdmin.editShop(id, name, address));
+		
+		if (isSaved) return "Shop edited successfully";
 		return "Ops, something went wrong!";	
 	}
 	

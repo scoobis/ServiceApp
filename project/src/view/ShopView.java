@@ -6,6 +6,8 @@ import controller.ShopController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -82,16 +84,39 @@ public class ShopView {
 			lv.refresh();
 			window.close();
 			
-			// TODO display message
 			String message = shopController.newShop(name, address, companyName);
 			
 			// update view
 			setList();
+			
+			// must display message last
+			if (message.contains("successfully"))
+				displaySuccessMessage(message);
+			else
+				displayErrorMessage(message);
 		});
 		
 		window.setTitle("Create new employee");
 		window.setScene(scene);
 		window.show();
+	}
+	
+	private void displaySuccessMessage(String message) {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Information Dialog");
+		alert.setHeaderText(null);
+		alert.setContentText(message);
+
+		alert.showAndWait();
+	}
+	
+	private void displayErrorMessage(String message) {
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle("Information Dialog");
+		alert.setHeaderText(null);
+		alert.setContentText(message);
+
+		alert.showAndWait();
 	}
 	
 	private void edit(Cell cell) {
@@ -117,11 +142,16 @@ public class ShopView {
 			lv.refresh();
 			window.close();
 			
-			// TODO display message
 			String message = shopController.editShop(cell.getID(), name, address);
 			
 			// update view
 			setList();
+			
+			// must display message last
+			if (message.contains("successfully"))
+				displaySuccessMessage(message);
+			else
+				displayErrorMessage(message);
 		});
 		
 		window.setTitle("Create new employee");
@@ -131,13 +161,15 @@ public class ShopView {
 	}
 	
 	private void remove(Cell cell) {
-		// TODO dissplay message
 		String message = shopController.deleteShop(cell.getID(), cell.getName());
 		
 		lv.refresh();
 		
 		// update view
 		setList();
+		
+		// must display message last
+			displayErrorMessage(message);
 	}
 	
 	private class Cell extends HBox {

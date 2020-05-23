@@ -1,5 +1,7 @@
 package view;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -26,6 +28,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import model.Employee;
 import model.Order;
 import model.Service;
 
@@ -75,7 +78,7 @@ public class HomeView {
 	
 	private void displayHomePage(GridPane pane) {
 		allOrders = orderController.getAllOrders(1); // TODO get from company instead
-		allServices = serviceController.getAllServices("company"); // TODO get get companyName from logged in user
+		allServices = serviceController.getAllServices(Employee.getLoggedInUser().getCompanyName());
 		
 		Text companyHeader = new Text("Your Company: Company");
 		companyHeader.setId("companyHeader");
@@ -131,7 +134,16 @@ public class HomeView {
 		pane.getChildren().add(centerPane);
 		
 		logoutButton.setOnAction(e -> {
-			//TODO logout user
+			PrintWriter pw;
+			try {
+				pw = new PrintWriter("LoggedInUser.txt");
+				pw.close();
+				
+				// TODO render loginView
+				
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			}
 		});
 	}
 	

@@ -33,13 +33,18 @@ public abstract class Employee implements Serializable {
 		this.password = password;
 	}
 	
-	public static Employee getLoggedInUser() throws IOException, ClassNotFoundException {
+	public static Employee getLoggedInUser() {
+		try {
 		File f = new File("LoggedInUser.txt");
 		FileInputStream fis = new FileInputStream(f);
 		ObjectInputStream ois = new ObjectInputStream(fis);
 		Employee e = (Employee) ois.readObject();
 		ois.close();
 		return e;
+		} catch(Exception err) {
+			err.printStackTrace();
+			return null;
+		}
 		
 	}
 	
@@ -54,12 +59,16 @@ public abstract class Employee implements Serializable {
 	 * @param e
 	 * @throws IOException
 	 */
-	public static void logInUser(Employee e) throws IOException {
+	public static void logInUser(Employee e) {
+		try {
 		File f = new File("LoggedInUser.txt");
 		FileOutputStream fos = new FileOutputStream(f);
 		ObjectOutputStream oos = new ObjectOutputStream(fos);
 		oos.writeObject(e);
 		oos.close();
+		} catch(Exception err) {
+			err.printStackTrace();
+		}
 	}
 	
 	public Employee() { this.status = ""; }
