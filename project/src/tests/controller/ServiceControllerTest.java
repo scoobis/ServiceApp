@@ -1,10 +1,10 @@
-package model.tests;
+package tests.controller;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-class UserTests {
+class ServiceControllerTest {
 
 	@Test
 	void test() {

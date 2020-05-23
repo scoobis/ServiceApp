@@ -1,4 +1,4 @@
-package model.tests;
+package tests.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -9,7 +9,8 @@ import model.Order;
 class OrderTests {
 
 	//TODO NEEDS FIXING
-	Order order = new Order(1, 1, "testString", 1, 1, 300, false);
+	double price = 300;
+	Order order = new Order(1, 1, "testString", 1, "company", price, false);
 	@Test
 	void testCustomerIdGetter() {
 		assertEquals(1, order.getCustomerId());

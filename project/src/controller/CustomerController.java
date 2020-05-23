@@ -39,6 +39,7 @@ public class CustomerController {
         return "ops, something went wrong!";
     }
 
+    // No company argument?
     public String editCustomer(String name, String email, String phone, String address, boolean isActive, int id) {
     	String inputCheck = inputValidator.validateCustomerInput(name, email, phone, address, id);
 

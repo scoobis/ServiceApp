@@ -1,4 +1,4 @@
-package model.database.tests;
+package tests.database;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

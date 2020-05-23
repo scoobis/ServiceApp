@@ -3,7 +3,7 @@ package model;
 public class Customer {
 
 	private String email;
-	private int id;
+	private int id; // ID SHOULD BE HERE
 	private String phone;
 	private String name;
 	private String address;
@@ -15,9 +15,9 @@ public class Customer {
 		
 	}
 	
-	public Customer(String email, String phone, String name, String address, boolean active, int id) {
+	public Customer(String email, String phone, String name, String address, boolean active, int id) { // ID SHOULD NOT BE HERE
 		this.email = email;
-		this.id = id;
+		this.id = id; // ID SHOULD NOT BE HERE
 		this.phone = phone;
 		this.name = name;
 		this.address = address;
@@ -32,10 +32,12 @@ public class Customer {
 		this.email = email;
 	}
 	
+	// ID SHOULD HAVE A GETTER METHOD
 	public int getId() {
 		return id;
 	}
 	
+	// ID SHOULD NOT HAVE A SETTER METHOD, IT IS BEING SET BY THE MYSQL SERVER
 	public void setId(int id) {
 		this.id = id;
 	}
