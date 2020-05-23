@@ -95,7 +95,7 @@ public class EmployeeView {
 		ComboBox<String> shopBox = new ComboBox<>();
 		TextField phoneField = new TextField();
 		
-		ArrayList<Shop> allShops = shopController.getAllShops("company"); // TODO get company name from loggedin user
+		ArrayList<Shop> allShops = shopController.getAllShops(loggedInUser.getCompanyName());
 		int i = 1;
 		for (Shop s : allShops) {
 			shopBox.getItems().add(i + ". " + s.getName() + "  |  " + s.getAddress());
@@ -131,7 +131,7 @@ public class EmployeeView {
 			String phone = phoneField.getText();
 			String email = emailField.getText();
 			String name = nameField.getText();
-			String companyName = "company"; // TODO get company from logged in user
+			String companyName = loggedInUser.getCompanyName();
 			int shopId = allShops.get(val).getId();
 			String password = PasswordHasher.hashPassword(passwordField.getText());
 			String status = statusBox.getValue();
@@ -170,7 +170,7 @@ public class EmployeeView {
 		TextField emailField = new TextField("" + cell.getEmail());
 		TextField phoneField = new TextField("" + cell.getPhone());
 		
-		ArrayList<Shop> allShops = shopController.getAllShops("company"); // TODO get company name from loggedin user
+		ArrayList<Shop> allShops = shopController.getAllShops(loggedInUser.getCompanyName());
 		int i = 1;
 		for (Shop s : allShops) {
 			shopBox.getItems().add(i + ". " + s.getName() + "  |  " + s.getAddress());

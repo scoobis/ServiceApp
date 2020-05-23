@@ -77,19 +77,22 @@ public class HomeView {
 	}
 	
 	private void displayHomePage(GridPane pane) {
-		allOrders = orderController.getAllOrders(1); // TODO get from company instead
-		allServices = serviceController.getAllServices(Employee.getLoggedInUser().getCompanyName());
 		
-		Text companyHeader = new Text("Your Company: Company");
+		Employee employee = Employee.getLoggedInUser();
+		allOrders = orderController.getAllOrdersCompany(employee.getCompanyName());
+		allServices = serviceController.getAllServices(employee.getCompanyName());
+		
+		Text companyHeader = new Text("Your Company: " + employee.getCompanyName());
 		companyHeader.setId("companyHeader");
 		
-		Text loggedInAsHeader = new Text("Logged In As: User.1");
+		Text loggedInAsHeader = new Text("Logged In As: " + employee.getName());
 		loggedInAsHeader.setId("loggedInAsHeader");
 		
 		GridPane centerPane = new GridPane();
 		
 		centerPane.add(companyHeader, 0, 0);
 		centerPane.add(loggedInAsHeader, 0, 1);
+		
 		centerPane.add(this.createBarChart(), 1, 1);
 		centerPane.add(this.createLineChart(), 0, 2);
 		centerPane.add(this.createMostPopularServiceChart(), 1, 2);
@@ -227,7 +230,6 @@ public class HomeView {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private Chart createLineChart() {
-		System.out.println("yee");
 		
 		CategoryAxis xAxis = new CategoryAxis();
         NumberAxis yAxis = new NumberAxis();
@@ -241,6 +243,8 @@ public class HomeView {
         
         XYChart.Series series = new XYChart.Series();
         series.setName("Months");
+        
+        if (allOrders == null) return chart;
         
         HashMap<String, Double> values = new HashMap<>();
         
@@ -293,6 +297,8 @@ public class HomeView {
         values.put("Q3", 0.0);
         values.put("Q4", 0.0);
         
+        if (allOrders == null) return bc;
+        
         for (Order order : allOrders) {
         	// includes only completed orders
         	if (!order.getCompleted()) continue;
@@ -336,6 +342,8 @@ public class HomeView {
         bc.setPrefSize(750, 300);
  
         XYChart.Series series = new XYChart.Series();      
+        
+        if (allServices == null || allOrders == null) return bc;
         
         HashMap<Integer, Integer> values = new HashMap<>();
         // setup
