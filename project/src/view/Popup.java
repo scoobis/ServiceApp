@@ -1,28 +1,25 @@
 package view;
 
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 public class Popup {
 	
-	//TODO Make this look nicer
-	public static void display(String message) {
-		GridPane pane = new GridPane();
-		Button button = new Button("Close");
-		Scene scene = new Scene(pane, 300, 150);
-		Stage window = new Stage();
-		
-		pane.add(new Label(message), 0, 0);
-		pane.add(button, 0, 1);
-		
-		window.setTitle("Message");
-		window.setScene(scene);
-		window.show();
-		
-		button.setOnAction(e -> window.close());
+	public static void displaySuccessMessage(String message) {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Information Dialog");
+		alert.setHeaderText(null);
+		alert.setContentText(message);
+
+		alert.showAndWait();
 	}
 	
+	public static void displayErrorMessage(String message) {
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle("Information Dialog");
+		alert.setHeaderText(null);
+		alert.setContentText(message);
+
+		alert.showAndWait();
+	}
 }

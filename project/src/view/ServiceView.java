@@ -16,6 +16,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
+import model.Employee;
 import model.Service;
 
 public class ServiceView {
@@ -24,9 +25,13 @@ public class ServiceView {
 	private ListView<Cell> lv;
 	private ServiceController serviceController;
 	
+	private Employee loggedInUser;
+	
 	public ServiceView() {
 		serviceController = new ServiceController();
 		list = new ArrayList<Cell>();
+		
+		loggedInUser = Employee.getLoggedInUser();
 	}
 	
 	public BorderPane getCenter() {
@@ -37,7 +42,12 @@ public class ServiceView {
 		BorderPane bp = new BorderPane();
 		Button createButton = new Button("Create");
 		
-		createButton.setOnAction(e -> create());
+		createButton.setOnAction(e -> {
+			if (loggedInUser.getStatus().equalsIgnoreCase("admin") || loggedInUser.getStatus().equalsIgnoreCase("super_admin"))
+				create();
+			else
+				Popup.displayErrorMessage("You do not have permission to create users!");
+		});
 	
 		lv = new ListView<Cell>();
 		obsList = FXCollections.observableList(list);
@@ -86,9 +96,13 @@ public class ServiceView {
 			window.close();
 			
 			String message = serviceController.newService(companyName, title, description, price);
-			Popup.display(message);
 			
 			setList();
+			
+			if (message.contains("successfully"))
+				Popup.displaySuccessMessage(message);
+			else
+				Popup.displayErrorMessage(message);
 		});
 		
 		window.setTitle("Create new order");
@@ -126,7 +140,11 @@ public class ServiceView {
 			window.close();
 			
 			String message = serviceController.editService(companyName, title, description, price, id);
-			Popup.display(message);
+			
+			if (message.contains("successfully"))
+				Popup.displaySuccessMessage(message);
+			else
+				Popup.displayErrorMessage(message);
 			
 			setList();
 			
@@ -138,10 +156,11 @@ public class ServiceView {
 	
 	private void remove(Cell cell) {
 		String message = serviceController.deleteService(cell.getID(), cell.getTitle());
-		Popup.display(message);
 		lv.refresh();
 		
 		setList();
+		
+		Popup.displayErrorMessage(message);
 	}
 	
 	public class Cell extends HBox {
@@ -177,11 +196,17 @@ public class ServiceView {
 			HBox.setHgrow(priceLabel, Priority.ALWAYS);
 			
 			editButton.setOnAction(e -> {
-				edit(this);
+				if (loggedInUser.getStatus().equalsIgnoreCase("admin") || loggedInUser.getStatus().equalsIgnoreCase("super_admin"))
+					edit(this);
+				else
+					Popup.displayErrorMessage("You do not have permission to edit users!");
 			});
 			
 			removeButton.setOnAction(e -> {
-				remove(this);
+				if (loggedInUser.getStatus().equalsIgnoreCase("admin") || loggedInUser.getStatus().equalsIgnoreCase("super_admin"))
+					remove(this);
+				else
+					Popup.displayErrorMessage("You do not have permission to remove users!");
 			});
 			
 			this.getChildren().addAll(idLabel, titleLabel, priceLabel, editButton, removeButton);

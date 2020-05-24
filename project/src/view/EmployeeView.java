@@ -1,38 +1,26 @@
 package view;
 
 import java.util.ArrayList;
-import java.util.concurrent.ThreadLocalRandom;
 
 import controller.EmployeeController;
 import controller.ShopController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Orientation;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToolBar;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.Employee;
 import model.Shop;
 import security.PasswordHasher;
-import view.ServiceView.Cell;
 
 public class EmployeeView {
 	
@@ -64,7 +52,7 @@ public class EmployeeView {
 			if (loggedInUser.getStatus().equalsIgnoreCase("admin") || loggedInUser.getStatus().equalsIgnoreCase("super_admin"))
 				create();
 			else
-				displayErrorMessage("You do not have permission to create users!");
+				Popup.displayErrorMessage("You do not have permission to create users!");
 		});
 		
 		lv = new ListView<Cell>();
@@ -153,9 +141,9 @@ public class EmployeeView {
 			
 			// must display message last
 			if (message.contains("successfully"))
-				displaySuccessMessage(message);
+				Popup.displaySuccessMessage(message);
 			else
-				displayErrorMessage(message);
+				Popup.displayErrorMessage(message);
 		});
 		window.setTitle("Create new employee");
 		window.setScene(scene);
@@ -219,31 +207,13 @@ public class EmployeeView {
 			
 			// must display message last
 			if (message.contains("successfully"))
-				displaySuccessMessage(message);
+				Popup.displaySuccessMessage(message);
 			else
-				displayErrorMessage(message);
+				Popup.displayErrorMessage(message);
 		});
 		window.setTitle("Edit " + cell.getName());
 		window.setScene(scene);
 		window.show();
-	}
-	
-	private void displaySuccessMessage(String message) {
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Information Dialog");
-		alert.setHeaderText(null);
-		alert.setContentText(message);
-
-		alert.showAndWait();
-	}
-	
-	private void displayErrorMessage(String message) {
-		Alert alert = new Alert(AlertType.ERROR);
-		alert.setTitle("Information Dialog");
-		alert.setHeaderText(null);
-		alert.setContentText(message);
-
-		alert.showAndWait();
 	}
 	
 	private void remove(Cell cell) {
@@ -260,7 +230,7 @@ public class EmployeeView {
 		setList();
 		
 		// must display message last
-		displayErrorMessage(message);
+		Popup.displayErrorMessage(message);
 	}
 	
 	public class Cell extends HBox {
@@ -309,14 +279,14 @@ public class EmployeeView {
 				if (loggedInUser.getStatus().equalsIgnoreCase("admin") || loggedInUser.getStatus().equalsIgnoreCase("super_admin"))
 					edit(this);
 				else
-					displayErrorMessage("You do not have permission to edit users!");
+					Popup.displayErrorMessage("You do not have permission to edit users!");
 			});
 			
 			removeButton.setOnAction(e -> {
 				if (loggedInUser.getStatus().equalsIgnoreCase("admin") || loggedInUser.getStatus().equalsIgnoreCase("super_admin"))
 					remove(this);
 				else
-					displayErrorMessage("You do not have permission to remove users!");
+					Popup.displayErrorMessage("You do not have permission to remove users!");
 			});
 			
 			this.getChildren().addAll(nameLabel, statusLabel, emailLabel, phoneLabel, editButton, removeButton);

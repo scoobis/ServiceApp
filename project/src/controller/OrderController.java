@@ -3,7 +3,6 @@ package controller;
 import java.util.ArrayList;
 
 import model.Customer;
-import model.Email;
 import model.Order;
 import model.User;
 import model.database.CustomerDatabase;
@@ -65,7 +64,7 @@ public class OrderController {
 		boolean isDeleted = orderDatabase.editOrder(user.editOrder(id, customerId, serviceId, price));
 
 		if (isDeleted)
-			return "Order Edited!";
+			return "Order edited successfully!";
 		return "ops, something went wrong!";
 	}
 
@@ -100,12 +99,12 @@ public class OrderController {
 	}
 
 	public void sendOrderCompleteMail(Order order) {
-
+/*
 		Email email = new Email();
 		CustomerDatabase CD = new CustomerDatabase();
 		Customer customer = CD.getCustomerById(order.getCustomerId());
 		email.sendMail(customer.getEmail(), order.getId());
-
+*/
 	}
 
 }
