@@ -36,9 +36,12 @@ public abstract class Employee implements Serializable {
 	public static Employee getLoggedInUser() {
 		try {
 		File f = new File("LoggedInUser.txt");
+		f.setWritable(true, true);
 		FileInputStream fis = new FileInputStream(f);
 		ObjectInputStream ois = new ObjectInputStream(fis);
 		Employee e = (Employee) ois.readObject();
+		f.setWritable(false);
+		f.setReadable(true);
 		ois.close();
 		return e;
 		} catch(Exception err) {
@@ -62,6 +65,7 @@ public abstract class Employee implements Serializable {
 	public static void logInUser(Employee e) {
 		try {
 		File f = new File("LoggedInUser.txt");
+		f.setWritable(true, true);
 		FileOutputStream fos = new FileOutputStream(f);
 		ObjectOutputStream oos = new ObjectOutputStream(fos);
 		oos.writeObject(e);
@@ -69,6 +73,8 @@ public abstract class Employee implements Serializable {
 		} catch(Exception err) {
 			err.printStackTrace();
 		}
+		f.setWritable(false);
+		f.setReadable(true);
 	}
 	
 	public Employee() { this.status = ""; }
