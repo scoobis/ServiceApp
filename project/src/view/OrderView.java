@@ -44,13 +44,13 @@ public class OrderView {
 		
 		uncompList = new ArrayList<Cell>();
 		compList = new ArrayList<Cell>();
-		
-		loggedInUser = Employee.getLoggedInUser();
 	}
 	
 	public BorderPane getCenter(Stage window) {
 		ObservableList<Cell> uncompObsList;
 		ObservableList<Cell> compObsList;
+		
+		loggedInUser = Employee.getLoggedInUser();
 		
 		setList();
 			
@@ -62,6 +62,8 @@ public class OrderView {
 		createButton.setOnAction(e ->  {
 			if (!loggedInUser.getStatus().equalsIgnoreCase("super_admin"))
 				create();
+			else
+				Popup.displayErrorMessage("Super admins can not create orders");
 		});
 		
 		uncompLv = new ListView<Cell>();
@@ -316,7 +318,10 @@ public class OrderView {
 			});
 			
 			removeButton.setOnAction(e -> {
-				remove(this);
+				if (loggedInUser.getStatus().equalsIgnoreCase("super_admin") || loggedInUser.getStatus().equalsIgnoreCase("admin"))
+					remove(this);
+				else
+					Popup.displayErrorMessage("You do not have permission to remove orders");
 			});
 			
 			this.getChildren().addAll(customerLabel, priceLabel, dateLabel, completeButton ,editButton, removeButton);

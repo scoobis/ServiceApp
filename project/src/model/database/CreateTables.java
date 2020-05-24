@@ -28,6 +28,7 @@ Connection connection = null;
 					+ "(id int NOT NULL AUTO_INCREMENT, "
 					+ "company_name varchar(25), "
 					+ "name varchar(75), "
+					+ "shop_id int, "
 					+ "phone varchar(25), "
 					+ "email varchar(155), "
 					+ "password varchar(512), "

@@ -30,12 +30,12 @@ public class ServiceView {
 	public ServiceView() {
 		serviceController = new ServiceController();
 		list = new ArrayList<Cell>();
-		
-		loggedInUser = Employee.getLoggedInUser();
 	}
 	
 	public BorderPane getCenter() {
 		ObservableList<Cell> obsList;
+		
+		loggedInUser = Employee.getLoggedInUser();
 		
 		setList();
 		
@@ -46,7 +46,7 @@ public class ServiceView {
 			if (loggedInUser.getStatus().equalsIgnoreCase("admin") || loggedInUser.getStatus().equalsIgnoreCase("super_admin"))
 				create();
 			else
-				Popup.displayErrorMessage("You do not have permission to create users!");
+				Popup.displayErrorMessage("You do not have permission to create services!");
 		});
 	
 		lv = new ListView<Cell>();
@@ -199,14 +199,14 @@ public class ServiceView {
 				if (loggedInUser.getStatus().equalsIgnoreCase("admin") || loggedInUser.getStatus().equalsIgnoreCase("super_admin"))
 					edit(this);
 				else
-					Popup.displayErrorMessage("You do not have permission to edit users!");
+					Popup.displayErrorMessage("You do not have permission to edit services!");
 			});
 			
 			removeButton.setOnAction(e -> {
-				if (loggedInUser.getStatus().equalsIgnoreCase("admin") || loggedInUser.getStatus().equalsIgnoreCase("super_admin"))
+				if (loggedInUser.getStatus().equalsIgnoreCase("super_admin"))
 					remove(this);
 				else
-					Popup.displayErrorMessage("You do not have permission to remove users!");
+					Popup.displayErrorMessage("You do not have permission to remove services!");
 			});
 			
 			this.getChildren().addAll(idLabel, titleLabel, priceLabel, editButton, removeButton);

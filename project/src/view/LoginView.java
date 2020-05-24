@@ -8,12 +8,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Employee;
 import security.PasswordHasher;
@@ -63,7 +61,7 @@ public class LoginView {
 		Button[] buttons = new Button[2];
 		buttons[0] = loginButton;
 		buttons[1] = registerButton;
-		boxButtons.setMargin(buttons[1], new Insets(0,0,0,50));
+		HBox.setMargin(buttons[1], new Insets(0,0,0,50));
 		boxButtons.getChildren().addAll(buttons);
 		pane.add(boxButtons, 0, 5);
 		

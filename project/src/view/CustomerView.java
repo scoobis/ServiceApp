@@ -17,6 +17,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 import model.Customer;
+import model.Employee;
 
 public class CustomerView {
 	
@@ -25,6 +26,8 @@ public class CustomerView {
 	
 	private CustomerController customerController;
 	
+	private Employee loggedInUser;
+	
 	public CustomerView() {
 		list = new ArrayList<Cell>();
 		customerController = new CustomerController();
@@ -32,6 +35,8 @@ public class CustomerView {
 	
 	public BorderPane getCenter() {
 		ObservableList<Cell> obsList;
+		
+		loggedInUser = Employee.getLoggedInUser();
 		
 		setList();
 		
@@ -50,7 +55,7 @@ public class CustomerView {
 	
 	private void setList() {
 		
-		ArrayList<Customer> allCustomers = customerController.getAllCustomers("company"); // TODO get company from logged in user
+		ArrayList<Customer> allCustomers = customerController.getAllCustomers(loggedInUser.getCompanyName());
 		
 		list.clear();
 		
@@ -87,7 +92,7 @@ public class CustomerView {
 			String phone = phoneField.getText();
 			String name = nameField.getText();
 			String address = addressField.getText();
-			String companyName = "company"; // TODO get company from logged in user;
+			String companyName = loggedInUser.getCompanyName();
 			
 			String message = customerController.createCustomer(name, email, phone, address, companyName);
 			
@@ -202,11 +207,17 @@ public class CustomerView {
 			HBox.setHgrow(emailLabel, Priority.ALWAYS);
 			
 			editButton.setOnAction(e -> {
-				edit(this);
+				if (loggedInUser.getStatus().equalsIgnoreCase("super_admin") || loggedInUser.getStatus().equalsIgnoreCase("admin"))
+					edit(this);
+				else
+					Popup.displayErrorMessage("You do not have permission to edit customers");
 			});
 			
 			removeButton.setOnAction(e -> {
-				remove(this);
+				if (loggedInUser.getStatus().equalsIgnoreCase("super_admin"))
+					remove(this);
+				else
+					Popup.displayErrorMessage("You do not have permission to delete customers");
 			});
 			
 			this.getChildren().addAll(nameLabel, emailLabel, phoneLabel, editButton, removeButton);

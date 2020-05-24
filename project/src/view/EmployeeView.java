@@ -36,12 +36,12 @@ public class EmployeeView {
 		list = new ArrayList<Cell>();
 		employeeController = new EmployeeController();
 		shopController = new ShopController();
-		
-		loggedInUser = Employee.getLoggedInUser();
 	}
 	
 	public BorderPane getCenter() {
 		ObservableList<Cell> obsList;
+		
+		loggedInUser = Employee.getLoggedInUser();
 		
 		setList();
 		
@@ -283,7 +283,7 @@ public class EmployeeView {
 			});
 			
 			removeButton.setOnAction(e -> {
-				if (loggedInUser.getStatus().equalsIgnoreCase("admin") || loggedInUser.getStatus().equalsIgnoreCase("super_admin"))
+				if (loggedInUser.getStatus().equalsIgnoreCase("super_admin"))
 					remove(this);
 				else
 					Popup.displayErrorMessage("You do not have permission to remove users!");

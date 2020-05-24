@@ -159,9 +159,11 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 				+ "'"+ e.getPhone() +"',"
 				+ "'"+ e.getEmail() +"', "
 				+ "'super_admin', "
-				+ "'"+ e.getStatus() +"', "
+				+ "'"+ e.getName() +"', "
 				+ "'"+ e.getPassword() +"')");
 			create.executeUpdate();
+			
+			System.out.println(e.getName());
 			return true;
 			} catch (SQLException e1) { 
 				e1.printStackTrace();
@@ -250,7 +252,7 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 				+ "UNION "
 				+ "SELECT * FROM admin WHERE email = '" + email + "' "
 				+ "UNION "
-				+ "SELECT *, 'dummy1' AS membersCol1 from super_admin = " + email + ";";
+				+ "SELECT * from super_admin = " + email + ";";
 		
 		Statement query = connection.prepareStatement(statement);
 		ResultSet result = query.executeQuery(statement);
