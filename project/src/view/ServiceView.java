@@ -58,7 +58,7 @@ public class ServiceView {
 	}
 	
 	private void setList() {
-		ArrayList<Service> allServices = serviceController.getAllServices("company"); // TODO get company from logged in user
+		ArrayList<Service> allServices = serviceController.getAllServices(loggedInUser.getCompanyName());
 		
 		list.clear();
 		
@@ -87,7 +87,7 @@ public class ServiceView {
 		
 		button.setOnAction(e -> {
 			
-			String companyName = "company"; // TODO and company from logged in user
+			String companyName = loggedInUser.getCompanyName();
 			String title = titleField.getText();
 			String description = descField.getText();
 			double price = Double.parseDouble(priceField.getText());
@@ -131,7 +131,7 @@ public class ServiceView {
 		button.setOnAction(e -> {
 			
 			int id = cell.getID();
-			String companyName = "company"; //TODO get company from logged in user
+			String companyName = loggedInUser.getCompanyName();
 			String title = titleField.getText();
 			String description = descField.getText();
 			double price = Double.parseDouble(priceField.getText());
@@ -164,26 +164,20 @@ public class ServiceView {
 	}
 	
 	public class Cell extends HBox {
-		Label idLabel = new Label();
-		Label titleLabel = new Label();
-		Label priceLabel = new Label();
-		Button editButton = new Button("Edit");
-		Button removeButton = new Button("Remove");
-		int id;
-		double price;
-		String title;
-		String company;
-		String description;
+		private Label titleLabel = new Label();
+		private Label priceLabel = new Label();
+		private Button editButton = new Button("Edit");
+		private Button removeButton = new Button("Remove");
+		private int id;
+		private double price;
+		private String title;
+		private String company;
+		private String description;
 
 		Cell(int id, String title, double price, String description) {
 			super();
 			
 			this.description = description;
-			
-			this.id = id;
-			idLabel.setText("Service id: " + id);
-			idLabel.setMaxWidth(Double.MAX_VALUE);
-			HBox.setHgrow(idLabel, Priority.ALWAYS);
 			
 			this.title = title;
 			titleLabel.setText("Title: " + title);
@@ -191,7 +185,7 @@ public class ServiceView {
 			HBox.setHgrow(titleLabel, Priority.ALWAYS);
 			
 			this.price = price;
-			priceLabel.setText("Price: " + price);
+			priceLabel.setText("Price: $" + price);
 			priceLabel.setMaxWidth(Double.MAX_VALUE);
 			HBox.setHgrow(priceLabel, Priority.ALWAYS);
 			
@@ -209,7 +203,7 @@ public class ServiceView {
 					Popup.displayErrorMessage("You do not have permission to remove services!");
 			});
 			
-			this.getChildren().addAll(idLabel, titleLabel, priceLabel, editButton, removeButton);
+			this.getChildren().addAll(titleLabel, priceLabel, editButton, removeButton);
 		}
 
 		public int getID() { return id; }

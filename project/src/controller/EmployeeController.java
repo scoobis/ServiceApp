@@ -107,13 +107,12 @@ public class EmployeeController {
 	public ArrayList<Employee> getAllEmployees(String companyName) {
         return employeeDatabase.getAllEmployees(companyName);
     }
-	
-	//TODO These needs implementation
-	public boolean validateEmployee(Employee e, String p) {
-			return false;
-	}
 
-	public Employee login(String email, String password) {
-		return employeeDatabase.validateEmployee(email, password);
+	public Employee login(String email, String password, boolean isSuperAdmin) {
+		System.out.println(isSuperAdmin);
+		if (isSuperAdmin)
+			return employeeDatabase.validateSuperAdmin(email, password);
+		else 
+			return employeeDatabase.validateEmployee(email, password);
 	}	
 }

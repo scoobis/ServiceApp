@@ -6,6 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -65,6 +66,10 @@ public class LoginView {
 		boxButtons.getChildren().addAll(buttons);
 		pane.add(boxButtons, 0, 5);
 		
+		CheckBox isSuperAdmin = new CheckBox();
+		isSuperAdmin.setText("Are you SuperAdmin?");
+		pane.add(isSuperAdmin, 0, 6);
+		
 		Employee test = Employee.getLoggedInUser();
 		if (test != null) {
 			usernameField.setText(test.getEmail());
@@ -72,7 +77,7 @@ public class LoginView {
 		
 		buttons[0].setOnAction(e -> {
 			
-			Employee employee = employeeController.login(usernameField.getText(), PasswordHasher.hashPassword(passwordField.getText()));
+			Employee employee = employeeController.login(usernameField.getText(), PasswordHasher.hashPassword(passwordField.getText()), isSuperAdmin.isSelected());
 			if(employee != null) {
 				Employee.logInUser(employee);
 				mainView.render(stage);

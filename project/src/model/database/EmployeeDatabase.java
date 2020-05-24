@@ -250,9 +250,7 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 		try {
 		String statement = "SELECT * FROM user WHERE email = '" + email + "' "
 				+ "UNION "
-				+ "SELECT * FROM admin WHERE email = '" + email + "' "
-				+ "UNION "
-				+ "SELECT * from super_admin = " + email + ";";
+				+ "SELECT * FROM admin WHERE email = '" + email + "';";
 		
 		Statement query = connection.prepareStatement(statement);
 		ResultSet result = query.executeQuery(statement);
@@ -274,6 +272,28 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 				
 			if (password.equalsIgnoreCase(result.getString("password"))) return employee;	
 		}
+		} catch (SQLException e1) { 
+			e1.printStackTrace(); 
+		}
+		return null;
+	}
+	
+	public SuperAdmin validateSuperAdmin(String email, String password) {
+		try {
+			String statement = "SELECT * FROM super_admin WHERE email = '" + email + "';";
+			
+			Statement query = connection.prepareStatement(statement);
+			ResultSet result = query.executeQuery(statement);
+			
+			while(result.next()) {
+				SuperAdmin superAdmin = new SuperAdmin(result.getString("phone"), result.getString("email"),
+						result.getString("name"), result.getString("company_name"), result.getString("password"));
+				superAdmin.setId(result.getInt("id"));
+				superAdmin.setStatus(result.getString("status"));
+				
+				if (password.equalsIgnoreCase(result.getString("password"))) return superAdmin;	
+			}
+			
 		} catch (SQLException e1) { 
 			e1.printStackTrace(); 
 		}

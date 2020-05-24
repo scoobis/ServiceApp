@@ -60,8 +60,7 @@ public class ShopView {
 	}
 	
 	private void setList() {
-		ArrayList<Shop> allShops = shopController.getAllShops("company"); // TODO add company name fom loggedin user
-		
+		ArrayList<Shop> allShops = shopController.getAllShops(loggedInUser.getCompanyName());
 		list.clear();
 		
 		for (Shop shop : allShops) {
@@ -86,7 +85,7 @@ public class ShopView {
 		Stage window = new Stage();
 		
 		button.setOnAction(e -> {
-			String companyName = "company"; // TODO get company name from logged in user
+			String companyName = loggedInUser.getCompanyName();
 			String name = nameField.getText();
 			String address = addressField.getText();
 			
