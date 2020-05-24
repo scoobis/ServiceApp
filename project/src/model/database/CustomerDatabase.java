@@ -24,7 +24,7 @@ public class CustomerDatabase implements DatabaseConnector {
 		ResultSet result = query.executeQuery(statement);
 		
 		while(result.next()) {
-			customers.add(getCustomerById(result.getString("id")));
+			customers.add(getCustomerById(result.getInt("id")));
 		}
 		
 		return customers;
@@ -35,7 +35,7 @@ public class CustomerDatabase implements DatabaseConnector {
 		}
 	}
 	
-	public Customer getCustomerById(String id) {
+	public Customer getCustomerById(int id) {
 		
 		try {
 		
@@ -43,7 +43,7 @@ public class CustomerDatabase implements DatabaseConnector {
 		Statement query = connection.prepareStatement(statement);
 		ResultSet result = query.executeQuery(statement);
 		
-		int i = 0;
+		int i = 0; //?
 		
 		Customer c = new Customer();
 		

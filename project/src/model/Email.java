@@ -5,10 +5,14 @@ import java.util.Properties;
 import javax.mail.*;
 import javax.mail.internet.*;
 
+import secretStuff.MailSecrets;
+
 public class Email {
 
-	String sender = "mackantestar@gmail.com";
-	String senderPassword = "katten1234";
+	MailSecrets mailSecrets = new MailSecrets();
+	
+	private String sender = mailSecrets.getSenderEmail();
+	private String senderPassword = mailSecrets.getSenderPasword();
 	String reciver;
 	String subject;
 	String mailContent;
@@ -75,4 +79,56 @@ public class Email {
 			mex.printStackTrace();
 		}
 	}
+	
+	public void sendMail(String email) {
+		setReciver(email);
+		setMailServerProperties();
+
+		try {
+
+			MimeMessage message = new MimeMessage(createSession());
+
+			message.setFrom(new InternetAddress(sender));
+			message.addRecipient(Message.RecipientType.TO, new InternetAddress(reciver));
+			message.setSubject(subject);
+			message.setText(mailContent);
+
+			Transport.send(message);
+
+			System.out.println("Message sent.");
+		} catch (MessagingException mex) {
+			mex.printStackTrace();
+		}
+	}
+	public void sendMail(String email, int orderId) {
+		setReciver(email);
+		orderCompleteTemplet(orderId);
+		setMailServerProperties();
+
+		try {
+
+			MimeMessage message = new MimeMessage(createSession());
+
+			message.setFrom(new InternetAddress(sender));
+			message.addRecipient(Message.RecipientType.TO, new InternetAddress(reciver));
+			message.setSubject(subject);
+			message.setText(mailContent);
+
+			Transport.send(message);
+
+			System.out.println("Message sent.");
+		} catch (MessagingException mex) {
+			mex.printStackTrace();
+		}
+	}
+	
+	public void orderCompleteTemplet(int orderId) {
+		//subject = "Order complete!";
+		subject = "Order "+orderId+" complete!";
+		mailContent = "Your service is now complete.\n Best regards,\n Company";
+	}
+	
+	
+	
+	
 }
