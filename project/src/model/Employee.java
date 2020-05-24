@@ -70,11 +70,11 @@ public abstract class Employee implements Serializable {
 		ObjectOutputStream oos = new ObjectOutputStream(fos);
 		oos.writeObject(e);
 		oos.close();
+		f.setWritable(false);
+		f.setReadable(true);
 		} catch(Exception err) {
 			err.printStackTrace();
 		}
-		f.setWritable(false);
-		f.setReadable(true);
 	}
 	
 	public Employee() { this.status = ""; }
