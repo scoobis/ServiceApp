@@ -40,7 +40,7 @@ public class MainView {
 		});
 		menuButtons[1].setOnAction(e -> {
 			if(lastPressed != 1) {
-				pane.setCenter(ov.getCenter());
+				pane.setCenter(ov.getCenter(window));
 				lastPressed = 1;
 			}
 		});
