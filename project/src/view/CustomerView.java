@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -54,7 +55,7 @@ public class CustomerView {
 		list.clear();
 		
 		for (Customer customer : allCustomers) {
-			list.add(new Cell(customer.getId(), customer.getName(), customer.getEmail(), customer.getPhone(), customer.getAddress()));
+			list.add(new Cell(customer.getId(), customer.getName(), customer.getEmail(), customer.getPhone(), customer.getAddress(), customer.isActive()));
 		}
 		
 	}
@@ -62,24 +63,20 @@ public class CustomerView {
 	private void create() {
 		GridPane pane = new GridPane();
 		Button button = new Button("Create");
-		TextField idField = new TextField();
 		TextField nameField = new TextField();
 		TextField emailField = new TextField();
-		TextField phoneField = new TextField();
+		IntTextField phoneField = new IntTextField();
 		TextField addressField = new TextField();
 		
-		// TODO remove id
-		pane.add(new Label("Id:"), 0, 0);
-		pane.add(idField, 0, 1);
-		pane.add(new Label("Name:"), 0, 2);
-		pane.add(nameField, 0, 3);
-		pane.add(new Label("Email:"), 0, 4);
-		pane.add(emailField, 0, 5);
-		pane.add(new Label("Phone:"), 0, 6);
-		pane.add(phoneField, 0, 7);
-		pane.add(new Label("Address:"), 0, 8);
-		pane.add(addressField, 0, 9);
-		pane.add(button, 0, 10);
+		pane.add(new Label("Name:"), 0, 0);
+		pane.add(nameField, 0, 1);
+		pane.add(new Label("Email:"), 0, 2);
+		pane.add(emailField, 0, 3);
+		pane.add(new Label("Phone:"), 0, 4);
+		pane.add(phoneField, 0, 5);
+		pane.add(new Label("Address:"), 0, 6);
+		pane.add(addressField, 0, 7);
+		pane.add(button, 0, 8);
 		
 		Scene scene = new Scene(pane, 300, 600);
 		Stage window = new Stage();
@@ -92,14 +89,12 @@ public class CustomerView {
 			String address = addressField.getText();
 			String companyName = "company"; // TODO get company from logged in user;
 			
-			// TODO display message
 			String message = customerController.createCustomer(name, email, phone, address, companyName);
+			Popup.display(message);
 			
 			lv.refresh();
 			window.close();
-			//TODO Call controller here
 			
-			// update view
 			setList();
 		});
 		window.setTitle("Create new customer");
@@ -110,24 +105,23 @@ public class CustomerView {
 	private void edit(Cell cell) {
 		GridPane pane = new GridPane();
 		Button button = new Button("Edit");
-		TextField idField = new TextField("" + cell.getID());
 		TextField nameField = new TextField("" + cell.getName());
 		TextField emailField = new TextField("" + cell.getEmail());
-		TextField phoneField = new TextField("" + cell.getPhone());
+		IntTextField phoneField = new IntTextField("" + cell.getPhone());
 		TextField addressField = new TextField("" + cell.getAddress());
+		CheckBox activeBox = new CheckBox();
+		activeBox.setSelected(cell.getActive());
 		
-		// TODO remove id
-		// TODO add isActive check
-		pane.add(new Label("Id:"), 0, 0);
-		pane.add(idField, 0, 1);
-		pane.add(new Label("Name:"), 0, 2);
-		pane.add(nameField, 0, 3);
-		pane.add(new Label("Email:"), 0, 4);
-		pane.add(emailField, 0, 5);
-		pane.add(new Label("Phone:"), 0, 6);
-		pane.add(phoneField, 0, 7);
-		pane.add(new Label("Address:"), 0, 8);
-		pane.add(addressField, 0, 9);
+		pane.add(new Label("Name:"), 0, 0);
+		pane.add(nameField, 0, 1);
+		pane.add(new Label("Email:"), 0, 2);
+		pane.add(emailField, 0, 3);
+		pane.add(new Label("Phone:"), 0, 4);
+		pane.add(phoneField, 0, 5);
+		pane.add(new Label("Address:"), 0, 6);
+		pane.add(addressField, 0, 7);
+		pane.add(new Label("Active:"), 0, 8);
+		pane.add(activeBox, 0, 9);
 		pane.add(button, 0, 10);
 		
 		Scene scene = new Scene(pane, 300, 600);
@@ -140,15 +134,14 @@ public class CustomerView {
 			String phone = phoneField.getText();
 			String name = nameField.getText();
 			String address = addressField.getText();
+			boolean active = activeBox.isSelected();
 			
-			// TODO set isActive
-			// TODO display message
-			String message = customerController.editCustomer(name, email, phone, address, true, id);
+			String message = customerController.editCustomer(name, email, phone, address, active, id);
+			Popup.display(message);
 			
 			lv.refresh();
 			window.close();
 			
-			// update view
 			setList();
 		});
 		window.setTitle("Edit " + cell.getID());
@@ -157,12 +150,10 @@ public class CustomerView {
 	}
 	
 	private void remove(Cell cell) {
-		//TODO display message
 		String message = customerController.deleteCustomer(cell.getID(), cell.getName());
-				
+		Popup.display(message);
 		lv.refresh();
 				
-		// update view
 		setList();
 	}
 	
@@ -177,10 +168,12 @@ public class CustomerView {
 		String email;
 		String phone;
 		String address;
-
-		Cell(int id, String name, String email, String phone, String address) {
+		boolean active;
+		
+		Cell(int id, String name, String email, String phone, String address, boolean active) {
 			super();
 			
+			this.active = active;
 			this.phone = phone;
 			this.address = address;
 			
@@ -190,7 +183,7 @@ public class CustomerView {
 			HBox.setHgrow(idLabel, Priority.ALWAYS);
 			
 			this.name = name;
-			nameLabel.setText("Company: " + name);
+			nameLabel.setText("Name: " + name);
 			nameLabel.setMaxWidth(Double.MAX_VALUE);
 			HBox.setHgrow(nameLabel, Priority.ALWAYS);
 			
@@ -248,6 +241,14 @@ public class CustomerView {
 
 		public void setAddress(String address) {
 			this.address = address;
+		}
+		
+		public boolean getActive() {
+			return active;
+		}
+		
+		public void setActive(boolean active) {
+			this.active = active;
 		}
 		
 	}

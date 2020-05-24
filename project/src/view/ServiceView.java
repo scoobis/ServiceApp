@@ -60,24 +60,17 @@ public class ServiceView {
 	private void create() {
 		GridPane pane = new GridPane();
 		Button button = new Button("Create");
-		TextField serviceIdField = new TextField();
 		TextField titleField = new TextField();
-		TextField priceField = new TextField();
-		TextField companyField = new TextField();
+		DoubleTextField priceField = new DoubleTextField();
 		TextArea descField = new TextArea();
 		
-		// TODO remove serviceId and company
-		pane.add(new Label("Service Id:"), 0, 0);
-		pane.add(serviceIdField, 0, 1);
-		pane.add(new Label("Title:"), 0, 2);
-		pane.add(titleField, 0, 3);
-		pane.add(new Label("Price:"), 0, 4);
-		pane.add(priceField, 0, 5);
-		pane.add(new Label("Company:"), 0, 6);
-		pane.add(companyField, 0, 7);
-		pane.add(new Label("Description:"), 0, 8);
-		pane.add(descField, 0, 9);
-		pane.add(button, 0, 10);
+		pane.add(new Label("Title:"), 0, 0);
+		pane.add(titleField, 0, 1);
+		pane.add(new Label("Price:"), 0, 2);
+		pane.add(priceField, 0, 3);
+		pane.add(new Label("Description:"), 0, 4);
+		pane.add(descField, 0, 5);
+		pane.add(button, 0, 6);
 		
 		Scene scene = new Scene(pane, 300, 600);
 		Stage window = new Stage();
@@ -92,10 +85,9 @@ public class ServiceView {
 			lv.refresh();
 			window.close();
 			
-			// TODO display message
 			String message = serviceController.newService(companyName, title, description, price);
+			Popup.display(message);
 			
-			// update view
 			setList();
 		});
 		
@@ -107,24 +99,17 @@ public class ServiceView {
 	private void edit(Cell cell) {
 		GridPane pane = new GridPane();
 		Button button = new Button("Edit");
-		TextField serviceIdField = new TextField("" + cell.getID());
 		TextField titleField = new TextField("" + cell.getTitle());
-		TextField priceField = new TextField("" + cell.getPrice());
-		TextField companyField = new TextField("" + cell.getCompany());
+		DoubleTextField priceField = new DoubleTextField("" + cell.getPrice());
 		TextArea descField = new TextArea("" + cell.getDescription());
 		
-		// TODO remove serviceId, remove company
-		pane.add(new Label("Service Id:"), 0, 0);
-		pane.add(serviceIdField, 0, 1);
-		pane.add(new Label("Title:"), 0, 2);
-		pane.add(titleField, 0, 3);
-		pane.add(new Label("Price:"), 0, 4);
-		pane.add(priceField, 0, 5);
-		pane.add(new Label("Company:"), 0, 6);
-		pane.add(companyField, 0, 7);
-		pane.add(new Label("Description:"), 0, 8);
-		pane.add(descField, 0, 9);
-		pane.add(button, 0, 10);
+		pane.add(new Label("Title:"), 0, 0);
+		pane.add(titleField, 0, 1);
+		pane.add(new Label("Price:"), 0, 2);
+		pane.add(priceField, 0, 3);
+		pane.add(new Label("Description:"), 0, 4);
+		pane.add(descField, 0, 5);
+		pane.add(button, 0, 6);
 		
 		Scene scene = new Scene(pane, 300, 600);
 		Stage window = new Stage();
@@ -140,10 +125,9 @@ public class ServiceView {
 			lv.refresh();
 			window.close();
 			
-			// TODO display message
 			String message = serviceController.editService(companyName, title, description, price, id);
+			Popup.display(message);
 			
-			// update view
 			setList();
 			
 		});
@@ -153,12 +137,10 @@ public class ServiceView {
 	}
 	
 	private void remove(Cell cell) {
-		// TODO display message
 		String message = serviceController.deleteService(cell.getID(), cell.getTitle());
-		
+		Popup.display(message);
 		lv.refresh();
 		
-		// update view
 		setList();
 	}
 	

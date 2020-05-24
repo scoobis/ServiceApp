@@ -113,7 +113,7 @@ public class OrderDatabase implements DatabaseConnector {
 		PreparedStatement edit;
 		try {
 			edit = connection.prepareStatement("UPDATE orders "
-						+ "SET completed = true, "
+						+ "SET completed = true "
 						+ "WHERE id = "+ id +";");
 			edit.executeUpdate();
 			
@@ -129,7 +129,7 @@ public class OrderDatabase implements DatabaseConnector {
 		PreparedStatement edit;
 		try {
 			edit = connection.prepareStatement("UPDATE orders "
-						+ "SET completed = false, "
+						+ "SET completed = false "
 						+ "WHERE id = "+ id +";");
 			edit.executeUpdate();
 			

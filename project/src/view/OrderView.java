@@ -5,35 +5,41 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import controller.OrderController;
+import controller.ServiceController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 import model.Order;
+import model.Service;
 
 public class OrderView {
 	
-	private ArrayList<Cell> list;
-	private ListView<Cell> lv;
+	private ArrayList<Cell> uncompList;
+	private ArrayList<Cell> compList;
+	private ListView<Cell> uncompLv;
+	private ListView<Cell> compLv;
 	
 	private OrderController orderController;
 	
 	public OrderView() {
 		orderController = new OrderController();
-		list = new ArrayList<Cell>();
+		uncompList = new ArrayList<Cell>();
+		compList = new ArrayList<Cell>();
 	}
 	
-	public BorderPane getCenter() {
-		ObservableList<Cell> obsList;
+	public BorderPane getCenter(Stage window) {
+		ObservableList<Cell> uncompObsList;
+		ObservableList<Cell> compObsList;
 		
 		setList();
 			
@@ -42,11 +48,20 @@ public class OrderView {
 		
 		createButton.setOnAction(e -> create());
 		
-		lv = new ListView<Cell>();
-		obsList = FXCollections.observableList(list);
-		lv.setItems(obsList);
-		bp.setCenter(lv);
+		uncompLv = new ListView<Cell>();
+		compLv = new ListView<Cell>();
+		uncompObsList = FXCollections.observableList(uncompList);
+		compObsList = FXCollections.observableList(compList);
+		uncompLv.setItems(uncompObsList);
+		compLv.setItems(compObsList);
+		
+		uncompLv.prefWidthProperty().bind(window.widthProperty().multiply(.495));
+		compLv.prefWidthProperty().bind(window.widthProperty().multiply(.495));
+		
 		bp.setTop(createButton);
+		bp.setLeft(uncompLv);
+		bp.setRight(compLv);
+		
 		return bp;
 	}
 	
@@ -54,61 +69,54 @@ public class OrderView {
 		
 		ArrayList<Order> allOrders = orderController.getAllOrders(1); // TODO get shopId from logged in user
 		
-		list.clear();
+		uncompList.clear();
+		compList.clear();
 		
-			for(Order o : allOrders) {
-				list.add(new Cell(o.getCustomerId(), o.getPrice(), o.getCompleted(), o.getServiceId(), o.getDate(), o.getShopId(), o.getcompanyName(), o.getId()));
-			}
+		for(Order o : allOrders) {
+			if(!o.getCompleted())
+				uncompList.add(new Cell(o.getCustomerId(), o.getPrice(), o.getCompleted(), o.getServiceId(), o.getDate(), o.getShopId(), o.getcompanyName(), o.getId()));
+			else
+				compList.add(new Cell(o.getCustomerId(), o.getPrice(), o.getCompleted(), o.getServiceId(), o.getDate(), o.getShopId(), o.getcompanyName(), o.getId()));
+		}
 	}
 	
 	private void create() {
 		GridPane pane = new GridPane();
 		Button button = new Button("Create");
-		TextField customerIdField = new TextField();
-		TextField priceField = new TextField();
-		CheckBox completedBox = new CheckBox();
-		TextField serviceIdField = new TextField();
-		TextField dateField = new TextField();
-		TextField shopIdField = new TextField();
-		TextField companyIdField = new TextField();
+		IntTextField customerIdField = new IntTextField();
+		DoubleTextField priceField = new DoubleTextField();
+		ComboBox<String> serviceBox = new ComboBox<String>();
+		
+		for(Service service : FXCollections.observableList(new ServiceController().getAllServices("company"))) { //TODO Get company from logged in user
+			serviceBox.getItems().add("" + service.getId() + ": " + service.getTitle());
+		}
 		
 		pane.add(new Label("Customer Id:"), 0, 0);
 		pane.add(customerIdField, 0, 1);
 		pane.add(new Label("Price:"), 0, 2);
 		pane.add(priceField, 0, 3);
-		pane.add(new Label("Completed:"), 0, 4);
-		pane.add(completedBox, 0, 5);
-		pane.add(new Label("Service Id:"), 0, 6);
-		pane.add(serviceIdField, 0, 7);
-		pane.add(new Label("Date:"), 0, 8);
-		pane.add(dateField, 0, 9);
-		pane.add(new Label("Shop Id:"), 0, 10);
-		pane.add(shopIdField, 0, 11);
-		pane.add(new Label("Company Id:"), 0, 12);
-		pane.add(companyIdField, 0, 13);
-		pane.add(button, 0, 14);
+		pane.add(new Label("Service:"), 0, 4);
+		pane.add(serviceBox, 0, 5);
+		pane.add(button, 0, 6);
 		
 		Scene scene = new Scene(pane, 300, 600);
 		Stage window = new Stage();
 		
 		button.setOnAction(e -> {
-			
-			// TODO remove datefield, companyName, shopField
-			
+			int serviceId = Integer.parseInt(serviceBox.getValue().substring(0, serviceBox.getValue().indexOf(':')));
 			int customerId = Integer.parseInt(customerIdField.getText());
-			int serviceId = Integer.parseInt(serviceIdField.getText());
 			String date = this.getTodaysDate();
 			int shopId = 1; // TODO get shopId from logged in user
 			String companyName = "company"; // TODO get company from logged in user
 			double price = Double.parseDouble(priceField.getText());
 			
-			lv.refresh();
+			uncompLv.refresh();
+			compLv.refresh();
 			window.close();
 			
-			// TODO display message
 			String message = orderController.newOrder(customerId, serviceId, date, shopId, companyName, price);
+			Popup.display(message);
 			
-			// update view
 			setList();
 		});
 		
@@ -121,31 +129,17 @@ public class OrderView {
 		
 		GridPane pane = new GridPane();
 		Button editBtn = new Button("Edit");
-		TextField customerIdField = new TextField("" + cell.getCustomerId());
-		TextField priceField = new TextField("" + cell.getPrice());
-		CheckBox completedBox = new CheckBox();
-		completedBox.setSelected(cell.isCompleted());
-		TextField serviceIdField = new TextField("" + cell.getServiceId());
-		TextField dateField = new TextField("" + cell.getDate());
-		TextField shopIdField = new TextField("" + cell.getShopId());
-		TextField companyIdField = new TextField("" + cell.getCompanyName());
+		IntTextField customerIdField = new IntTextField("" + cell.getCustomerId());
+		DoubleTextField priceField = new DoubleTextField("" + cell.getPrice());
+		IntTextField shopIdField = new IntTextField("" + cell.getShopId());
 		
-		// TODO only include customerId, shopId, Price, completed
 		pane.add(new Label("Customer Id:"), 0, 0);
 		pane.add(customerIdField, 0, 1);
 		pane.add(new Label("Price:"), 0, 2);
 		pane.add(priceField, 0, 3);
-		pane.add(new Label("Completed:"), 0, 4);
-		pane.add(completedBox, 0, 5);
-		pane.add(new Label("Service Id:"), 0, 6);
-		pane.add(serviceIdField, 0, 7);
-		pane.add(new Label("Date:"), 0, 8);
-		pane.add(dateField, 0, 9);
-		pane.add(new Label("Shop Id:"), 0, 10);
-		pane.add(shopIdField, 0, 11);
-		pane.add(new Label("Company Id:"), 0, 12);
-		pane.add(companyIdField, 0, 13);
-		pane.add(editBtn, 0, 14);
+		pane.add(new Label("Shop Id:"), 0, 4);
+		pane.add(shopIdField, 0, 5);
+		pane.add(editBtn, 0, 6);
 		
 		Scene scene = new Scene(pane, 300, 600);
 		Stage window = new Stage();
@@ -154,16 +148,16 @@ public class OrderView {
 			
 			int id = cell.getID();
 			int customerId = Integer.parseInt(customerIdField.getText());
-			int serviceId = Integer.parseInt(serviceIdField.getText());
+			int serviceId = cell.getServiceId();
 			double price = Double.parseDouble(priceField.getText());
 			
-			lv.refresh();
+			uncompLv.refresh();
+			compLv.refresh();
 			window.close();
 			
-			// TODO display message
 			String message = orderController.editOrder(id, customerId, serviceId, price);
+			Popup.display(message);
 			
-			// update view
 			setList();
 		});
 		
@@ -173,12 +167,12 @@ public class OrderView {
 	}
 	
 	private void remove(Cell cell) {
-		//TODO display message
 		String message = orderController.deleteOrder(cell.getID());
+		Popup.display(message);
 		
-		lv.refresh();
+		uncompLv.refresh();
+		compLv.refresh();
 		
-		// update view
 		setList();
 	}
 	
@@ -190,9 +184,10 @@ public class OrderView {
 	public class Cell extends HBox {
 		Label customerLabel = new Label();
 		Label priceLabel = new Label();
-		Label completedLabel = new Label();
+		Label dateLabel = new Label();
 		Button editButton = new Button("Edit");
 		Button removeButton = new Button("Remove");
+		Button completeButton = new Button();
 		int customerId;
 		double price;
 		boolean completed;
@@ -206,7 +201,7 @@ public class OrderView {
 			super();
 			
 			this.serviceId = serviceId;
-			this.date = date;
+			this.completed = completed;
 			this.shopId = shopId;
 			this.companyName = companyName;
 			this.id = id;
@@ -221,10 +216,32 @@ public class OrderView {
 			priceLabel.setMaxWidth(Double.MAX_VALUE);
 			HBox.setHgrow(priceLabel, Priority.ALWAYS);
 			
-			this.completed = completed;
-			completedLabel.setText("Completed: " + completed);
-			completedLabel.setMaxWidth(Double.MAX_VALUE);
-			HBox.setHgrow(completedLabel, Priority.ALWAYS);
+			this.date = date;
+			dateLabel.setText("Date: " + date);
+			dateLabel.setMaxWidth(Double.MAX_VALUE);
+			HBox.setHgrow(dateLabel, Priority.ALWAYS);
+			
+			//TODO Update view
+			if(completed) {
+				completeButton.setText("Uncomplete");
+				completeButton.setOnAction(e -> {
+					orderController.setOrderToUnCompleted(id);
+					uncompLv.refresh();
+					compLv.refresh();
+					
+					setList();
+				});
+			} else {
+				completeButton.setText("Complete");
+				completeButton.setOnAction(e -> {
+					orderController.setOrderToCompleted(id);
+					uncompLv.refresh();
+					compLv.refresh();
+					
+					setList();
+				});
+			}
+			
 			
 			editButton.setOnAction(e -> {
 				edit(this);
@@ -234,7 +251,7 @@ public class OrderView {
 				remove(this);
 			});
 			
-			this.getChildren().addAll(customerLabel, priceLabel, completedLabel, editButton, removeButton);
+			this.getChildren().addAll(customerLabel, priceLabel, dateLabel, completeButton ,editButton, removeButton);
 		}
 
 		public int getCustomerId() {
