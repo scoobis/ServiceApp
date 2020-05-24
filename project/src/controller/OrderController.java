@@ -56,6 +56,10 @@ public class OrderController {
     public ArrayList<Order> getAllOrders(int shopId) {
         return orderDatabase.getAllOrders(shopId);
     }
+    
+    public ArrayList<Order> getAllOrdersCompany(String companyName) {
+    	return orderDatabase.getAllOrdersCompany(companyName);
+    }
 
     public String setOrderToCompleted(int id) {
         if (id <= 0) return "ops, something went wrong!";

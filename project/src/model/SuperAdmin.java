@@ -28,6 +28,19 @@ public class SuperAdmin extends Employee {
 		return null;
 	}
 	
+	public Shop createShop(String name, String address, String companyName) {
+		return new Shop(companyName, address, name);
+	}
+	
+	public Shop editShop(int id, String name, String address) {
+		Shop shop = new Shop();
+		shop.setId(id);
+		shop.setName(name);
+		shop.setAddress(address);
+		
+		return shop;
+	}
+	
 	public Service createService(String companyName, String title, String description, double price) {
 		Service service = new Service();
         service.setCompany(companyName);

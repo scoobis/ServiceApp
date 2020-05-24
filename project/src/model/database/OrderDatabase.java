@@ -32,6 +32,26 @@ public class OrderDatabase implements DatabaseConnector {
 		}
 	}
 	
+	public ArrayList<Order> getAllOrdersCompany(String companyName) {
+		ArrayList<Order> orders = new ArrayList<>();
+		
+		try {
+			String statement = "SELECT id FROM orders WHERE company_name = '" + companyName + "';";
+			Statement query = connection.prepareStatement(statement);
+			ResultSet result = query.executeQuery(statement);
+			
+			while(result.next()) {
+				orders.add(getOrderById(result.getInt("id")));
+			}
+			
+			return orders;
+			
+		} catch (SQLException e1) { 
+			e1.printStackTrace(); 
+			return null;
+		}
+	}
+	
 	public Order getOrderById(int id) {
 		Order order = new Order();
 		try {

@@ -34,4 +34,12 @@ public class InputValidator {
 		
 		return "";
 	}
+	
+	public String validateShopInput(String name, String address, String companyName) {
+		if (name.equalsIgnoreCase("")) return "Name is missing!";
+		else if (address.equalsIgnoreCase("")) return "Address is missing!";
+		else if (companyName.equalsIgnoreCase("")) return "Company is missing!";
+		
+		return "";
+	}
 }

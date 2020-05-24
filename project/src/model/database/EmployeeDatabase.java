@@ -170,9 +170,34 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 	}
 	
 	public boolean deleteEmployee(Employee e) {
+		// Not used anymore!
 		try {
 			PreparedStatement create;
 			create = connection.prepareStatement("DELETE FROM "+ e.getStatus() +" WHERE id = " + e.getId() + ";");
+			create.executeUpdate();
+			return true;
+			} catch (SQLException e1) { 
+				e1.printStackTrace();
+				return false;
+				}
+	}
+	
+	public boolean deleteUser(int id) {
+		try {
+			PreparedStatement create;
+			create = connection.prepareStatement("DELETE FROM user WHERE id = " + id + ";");
+			create.executeUpdate();
+			return true;
+			} catch (SQLException e1) { 
+				e1.printStackTrace();
+				return false;
+				}
+	}
+	
+	public boolean deleteAdmin(int id) {
+		try {
+			PreparedStatement create;
+			create = connection.prepareStatement("DELETE FROM admin WHERE id = " + id + ";");
 			create.executeUpdate();
 			return true;
 			} catch (SQLException e1) { 
@@ -219,24 +244,38 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 			}
 	}
 	
-	public boolean validateEmployee(String email, String password) {
+	public Employee validateEmployee(String email, String password) {
 		try {
-		String statement = "SELECT password FROM user WHERE email = '" + email + "' "
+		String statement = "SELECT * FROM user WHERE email = '" + email + "' "
 				+ "UNION "
-				+ "SELECT password FROM admin WHERE email = '" + email + "' "
+				+ "SELECT * FROM admin WHERE email = '" + email + "' "
 				+ "UNION "
-				+ "SELECT password from super_admin = " + email + ";";
+				+ "SELECT *, 'dummy1' AS membersCol1 from super_admin = " + email + ";";
 		
 		Statement query = connection.prepareStatement(statement);
 		ResultSet result = query.executeQuery(statement);
 		
+		Employee employee = null;
+		
 		while(result.next()) {
-			if (password.equalsIgnoreCase(result.getString("password"))) return true;	
+			if (result.getString("status").equalsIgnoreCase("user")) employee = new User();
+			else if (result.getString("status").equalsIgnoreCase("admin")) employee = new Admin();
+			else if (result.getString("status").equalsIgnoreCase("super_admin")) employee = new SuperAdmin();
+			employee.setCompanyName(result.getString("company_name"));
+			employee.setShopId(result.getInt("shop_id"));
+			employee.setPhone(result.getString("phone"));
+			employee.setEmail(result.getString("email"));
+			employee.setStatus(result.getString("status"));
+			employee.setId(result.getInt("id"));
+			employee.setName(result.getString("name"));
+			employee.setPassword(result.getString("password"));
+				
+			if (password.equalsIgnoreCase(result.getString("password"))) return employee;	
 		}
 		} catch (SQLException e1) { 
 			e1.printStackTrace(); 
 		}
-		return false;
+		return null;
 	}
 	
 	// TEST METHODS

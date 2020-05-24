@@ -13,13 +13,11 @@ import security.PasswordHasher;
 public class EmployeeController {
 
 	private EmployeeDatabase employeeDatabase;
-	private PasswordHasher hash;
 	
 	private InputValidator inputValidator;
 	
 	public EmployeeController() {
 		employeeDatabase = new EmployeeDatabase();
-		hash = new PasswordHasher();
 		
 		inputValidator = new InputValidator();
 	}
@@ -30,12 +28,9 @@ public class EmployeeController {
 		superAdmin.setCompanyName(list.get(1));
 		superAdmin.setName(list.get(2));
 		superAdmin.setPhone(list.get(3));
-		try {
-			String hashedPassword = hash.hashPassword(list.get(4));
-			//superAdmin.setPassword(hashedPassword); 
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
+		
+		// TODO hash password
+		
 		superAdmin.setStatus("Super_Admin");
 		employeeDatabase.saveEmployee(superAdmin);
 	}
@@ -54,11 +49,11 @@ public class EmployeeController {
         return "User created successfully";
     }
 	
-	public String deleteUser(Employee e) {
+	public String deleteUser(int id, String name) {
 		
-        boolean isDeleted = employeeDatabase.deleteEmployee(e);
+        boolean isDeleted = employeeDatabase.deleteUser(id);
 
-        if (isDeleted) return e.getName() + " Deleted!";
+        if (isDeleted) return name + " Deleted!";
         return "ops, something went wrong!";
     }
 	
@@ -89,11 +84,11 @@ public class EmployeeController {
         return "Admin created successfully";
     }
 	
-	public String deleteAdmin(Employee e) {
+	public String deleteAdmin(int id, String name) {
 		
-        boolean isDeleted = employeeDatabase.deleteEmployee(e);
+        boolean isDeleted = employeeDatabase.deleteAdmin(id);
 
-        if (isDeleted) return e.getName() + " Deleted!";
+        if (isDeleted) return name + " Deleted!";
         return "ops, something went wrong!";
     }
 	
@@ -119,7 +114,7 @@ public class EmployeeController {
 			return false;
 	}
 
-	public boolean login(String email, String password) {
-		return false;
+	public Employee login(String email, String password) {
+		return employeeDatabase.validateEmployee(email, password);
 	}	
 }
