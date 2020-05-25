@@ -6,6 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -18,10 +19,14 @@ import security.PasswordHasher;
 
 
 public class LoginView {
-	Stage window = null;
-	MainView mainView = new MainView();
-	IView regView = new RegisterView();
-	EmployeeController cont = new EmployeeController();
+	private Stage window = null;
+	private EmployeeController employeeController;
+	private MainView mainView;
+	
+	public LoginView() {
+		employeeController = new EmployeeController();
+		mainView = new MainView();
+	}
 	
 	public void render(Stage stage) {
 		window = stage;
@@ -32,6 +37,7 @@ public class LoginView {
 		pane.setPadding(new Insets(25,25,25,25));
 		pane.setMinHeight(900);
 		pane.setMinWidth(1800);
+		
 		Label username = new Label("Username");
 		pane.add(username, 0, 1);
 		
@@ -56,9 +62,13 @@ public class LoginView {
 		Button[] buttons = new Button[2];
 		buttons[0] = loginButton;
 		buttons[1] = registerButton;
-		boxButtons.setMargin(buttons[1], new Insets(0,0,0,50));
+		HBox.setMargin(buttons[1], new Insets(0,0,0,50));
 		boxButtons.getChildren().addAll(buttons);
 		pane.add(boxButtons, 0, 5);
+		
+		CheckBox isSuperAdmin = new CheckBox();
+		isSuperAdmin.setText("Are you SuperAdmin?");
+		pane.add(isSuperAdmin, 0, 6);
 		
 		Employee test = Employee.getLoggedInUser();
 		if (test != null) {
@@ -66,7 +76,8 @@ public class LoginView {
 		}
 		
 		buttons[0].setOnAction(e -> {
-			Employee employee = cont.login(usernameField.getText(), PasswordHasher.hashPassword(passwordField.getText()));
+			
+			Employee employee = employeeController.login(usernameField.getText(), PasswordHasher.hashPassword(passwordField.getText()), isSuperAdmin.isSelected());
 			if(employee != null) {
 				Employee.logInUser(employee);
 				mainView.render(stage);
@@ -81,7 +92,7 @@ public class LoginView {
 		});
 		
 		buttons[1].setOnAction(e -> {
-			regView.render(stage);
+			new RegisterView().render(stage);
 		});
 		
 		Scene scene = new Scene(pane);

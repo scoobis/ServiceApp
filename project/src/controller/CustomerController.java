@@ -1,6 +1,5 @@
 package controller;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import model.Customer;
@@ -48,7 +47,7 @@ public class CustomerController {
 
         boolean isDeleted = customerDatabase.editCustomer(user.editCustomer(name, email, phone, address, isActive, id));
 
-        if (isDeleted) return name + " Edited!";
+        if (isDeleted) return name + " Edited successfully!";
         return "ops, something went wrong!";
 
     }

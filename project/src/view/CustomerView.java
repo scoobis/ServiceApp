@@ -17,6 +17,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 import model.Customer;
+import model.Employee;
 
 public class CustomerView {
 	
@@ -25,6 +26,8 @@ public class CustomerView {
 	
 	private CustomerController customerController;
 	
+	private Employee loggedInUser;
+	
 	public CustomerView() {
 		list = new ArrayList<Cell>();
 		customerController = new CustomerController();
@@ -32,6 +35,8 @@ public class CustomerView {
 	
 	public BorderPane getCenter() {
 		ObservableList<Cell> obsList;
+		
+		loggedInUser = Employee.getLoggedInUser();
 		
 		setList();
 		
@@ -50,7 +55,7 @@ public class CustomerView {
 	
 	private void setList() {
 		
-		ArrayList<Customer> allCustomers = customerController.getAllCustomers("company"); // TODO get company from logged in user
+		ArrayList<Customer> allCustomers = customerController.getAllCustomers(loggedInUser.getCompanyName());
 		
 		list.clear();
 		
@@ -87,15 +92,19 @@ public class CustomerView {
 			String phone = phoneField.getText();
 			String name = nameField.getText();
 			String address = addressField.getText();
-			String companyName = "company"; // TODO get company from logged in user;
+			String companyName = loggedInUser.getCompanyName();
 			
 			String message = customerController.createCustomer(name, email, phone, address, companyName);
-			Popup.display(message);
 			
 			lv.refresh();
 			window.close();
 			
 			setList();
+			
+			if (message.contains("successfully"))
+				Popup.displaySuccessMessage(message);
+			else
+				Popup.displayErrorMessage(message);
 		});
 		window.setTitle("Create new customer");
 		window.setScene(scene);
@@ -137,12 +146,16 @@ public class CustomerView {
 			boolean active = activeBox.isSelected();
 			
 			String message = customerController.editCustomer(name, email, phone, address, active, id);
-			Popup.display(message);
 			
 			lv.refresh();
 			window.close();
 			
 			setList();
+			
+			if (message.contains("successfully"))
+				Popup.displaySuccessMessage(message);
+			else
+				Popup.displayErrorMessage(message);
 		});
 		window.setTitle("Edit " + cell.getID());
 		window.setScene(scene);
@@ -151,14 +164,15 @@ public class CustomerView {
 	
 	private void remove(Cell cell) {
 		String message = customerController.deleteCustomer(cell.getID(), cell.getName());
-		Popup.display(message);
 		lv.refresh();
 				
 		setList();
+		
+		Popup.displayErrorMessage(message);
 	}
 	
 	public class Cell extends HBox {
-		Label idLabel = new Label();
+		Label phoneLabel = new Label();
 		Label nameLabel = new Label();
 		Label emailLabel = new Label();
 		Button editButton = new Button("Edit");
@@ -174,18 +188,18 @@ public class CustomerView {
 			super();
 			
 			this.active = active;
-			this.phone = phone;
 			this.address = address;
-			
 			this.id = id;
-			idLabel.setText("Id: " + id);
-			idLabel.setMaxWidth(Double.MAX_VALUE);
-			HBox.setHgrow(idLabel, Priority.ALWAYS);
 			
 			this.name = name;
 			nameLabel.setText("Name: " + name);
 			nameLabel.setMaxWidth(Double.MAX_VALUE);
 			HBox.setHgrow(nameLabel, Priority.ALWAYS);
+			
+			this.phone = phone;
+			phoneLabel.setText("Phone: " + phone);
+			phoneLabel.setMaxWidth(Double.MAX_VALUE);
+			HBox.setHgrow(phoneLabel, Priority.ALWAYS);
 			
 			this.email = email;
 			emailLabel.setText("Email: " + email);
@@ -193,14 +207,20 @@ public class CustomerView {
 			HBox.setHgrow(emailLabel, Priority.ALWAYS);
 			
 			editButton.setOnAction(e -> {
-				edit(this);
+				if (loggedInUser.getStatus().equalsIgnoreCase("super_admin") || loggedInUser.getStatus().equalsIgnoreCase("admin"))
+					edit(this);
+				else
+					Popup.displayErrorMessage("You do not have permission to edit customers");
 			});
 			
 			removeButton.setOnAction(e -> {
-				remove(this);
+				if (loggedInUser.getStatus().equalsIgnoreCase("super_admin"))
+					remove(this);
+				else
+					Popup.displayErrorMessage("You do not have permission to delete customers");
 			});
 			
-			this.getChildren().addAll(idLabel, nameLabel, emailLabel, editButton, removeButton);
+			this.getChildren().addAll(nameLabel, emailLabel, phoneLabel, editButton, removeButton);
 		}
 
 		public int getID() {

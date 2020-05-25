@@ -9,20 +9,30 @@ import javafx.stage.Stage;
 
 public class MainView {
 	
-	Stage window = null;
+	private Stage window = null;
 	private final int WIDTH = 1800;
 	private final int HEIGHT = 900;
 	private String[] menuText = {"Home", "Order", "Service", "Customer", "Employee", "Shop"};
 	private int lastPressed = 0;
 	
-	HomeView hv = new HomeView();
-	OrderView ov = new OrderView();
-	EmployeeView ev = new EmployeeView();
-	CustomerView cv = new CustomerView();
-	ServiceView sv = new ServiceView();
-	ShopView shopView = new ShopView();
+	private HomeView hv;
+	private OrderView ov;
+	private EmployeeView ev;
+	private CustomerView cv;
+	private ServiceView sv;
+	private ShopView shopView;
+	
+	public MainView() {
+		hv = new HomeView();
+		ov = new OrderView();
+		ev = new EmployeeView();
+		cv = new CustomerView();
+		sv = new ServiceView();
+		shopView = new ShopView();
+	}
 	
 	public void render(Stage primaryStage) {
+		
 		window = primaryStage;
 		
 		BorderPane pane = new BorderPane();

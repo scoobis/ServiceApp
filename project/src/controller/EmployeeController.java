@@ -1,6 +1,5 @@
 package controller;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 import model.Admin;
@@ -22,17 +21,17 @@ public class EmployeeController {
 		inputValidator = new InputValidator();
 	}
 	
-	public void newSuperAdmin(ArrayList<String> list) {
-		Employee superAdmin = new SuperAdmin();
-		superAdmin.setEmail(list.get(0));
-		superAdmin.setCompanyName(list.get(1));
-		superAdmin.setName(list.get(2));
-		superAdmin.setPhone(list.get(3));
+	public String newSuperAdmin(String name, String email, String phone, String password, String companyName) {
 		
-		// TODO hash password
+		String inputCheck = inputValidator.validateEmployeeInput(name, email, phone, password, companyName, 1, 1); // id as and shopId as stub
+		if (!inputCheck.equalsIgnoreCase("")) return inputCheck;
 		
-		superAdmin.setStatus("Super_Admin");
-		employeeDatabase.saveEmployee(superAdmin);
+		SuperAdmin superAdmin = new SuperAdmin(phone, email, name, companyName, PasswordHasher.hashPassword(password));
+		
+		boolean isSaved = employeeDatabase.saveEmployee(superAdmin);
+		
+		if (!isSaved) return "ops, something went wrong!";
+        return "SuperAdmin created successfully";
 	}
 	
 	public String newUser(String name, String email, String phone, String password, String companyName, int shopId) {
@@ -108,13 +107,12 @@ public class EmployeeController {
 	public ArrayList<Employee> getAllEmployees(String companyName) {
         return employeeDatabase.getAllEmployees(companyName);
     }
-	
-	//TODO These needs implementation
-	public boolean validateEmployee(Employee e, String p) {
-			return false;
-	}
 
-	public Employee login(String email, String password) {
-		return employeeDatabase.validateEmployee(email, password);
+	public Employee login(String email, String password, boolean isSuperAdmin) {
+		System.out.println(isSuperAdmin);
+		if (isSuperAdmin)
+			return employeeDatabase.validateSuperAdmin(email, password);
+		else 
+			return employeeDatabase.validateEmployee(email, password);
 	}	
 }

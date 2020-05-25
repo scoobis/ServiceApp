@@ -17,6 +17,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
+import model.Employee;
 import model.Shop;
 
 public class ShopView {
@@ -26,6 +27,8 @@ public class ShopView {
 	
 	private ShopController shopController;
 	
+	private Employee loggedInUser;
+	
 	public ShopView() {
 		list = new ArrayList<Cell>();
 		shopController = new ShopController();
@@ -34,13 +37,19 @@ public class ShopView {
 	public BorderPane getCenter() {
 		ObservableList<Cell> obsList;
 		
+		loggedInUser = Employee.getLoggedInUser();
+		
 		setList();
 		
 		BorderPane bp = new BorderPane();
 		Button createButton = new Button("Create");
 		
-		//TODO Make this check permissions
-		createButton.setOnAction(e -> create());
+		createButton.setOnAction(e -> {
+			if (Employee.getLoggedInUser().getStatus().equalsIgnoreCase("super_admin"))
+				create();
+			else
+				Popup.displayErrorMessage("You do not have permission to create shops!");
+		});
 		
 		lv = new ListView<Cell>();
 		obsList = FXCollections.observableList(list);
@@ -51,12 +60,11 @@ public class ShopView {
 	}
 	
 	private void setList() {
-		ArrayList<Shop> allShops = shopController.getAllShops("company"); // TODO add company name fom loggedin user
-		
+		ArrayList<Shop> allShops = shopController.getAllShops(loggedInUser.getCompanyName());
 		list.clear();
 		
 		for (Shop shop : allShops) {
-			list.add(new Cell(shop.getId(), shop.getCompanyName(), shop.getAddress(), shop.getName()));
+			list.add(new Cell(shop.getId(), shop.getAddress(), shop.getName()));
 		}
 	}
 	
@@ -77,7 +85,7 @@ public class ShopView {
 		Stage window = new Stage();
 		
 		button.setOnAction(e -> {
-			String companyName = "company"; // TODO get company name from logged in user
+			String companyName = loggedInUser.getCompanyName();
 			String name = nameField.getText();
 			String address = addressField.getText();
 			
@@ -175,7 +183,7 @@ public class ShopView {
 	private class Cell extends HBox {
 		
 		private int id;
-		private String companyName, address, name;
+		private String address, name;
 		
 		private Label nameLabel = new Label();
 		private Label addressLabel = new Label();
@@ -183,11 +191,10 @@ public class ShopView {
 		private Button editButton = new Button("Edit");
 		private Button removeButton = new Button("Remove");
 		
-		Cell(int id, String companyName, String address, String name) {
+		Cell(int id, String address, String name) {
 			super();
 			
 			this.id = id;
-			this.companyName = companyName;
 			this.address = address;
 			this.name = name;
 			
@@ -200,28 +207,24 @@ public class ShopView {
 			HBox.setHgrow(addressLabel, Priority.ALWAYS);
 			
 			editButton.setOnAction(e -> {
-				edit(this);
+				if (loggedInUser.getStatus().equalsIgnoreCase("super_admin"))
+					edit(this);
+				else
+					Popup.displayErrorMessage("You do not have permission to edit shops!");
 			});
 			
 			removeButton.setOnAction(e -> {
-				remove(this);
+				if (loggedInUser.getStatus().equalsIgnoreCase("super_admin"))
+					remove(this);
+				else
+					Popup.displayErrorMessage("You do not have permission to remove shops!");
 			});
 			
 			this.getChildren().addAll(nameLabel, addressLabel, editButton, removeButton);
 			
 		}
 		
-		public void setId(int id) { this.id = id; }
-		
-		public void setCompanyName(String companyName) { this.companyName = companyName; }
-		
-		public void setName(String name) { this.name = name; }
-		
-		public void setAddress(String address) { this.address = address; }
-		
 		public int getID() { return id; }
-		
-		public String getCompanyName() { return companyName; }
 		
 		public String getAddress() { return address; }
 		
