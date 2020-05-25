@@ -10,10 +10,12 @@ public class Order {
 	private double price; // Changed to double
 	private boolean completed;
 	private int id;
+	
+	private String paidStatus;
 
 	// TODO How are id's supposed to be created? Like should the employee just set the number or should it be generated automatically?
 	// Company ID String?
-	public Order(int customerId, int serviceId, String date, int shopId, String companyName, double price, boolean completed) {
+	public Order(int customerId, int serviceId, String date, int shopId, String companyName, double price, boolean completed, String paidStatus) {
 		this.customerId = customerId;
 		this.serviceId = serviceId;
 		this.date = date;
@@ -21,6 +23,7 @@ public class Order {
 		this.companyName = companyName;
 		this.price = price;
 		this.completed = completed;
+		this.paidStatus = paidStatus;
 	}
 
 	public Order() {
@@ -36,6 +39,10 @@ public class Order {
 
 	public void setCustomerId(int customerId) {
 		this.customerId = customerId;
+	}
+	
+	public void setPaidStatus(String paidStatus) {
+		this.paidStatus = paidStatus;
 	}
 
 	public void setServiceId(int serviceId) {
@@ -96,6 +103,10 @@ public class Order {
 
 	public int getId() {
 		return id;
+	}
+	
+	public String getPaidStatus() {
+		return paidStatus;
 	}
 
 }

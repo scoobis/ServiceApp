@@ -108,6 +108,7 @@ public class OrderController {
 		return "ops, something went wrong!";
 	}
 	
+
 	public void sendInvoice(int id) {
 		System.out.println(id);
 		invoice.create(id);
@@ -116,6 +117,10 @@ public class OrderController {
 		
 	public Map<Integer,String> getAllInvoices(int shopId){
 		return invoice.getStatus(invoice.getMerchantInvoices(), orderDatabase.getAllOrders(shopId));
+	}
+
+	public boolean setPaidStatus(int id, String paidStatus) {
+		return orderDatabase.setPaidStatus(id, paidStatus);
 	}
 
 	public void sendOrderCompleteMail(Order order) {
