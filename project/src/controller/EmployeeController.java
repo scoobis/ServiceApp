@@ -114,5 +114,5 @@ public class EmployeeController {
 			return employeeDatabase.validateSuperAdmin(email, password);
 		else 
 			return employeeDatabase.validateEmployee(email, password);
-	}	
+	}
 }

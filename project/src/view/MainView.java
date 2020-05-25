@@ -12,7 +12,7 @@ public class MainView {
 	private Stage window = null;
 	private final int WIDTH = 1800;
 	private final int HEIGHT = 900;
-	private String[] menuText = {"Home", "Order", "Service", "Customer", "Employee", "Shop"};
+	private String[] menuText = {"Home", "Order", "Service", "Customer", "Employee", "Shop", "Logout"};
 	private int lastPressed = 0;
 	
 	private HomeView hv;
@@ -76,6 +76,14 @@ public class MainView {
 			if(lastPressed != 5) {
 				pane.setCenter(shopView.getCenter());
 				lastPressed = 5;
+			}
+		});
+		menuButtons[6].setOnAction(e -> {
+			if(lastPressed != 6) {
+				window.close();
+				new LoginView().render(window);
+				
+				lastPressed = 6;
 			}
 		});
 		

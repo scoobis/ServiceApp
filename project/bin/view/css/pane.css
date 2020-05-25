@@ -10,6 +10,10 @@ GridPane {
 	-fx-stroke: black;
 }
 
+.chart-bar {
+    -fx-bar-fill: #1c1729; 
+}
+
 .chart-plot-background {
     -fx-background-color: transparent;
 }

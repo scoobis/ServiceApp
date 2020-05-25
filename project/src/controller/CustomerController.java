@@ -58,4 +58,8 @@ public class CustomerController {
 
         return customers;
     }
+    
+    public String getCustomerNameById(int id) {
+    	return customerDatabase.getCustomerById(id).getName();
+    }
 }

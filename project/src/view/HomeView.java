@@ -1,7 +1,5 @@
 package view;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -85,10 +83,10 @@ public class HomeView {
 		loggedInAsHeader.setId("loggedInAsHeader");
 		
 		GridPane centerPane = new GridPane();
+		centerPane.setVgap(60);
 		
 		centerPane.add(companyHeader, 0, 0);
-		centerPane.add(loggedInAsHeader, 0, 1);
-		
+		centerPane.add(loggedInAsHeader, 1, 0);
 		centerPane.add(this.createBarChart(), 1, 1);
 		centerPane.add(this.createLineChart(), 0, 2);
 		centerPane.add(this.createMostPopularServiceChart(), 1, 2);
@@ -126,24 +124,11 @@ public class HomeView {
 	private void displaySettingsPage(Pane pane) {
 		GridPane centerPane = new GridPane();
 		
-		Button logoutButton = new Button("Logout");
+		Text commingSoon = new Text("Cooming Soon!");
 		
-		centerPane.add(logoutButton, 0, 0);
+		centerPane.add(commingSoon, 0, 0);
 		
 		pane.getChildren().add(centerPane);
-		
-		logoutButton.setOnAction(e -> {
-			PrintWriter pw;
-			try {
-				pw = new PrintWriter("LoggedInUser.txt");
-				pw.close();
-				
-				// TODO render loginView
-				
-			} catch (FileNotFoundException e1) {
-				e1.printStackTrace();
-			}
-		});
 	}
 	
 	private void displayHelpPage(Pane pane) {

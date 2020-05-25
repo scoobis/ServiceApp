@@ -2,10 +2,8 @@ package controller;
 
 import java.util.ArrayList;
 
-import model.Customer;
 import model.Order;
 import model.User;
-import model.database.CustomerDatabase;
 import model.database.OrderDatabase;
 
 public class OrderController {

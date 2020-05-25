@@ -32,15 +32,14 @@ public class OrderView {
 	private ListView<Cell> compLv;
 	
 	private OrderController orderController;
-	private ServiceController serviceController;
-	private CustomerController customerController;
 	
 	private Employee loggedInUser;
 	
+	private ArrayList<Customer> allCustomers;
+	ArrayList<Service> allServices;
+	
 	public OrderView() {
 		orderController = new OrderController();
-		serviceController = new ServiceController();
-		customerController = new CustomerController();
 		
 		uncompList = new ArrayList<Cell>();
 		compList = new ArrayList<Cell>();
@@ -51,6 +50,8 @@ public class OrderView {
 		ObservableList<Cell> compObsList;
 		
 		loggedInUser = Employee.getLoggedInUser();
+		allCustomers = new CustomerController().getAllCustomers(loggedInUser.getCompanyName());
+		allServices = new ServiceController().getAllServices(loggedInUser.getCompanyName());
 		
 		setList();
 			
@@ -105,16 +106,12 @@ public class OrderView {
 		DoubleTextField priceField = new DoubleTextField();
 		ComboBox<String> serviceBox = new ComboBox<String>();
 		ComboBox<String> customerBox = new ComboBox<String>();
-		
-		ArrayList<Service> allServices = serviceController.getAllServices(loggedInUser.getCompanyName());
 		int i = 1;
 		for (Service s : allServices) {
 			serviceBox.getItems().add(i + ". " + s.getTitle() + "  |  $" + s.getPrice());
 			if (i == 1) serviceBox.setValue(i + ". " + s.getTitle() + "  |  $" + s.getPrice());
 		i++;
 		}
-		
-		ArrayList<Customer> allCustomers = customerController.getAllCustomers(loggedInUser.getCompanyName());
 		
 		i = 1;
 		for (Customer c : allCustomers) {
@@ -175,16 +172,13 @@ public class OrderView {
 		DoubleTextField priceField = new DoubleTextField("" + cell.getPrice());
 		ComboBox<String> serviceBox = new ComboBox<String>();
 		ComboBox<String> customerBox = new ComboBox<String>();
-		
-		ArrayList<Service> allServices = serviceController.getAllServices(loggedInUser.getCompanyName());
+	
 		int i = 1;
 		for (Service s : allServices) {
 			serviceBox.getItems().add(i + ". " + s.getTitle() + "  |  $" + s.getPrice());
 			if (cell.getServiceId() == s.getId()) serviceBox.setValue(i + ". " + s.getTitle() + "  |  $" + s.getPrice());
 		i++;
 		}
-		
-		ArrayList<Customer> allCustomers = customerController.getAllCustomers(loggedInUser.getCompanyName());
 		
 		i = 1;
 		for (Customer c : allCustomers) {
@@ -253,21 +247,22 @@ public class OrderView {
 	}
 	
 	public class Cell extends HBox {
-		Label paidStatusLabel = new Label();
-		Label customerLabel = new Label();
-		Label priceLabel = new Label();
-		Label dateLabel = new Label();
-		Button editButton = new Button("Edit");
-		Button removeButton = new Button("Remove");
-		Button completeButton = new Button();
-		int customerId;
-		double price;
-		boolean completed;
-		int serviceId;
-		String date;
-		int shopId;
-		String companyName;
-		int id;
+		private Label paidStatusLabel = new Label();
+		private Label customerLabel = new Label();
+		private Label priceLabel = new Label();
+		private Label dateLabel = new Label();
+		private Button editButton = new Button("Edit");
+		private Button removeButton = new Button("Remove");
+		private Button completeButton = new Button();
+		private int customerId;
+		private double price;
+		private boolean completed;
+		private int serviceId;
+		private String date;
+		private int shopId;
+		private String companyName;
+		private int id;
+		private String customerName;
 		
 		String paidStatus;
 
@@ -278,7 +273,10 @@ public class OrderView {
 			this.completed = completed;
 			this.shopId = shopId;
 			this.companyName = companyName;
+			this.customerId = customerId;
 			this.id = id;
+			
+			this.customerName = "DELETED";
 			
 			if (paidStatus == null)
 				this.paidStatus = "UNPAID";
@@ -288,13 +286,20 @@ public class OrderView {
 			paidStatusLabel.setMaxWidth(Double.MAX_VALUE);
 			HBox.setHgrow(paidStatusLabel, Priority.ALWAYS);
 			
-			this.customerId = customerId;
-			customerLabel.setText("Customer id: " + customerId);
+			
+			for (Customer c : allCustomers) {
+				if (c.getId() == customerId) {
+					this.customerName = c.getName();
+					break;
+				}
+			}
+				
+			customerLabel.setText("Customer: " + this.customerName);
 			customerLabel.setMaxWidth(Double.MAX_VALUE);
 			HBox.setHgrow(customerLabel, Priority.ALWAYS);
 			
 			this.price = price;
-			priceLabel.setText("Price: " + price);
+			priceLabel.setText("Price: $" + price);
 			priceLabel.setMaxWidth(Double.MAX_VALUE);
 			HBox.setHgrow(priceLabel, Priority.ALWAYS);
 			
