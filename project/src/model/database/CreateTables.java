@@ -100,6 +100,7 @@ Connection connection = null;
 					+ "customer_id int, "
 					+ "shop_id int, "
 					+ "company_name varchar(64), "
+					+ "paid_status varchar(64), "
 					+ "price DOUBLE, "
 					+ "completed boolean, "
 					+ "date varchar(75), "

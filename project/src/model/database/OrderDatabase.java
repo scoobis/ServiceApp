@@ -68,6 +68,7 @@ public class OrderDatabase implements DatabaseConnector {
 				order.setCompleted(result.getBoolean("completed"));
 				order.setDate(result.getString("date"));
 				order.setId(result.getInt("id"));
+				order.setPaidStatus(result.getString("paid_status"));
 			}
 			return order;
 			
@@ -119,6 +120,22 @@ public class OrderDatabase implements DatabaseConnector {
 						+ "price = "+ o.getPrice() +","
 						+ "completed = "+ o.getCompleted() +" "
 						+ "WHERE id = "+ o.getId() +";");
+			edit.executeUpdate();
+			
+			return true;
+			
+		} catch (SQLException e1) { 
+			e1.printStackTrace();
+			return false;
+			}
+	}
+	
+	public boolean setPaidStatus(int id, String paidStatus) {
+		PreparedStatement edit;
+		try {
+			edit = connection.prepareStatement("UPDATE orders "
+						+ "SET paid_status = "+ paidStatus +" "
+						+ "WHERE id = "+ id +";");
 			edit.executeUpdate();
 			
 			return true;

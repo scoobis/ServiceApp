@@ -97,6 +97,10 @@ public class OrderController {
 			return "Order set to completed!";
 		return "ops, something went wrong!";
 	}
+	
+	public boolean setPaidStatus(int id, String paidStatus) {
+		return orderDatabase.setPaidStatus(id, paidStatus);
+	}
 
 	public void sendOrderCompleteMail(Order order) {
 /*

@@ -92,9 +92,9 @@ public class OrderView {
 		
 		for(Order o : allOrders) {
 			if(!o.getCompleted())
-				uncompList.add(new Cell(o.getCustomerId(), o.getPrice(), o.getCompleted(), o.getServiceId(), o.getDate(), o.getShopId(), o.getcompanyName(), o.getId()));
+				uncompList.add(new Cell(o.getCustomerId(), o.getPrice(), o.getCompleted(), o.getServiceId(), o.getDate(), o.getShopId(), o.getcompanyName(), o.getId(), o.getPaidStatus()));
 			else
-				compList.add(new Cell(o.getCustomerId(), o.getPrice(), o.getCompleted(), o.getServiceId(), o.getDate(), o.getShopId(), o.getcompanyName(), o.getId()));
+				compList.add(new Cell(o.getCustomerId(), o.getPrice(), o.getCompleted(), o.getServiceId(), o.getDate(), o.getShopId(), o.getcompanyName(), o.getId(), o.getPaidStatus()));
 		}
 	}
 	
@@ -253,6 +253,7 @@ public class OrderView {
 	}
 	
 	public class Cell extends HBox {
+		Label paidStatusLabel = new Label();
 		Label customerLabel = new Label();
 		Label priceLabel = new Label();
 		Label dateLabel = new Label();
@@ -267,8 +268,10 @@ public class OrderView {
 		int shopId;
 		String companyName;
 		int id;
+		
+		String paidStatus;
 
-		Cell(int customerId, double price, boolean completed, int serviceId, String date, int shopId, String companyName, int id) {
+		Cell(int customerId, double price, boolean completed, int serviceId, String date, int shopId, String companyName, int id, String paidStatus) {
 			super();
 			
 			this.serviceId = serviceId;
@@ -276,6 +279,14 @@ public class OrderView {
 			this.shopId = shopId;
 			this.companyName = companyName;
 			this.id = id;
+			
+			if (paidStatus == null)
+				this.paidStatus = "UNPAID";
+			else
+				this.paidStatus = paidStatus;
+			paidStatusLabel.setText("Pay Status: " + this.paidStatus);
+			paidStatusLabel.setMaxWidth(Double.MAX_VALUE);
+			HBox.setHgrow(paidStatusLabel, Priority.ALWAYS);
 			
 			this.customerId = customerId;
 			customerLabel.setText("Customer id: " + customerId);
@@ -324,7 +335,7 @@ public class OrderView {
 					Popup.displayErrorMessage("You do not have permission to remove orders");
 			});
 			
-			this.getChildren().addAll(customerLabel, priceLabel, dateLabel, completeButton ,editButton, removeButton);
+			this.getChildren().addAll(customerLabel, priceLabel, paidStatusLabel, dateLabel, completeButton ,editButton, removeButton);
 		}
 
 		public int getCustomerId() {
@@ -378,6 +389,10 @@ public class OrderView {
 		public String getCompanyName() {
 			return companyName;
 		}
+		
+		public String getPaidStatus() {
+			return paidStatus;
+		}
 
 		public void setCompanyName(String companyName) {
 			this.companyName = companyName;
@@ -388,7 +403,7 @@ public class OrderView {
 		}
 		
 		public Order getAsOrder() {
-			return new Order(customerId, serviceId, date, shopId, companyName, price, completed);
+			return new Order(customerId, serviceId, date, shopId, companyName, price, completed, paidStatus);
 		}
 	}
 }
