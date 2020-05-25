@@ -21,7 +21,7 @@ public class ServiceDatabase implements DatabaseConnector {
 		ResultSet result = query.executeQuery(statement);
 	
 		while(result.next()) {
-			services.add(getServiceById(result.getString("id")));
+			services.add(getServiceById(result.getInt("id")));
 			
 		}
 		
@@ -32,7 +32,7 @@ public class ServiceDatabase implements DatabaseConnector {
 		}
 	}
 	
-	public Service getServiceById(String id) throws SQLException {
+	public Service getServiceById(int id) throws SQLException {
 		String statement = "SELECT * FROM service WHERE id=" + id + ";";
 		Statement query = connection.prepareStatement(statement);
 		ResultSet result = query.executeQuery(statement);
