@@ -10,12 +10,20 @@ import model.SuperAdmin;
 import model.database.EmployeeDatabase;
 import security.PasswordHasher;
 
+/**
+ * Handles calls from View to Model which concerns any class that extends the Employee Class.
+ */
+
 public class EmployeeController {
 
 	private EmployeeDatabase employeeDatabase;
 	private PasswordHasher hash;
 	
 	private InputValidator inputValidator;
+	
+	/**
+	 * Constructor
+	 */
 	
 	public EmployeeController() {
 		employeeDatabase = new EmployeeDatabase();
@@ -24,6 +32,11 @@ public class EmployeeController {
 		inputValidator = new InputValidator();
 	}
 	
+	/**
+	 * Makes a call to the employeeDatabase.saveEmployee() function.
+	 * @param list A list of information about the new Super_admin.
+	 */
+	
 	public void newSuperAdmin(ArrayList<String> list) {
 		Employee superAdmin = new SuperAdmin();
 		superAdmin.setEmail(list.get(0));
@@ -31,7 +44,7 @@ public class EmployeeController {
 		superAdmin.setName(list.get(2));
 		superAdmin.setPhone(list.get(3));
 		try {
-			String hashedPassword = hash.hashPassword(list.get(4));
+			String hashedPassword = hash.hashPassword(list.get(4)); // TODO hashedPassword never used?
 			//superAdmin.setPassword(hashedPassword); 
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
@@ -39,6 +52,17 @@ public class EmployeeController {
 		superAdmin.setStatus("Super_Admin");
 		employeeDatabase.saveEmployee(superAdmin);
 	}
+	
+	/**
+	 * Creates a new User.
+	 * @param name The name of the new User to be created.
+	 * @param email The email of the new User to be created.
+	 * @param phone The phone number of the new User to be created.
+	 * @param password The password of the new User to be created.
+	 * @param companyName The company name which the new user to be created belongs to.
+	 * @param shopId The ID of the shop where the new User to be created is placed at.
+	 * @return String
+	 */
 	
 	public String newUser(String name, String email, String phone, String password, String companyName, int shopId) {
 		
@@ -54,6 +78,12 @@ public class EmployeeController {
         return "User created successfully";
     }
 	
+	/**
+	 * Deletes a User.
+	 * @param e The Employee to be deleted.
+	 * @return String
+	 */
+	
 	public String deleteUser(Employee e) {
 		
         boolean isDeleted = employeeDatabase.deleteEmployee(e);
@@ -61,6 +91,16 @@ public class EmployeeController {
         if (isDeleted) return e.getName() + " Deleted!";
         return "ops, something went wrong!";
     }
+	
+	/**
+	 * Edits a user.
+	 * @param phone
+	 * @param email
+	 * @param name
+	 * @param shopId
+	 * @param id
+	 * @return String
+	 */
 	
 	public String editUser(String phone, String email, String name, int shopId, int id) {
 		
@@ -74,6 +114,17 @@ public class EmployeeController {
         if (isEdited) return "User edited successfully";
         return "Ops, something went wrong!";
     }
+	
+	/**
+	 * Creates a new Admin.
+	 * @param name
+	 * @param email
+	 * @param phone
+	 * @param password
+	 * @param companyName
+	 * @param shopId
+	 * @return String
+	 */
 	
 	public String newAdmin(String name, String email, String phone, String password, String companyName, int shopId) {
 		
@@ -89,6 +140,12 @@ public class EmployeeController {
         return "Admin created successfully";
     }
 	
+	/**
+	 * Will delete a Admin.
+	 * @param e The Employee to be deleted.
+	 * @return
+	 */
+	
 	public String deleteAdmin(Employee e) {
 		
         boolean isDeleted = employeeDatabase.deleteEmployee(e);
@@ -96,6 +153,16 @@ public class EmployeeController {
         if (isDeleted) return e.getName() + " Deleted!";
         return "ops, something went wrong!";
     }
+	
+	/**
+	 * A function which will edit a Admin.
+	 * @param phone
+	 * @param email
+	 * @param name
+	 * @param shopId
+	 * @param id
+	 * @return String
+	 */
 	
 	public String editAdmin(String phone, String email, String name, int shopId, int id) {
 		
@@ -110,15 +177,22 @@ public class EmployeeController {
         return "Ops, something went wrong!";
     }
 	
+	/**
+	 * Retrieves all the Employees from a certain company.
+	 * @param companyName The name of the company
+	 * @return ArrayList<Employee>
+	 */
+	
 	public ArrayList<Employee> getAllEmployees(String companyName) {
         return employeeDatabase.getAllEmployees(companyName);
     }
 	
-	//TODO These needs implementation
+	//TODO needs implementation
 	public boolean validateEmployee(Employee e, String p) {
 			return false;
 	}
 
+	//TODO needs implementation
 	public boolean login(String email, String password) {
 		return false;
 	}	

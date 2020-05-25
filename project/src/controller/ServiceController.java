@@ -1,6 +1,5 @@
 package controller;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import model.InputValidator;
@@ -8,16 +7,33 @@ import model.Service;
 import model.SuperAdmin;
 import model.database.ServiceDatabase;
 
+/**
+ * Handles calls from View to Model which concerns any calls to the Service class.
+ */
+
 public class ServiceController {
 
     private ServiceDatabase serviceDatabase;
     private InputValidator inputValidator;
 
+    /**
+     * Constructor
+     */
+    
     public ServiceController() {
         serviceDatabase = new ServiceDatabase();
         inputValidator = new InputValidator();
     }
 
+    /**
+     * Creates a new Service
+     * @param companyName
+     * @param title
+     * @param description
+     * @param price
+     * @return
+     */
+    
     public String newService(String companyName, String title, String description, double price) {
     	String inputCheck = inputValidator.validateServiceInput(companyName, title, description, price);
 
@@ -31,9 +47,25 @@ public class ServiceController {
         return "Service saved successfully";
     }
 
+    /**
+     * Gets all services from a company.
+     * @param companyName The name of the company
+     * @return ArrayList<Service>
+     */
+    
     public ArrayList<Service> getAllServices(String companyName) {
         return serviceDatabase.getAllServices(companyName);
     }
+    
+    /**
+     * Edits a Service.
+     * @param companyName
+     * @param title
+     * @param description
+     * @param price
+     * @param id
+     * @return String
+     */
 
     public String editService(String companyName, String title, String description, double price, int id) {
     	if (id == 0) return "Ops, something went wrong!";
@@ -49,6 +81,13 @@ public class ServiceController {
         return "Ops, something went wrong!";
     }
 
+    /**
+     * Deletes a Service.
+     * @param id
+     * @param title
+     * @return String
+     */
+    
     public String deleteService(int id, String title) {
         boolean isDeleted = serviceDatabase.deleteService(id);
 

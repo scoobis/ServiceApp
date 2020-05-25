@@ -1,5 +1,9 @@
 package model;
 
+/**
+ * A representation of a Order in the system.
+ */
+
 public class Order {
 
 	private int customerId;
@@ -11,8 +15,17 @@ public class Order {
 	private boolean completed;
 	private int id;
 
-	// TODO How are id's supposed to be created? Like should the employee just set the number or should it be generated automatically?
-	// Company ID String?
+	/**
+	 * Constructor.
+	 * @param customerId
+	 * @param serviceId
+	 * @param date
+	 * @param shopId
+	 * @param companyName
+	 * @param price
+	 * @param completed
+	 */
+	
 	public Order(int customerId, int serviceId, String date, int shopId, String companyName, double price, boolean completed) {
 		this.customerId = customerId;
 		this.serviceId = serviceId;
@@ -23,8 +36,14 @@ public class Order {
 		this.completed = completed;
 	}
 
+	/**
+	 * Empty Constructor.
+	 */
+	
 	public Order() {
 	}
+	
+	// GETTERS AND SETTERS
 
 	public boolean sendOrderComplete() {
 		return false;

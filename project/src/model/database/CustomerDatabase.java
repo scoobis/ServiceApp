@@ -9,9 +9,19 @@ import java.util.ArrayList;
 
 import model.Customer;
 
+/**
+ * A class that handles the Customer Database.
+ */
+
 public class CustomerDatabase implements DatabaseConnector {
 
 	Connection connection = DatabaseConnector.getConnection();
+	
+	/**
+	 * Gets all Customers from a certain company.
+	 * @param companyName
+	 * @return ArrayList<Customer>
+	 */
 	
 	public ArrayList<Customer> getAllCustomers(String companyName) {
 		
@@ -35,6 +45,12 @@ public class CustomerDatabase implements DatabaseConnector {
 		}
 	}
 	
+	/**
+	 * Gets one Customer.
+	 * @param id
+	 * @return Customer
+	 */
+	
 	public Customer getCustomerById(String id) {
 		
 		try {
@@ -42,8 +58,6 @@ public class CustomerDatabase implements DatabaseConnector {
 		String statement = "SELECT * FROM customer WHERE id=" + id + ";";
 		Statement query = connection.prepareStatement(statement);
 		ResultSet result = query.executeQuery(statement);
-		
-		int i = 0;
 		
 		Customer c = new Customer();
 		
@@ -62,6 +76,12 @@ public class CustomerDatabase implements DatabaseConnector {
 			return null;
 		}
 	}
+	
+	/**
+	 * Saves a Customer to the customer database.
+	 * @param customer
+	 * @return boolean
+	 */
 	
 	public boolean saveCustomer(Customer customer) {
 		try {
@@ -84,8 +104,12 @@ public class CustomerDatabase implements DatabaseConnector {
 		}
 	}
 	
-	// TODO
-	// * Use TRUNCATE TABLE instead of DELETE, this will update the ids which makes it easier to test.
+	/**
+	 * Deletes a customer.
+	 * @param id
+	 * @return boolean
+	 */
+	
 	public boolean deleteCustomer(int id) {
 		String statement = "DELETE FROM customer WHERE id=" + id + ";";
 		Statement query;
@@ -99,6 +123,11 @@ public class CustomerDatabase implements DatabaseConnector {
 		}
 	}
 	
+	/**
+	 * Edits a customer.
+	 * @param c The new customer.
+	 * @return boolean
+	 */
 	public boolean editCustomer(Customer c) {
 	
 		try {

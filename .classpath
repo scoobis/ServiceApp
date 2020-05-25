@@ -15,5 +15,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/javaFX"/>
 	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.49.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
+	<classpathentry kind="lib" path="C:/Users/46760/Downloads/mockito-core-3.3.11.jar"/>
 	<classpathentry kind="output" path="project/bin"/>
 </classpath>

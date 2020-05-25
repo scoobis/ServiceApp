@@ -1,6 +1,19 @@
 package model;
 
+/**
+ * Validates input from system user.
+ */
+
 public class InputValidator {
+	
+	/**
+	 * Validates that the information entered is enough to create a Service.
+	 * @param companyName
+	 * @param title
+	 * @param description
+	 * @param price
+	 * @return String
+	 */
 	
 	public String validateServiceInput(String companyName, String title, String description, double price) {
 		
@@ -12,6 +25,16 @@ public class InputValidator {
 		return "";
 	}
 	
+	/**
+	 * Validates that the information entered is enough to create a Customer.
+	 * @param name
+	 * @param email
+	 * @param phone
+	 * @param address
+	 * @param id
+	 * @return String
+	 */
+	
 	public String validateCustomerInput(String name, String email, String phone, String address, int id) {
 		
 		if (name.equalsIgnoreCase("")) return "Name is missing!";
@@ -22,6 +45,18 @@ public class InputValidator {
 		
 		return "";
 	}
+	
+	/**
+	 * Validates that the information entered is enough to create a Employee.
+	 * @param name
+	 * @param email
+	 * @param phone
+	 * @param password
+	 * @param companyName
+	 * @param shopId
+	 * @param id
+	 * @return String
+	 */
 	
 	public String validateEmployeeInput(String name, String email, String phone, String password, String companyName, int shopId, int id) {
 		

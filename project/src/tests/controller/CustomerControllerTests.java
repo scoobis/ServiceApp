@@ -3,9 +3,11 @@ package tests.controller;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.*;
 
 import controller.CustomerController;
 import model.Customer;
+import model.database.CustomerDatabase;
 
 class CustomerControllerTests {
 
@@ -41,18 +43,5 @@ class CustomerControllerTests {
 		assertEquals(cc.editCustomer("", "", "", "Rastensv2", true, 1), "Name is missing!"); // Maybe return a array with all the errors?
 	}
 	
-	
-	// TODO
-	// Fix so that I can check wheter a function in a class is being called.
-	@Test
-	void deleteCustomerTest() {
-		cc.createCustomer("Jesper", "je223@gmail.com", "070623123", "Rastensv2", "Test_company");
-		cc.deleteCustomer(1, "Jesper Deleted!");
-	}
-	
-	@Test
-	void getAllCustomersTests() {
-		// Check that getAllCustomers is being called.
-	}
 
 }

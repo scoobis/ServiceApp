@@ -8,10 +8,19 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import model.Service;
 
+/**
+ * A class that handles the Service Database.
+ */
 public class ServiceDatabase implements DatabaseConnector {
 	
 	Connection connection = DatabaseConnector.getConnection();
 
+	/**
+	 * Gets all Services from a certain company.
+	 * @param companyName
+	 * @return ArrayList<Service>
+	 */
+	
 	public ArrayList<Service> getAllServices(String companyName) {
 		ArrayList<Service> services = new ArrayList<>();
 		
@@ -21,7 +30,7 @@ public class ServiceDatabase implements DatabaseConnector {
 		ResultSet result = query.executeQuery(statement);
 	
 		while(result.next()) {
-			services.add(getServiceById(result.getString("id")));
+			services.add(getServiceById(result.getInt("id")));
 			
 		}
 		
@@ -32,7 +41,14 @@ public class ServiceDatabase implements DatabaseConnector {
 		}
 	}
 	
-	public Service getServiceById(String id) throws SQLException {
+	/**
+	 * Gets a Service by ID.
+	 * @param id
+	 * @return Service
+	 * @throws SQLException
+	 */
+	
+	public Service getServiceById(int id) throws SQLException {
 		String statement = "SELECT * FROM service WHERE id=" + id + ";";
 		Statement query = connection.prepareStatement(statement);
 		ResultSet result = query.executeQuery(statement);
@@ -49,6 +65,12 @@ public class ServiceDatabase implements DatabaseConnector {
 		
 		return s;
 	}
+	
+	/**
+	 * Saves a Service.
+	 * @param s
+	 * @return boolean
+	 */
 	
 	public boolean saveService(Service s) {
 		try {
@@ -71,6 +93,12 @@ public class ServiceDatabase implements DatabaseConnector {
 			}
 	}
 	
+	/**
+	 * Deletes a Service.
+	 * @param id
+	 * @return boolean
+	 */
+	
 	public boolean deleteService(int id) {
 		String statement = "DELETE FROM service WHERE id=" + id + ";";
 		Statement query;
@@ -84,6 +112,12 @@ public class ServiceDatabase implements DatabaseConnector {
 			return false;
 		}
 	}
+	
+	/**
+	 * Edits a Service
+	 * @param s
+	 * @return boolean
+	 */
 	
 	public boolean editService(Service s) {
 		
@@ -106,6 +140,8 @@ public class ServiceDatabase implements DatabaseConnector {
 			return false;
 		}
 	}
+	
+	// TEST METHOD
 	
 	public void reset() throws SQLException {
 		String statement = "TRUNCATE TABLE service";

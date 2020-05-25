@@ -51,19 +51,13 @@ class OrderTests {
 	
 	@Test
 	void testShopIdSetter() {
-		order.setShopId(2);
-		assertEquals(2, order.getShopId());
+		order.setcompanyName("test");
+		assertEquals("test", order.getcompanyName());
 	}
 	
 	@Test
 	void testCompanyIdGetter() {
-		assertEquals(1, order.getCompanyId());
-	}
-	
-	@Test
-	void testCompanyIdSetter() {
-		order.setCompanyId(2);
-		assertEquals(2, order.getCompanyId());
+		assertEquals("test", order.getcompanyName());
 	}
 	
 	@Test

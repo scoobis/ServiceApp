@@ -85,7 +85,7 @@ class CustomerDatabaseUnitTests {
 	}
 	
 	/**
-	 * TODO: Its hard to test edit becuase it doesn't throw any Exception when entering a invalid ID.
+	 * TODO: Its hard to test edit because it doesn't throw any Exception when entering a invalid ID.
 	 * @throws NoSuchAlgorithmException
 	 * @throws InvalidKeySpecException
 	 * @throws SQLException

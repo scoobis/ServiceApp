@@ -41,13 +41,13 @@ class ServiceDatabaseUnitTests {
 	void testGetAllServices() throws SQLException {
 		this.init();
 		
+		ArrayList<Service> testArr = new ArrayList<Service>();
+		
 		db.saveService(a);
 		db.saveService(b);
 		
-		/*ArrayList<Service> testArr = db.getAllServices(); TODO NEEDS FIXNIG
-		
 		assertEquals(a.getCompany(), testArr.get(0).getCompany());
-		assertEquals(b.getCompany(), testArr.get(1).getCompany());*/
+		assertEquals(b.getCompany(), testArr.get(1).getCompany());
 		
 		db.reset();
 	}
@@ -58,7 +58,7 @@ class ServiceDatabaseUnitTests {
 
 		db.saveService(a);
 		
-		assertEquals(a.getCompany(), db.getServiceById("1").getCompany());
+		assertEquals(a.getCompany(), db.getServiceById(1).getCompany());
 		
 		db.reset();
 	}
@@ -79,9 +79,9 @@ class ServiceDatabaseUnitTests {
 		this.init();
 		
 		db.saveService(a);
-		//db.editService("1", b); TODO NEEDS FIXING
+		db.editService(b);
 		
-		assertEquals(b.getCompany(), db.getServiceById("1").getCompany());
+		assertEquals(b.getCompany(), db.getServiceById(1).getCompany());
 	}
 
 

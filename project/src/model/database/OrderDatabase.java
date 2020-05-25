@@ -8,10 +8,20 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import model.Order;
 
+/**
+ * A class that handles the Order Database.
+ */
+
 public class OrderDatabase implements DatabaseConnector {
 	
 	private Connection connection = DatabaseConnector.getConnection();
 
+	/**
+	 * Gets all orders from a certain shop.
+	 * @param shopId
+	 * @return ArrayList<Order>
+	 */
+	
 	public ArrayList<Order> getAllOrders(int shopId) {
 		ArrayList<Order> orders = new ArrayList<>();
 		
@@ -31,6 +41,12 @@ public class OrderDatabase implements DatabaseConnector {
 			return null;
 		}
 	}
+	
+	/**
+	 * Gets a Order by ID.
+	 * @param id
+	 * @return Order
+	 */
 	
 	public Order getOrderById(int id) {
 		Order order = new Order();
@@ -55,6 +71,12 @@ public class OrderDatabase implements DatabaseConnector {
 		return null;
 	}
 	
+	/**
+	 * Saves a Order
+	 * @param o
+	 * @return boolean.
+	 */
+	
 	public boolean saveOrder(Order o) {
 		PreparedStatement create;
 		try {
@@ -76,6 +98,12 @@ public class OrderDatabase implements DatabaseConnector {
 			}
 	}
 	
+	/**
+	 * Deletes a Order.
+	 * @param id
+	 * @return boolean
+	 */
+	
 	public boolean deleteOrder(int id) {
 		PreparedStatement create;
 		try {
@@ -89,6 +117,12 @@ public class OrderDatabase implements DatabaseConnector {
 			return false;
 			}
 	}
+	
+	/**
+	 * Edits a Order.
+	 * @param o
+	 * @return boolean
+	 */
 	
 	public boolean editOrder(Order o) {
 		PreparedStatement edit;
@@ -109,6 +143,12 @@ public class OrderDatabase implements DatabaseConnector {
 			}
 	}
 	
+	/**
+	 * Sets a order to complete
+	 * @param id
+	 * @return boolean
+	 */
+	
 	public boolean setOrderToCompleted(int id) {
 		PreparedStatement edit;
 		try {
@@ -124,6 +164,12 @@ public class OrderDatabase implements DatabaseConnector {
 			return false;
 		}
 	}
+	
+	/**
+	 * Sets a Order to uncompleted.
+	 * @param id
+	 * @return boolean
+	 */
 	
 	public boolean setOrderToUnCompleted(int id) {
 		PreparedStatement edit;
@@ -141,6 +187,7 @@ public class OrderDatabase implements DatabaseConnector {
 		}
 	}
 	
+	// TEST METHOD
 	public void reset() throws SQLException {
 		String statement = "TRUNCATE TABLE orders";
 		PreparedStatement query = connection.prepareStatement(statement);
