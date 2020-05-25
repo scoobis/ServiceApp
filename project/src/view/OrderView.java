@@ -14,6 +14,9 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -37,6 +40,7 @@ public class OrderView {
 		compList = new ArrayList<Cell>();
 	}
 	
+	//TODO Try with TableView
 	public BorderPane getCenter(Stage window) {
 		ObservableList<Cell> uncompObsList;
 		ObservableList<Cell> compObsList;
@@ -44,9 +48,11 @@ public class OrderView {
 		setList();
 			
 		BorderPane bp = new BorderPane();
-		Button createButton = new Button("Create");
+		Button createButton = new Button();
 		
+		createButton.setGraphic(new ImageView(new Image("view/images/create.png")));
 		createButton.setOnAction(e -> create());
+		createButton.setTooltip(new Tooltip("Create new order"));
 		
 		uncompLv = new ListView<Cell>();
 		compLv = new ListView<Cell>();
@@ -57,6 +63,8 @@ public class OrderView {
 		
 		uncompLv.prefWidthProperty().bind(window.widthProperty().multiply(.495));
 		compLv.prefWidthProperty().bind(window.widthProperty().multiply(.495));
+		bp.getStylesheets().add("view/css/list-buttons.css");
+		bp.getStylesheets().add("view/css/tooltips.css");
 		
 		bp.setTop(createButton);
 		bp.setLeft(uncompLv);
@@ -185,8 +193,8 @@ public class OrderView {
 		Label customerLabel = new Label();
 		Label priceLabel = new Label();
 		Label dateLabel = new Label();
-		Button editButton = new Button("Edit");
-		Button removeButton = new Button("Remove");
+		Button editButton = new Button();
+		Button removeButton = new Button();
 		Button completeButton = new Button();
 		int customerId;
 		double price;
@@ -197,6 +205,7 @@ public class OrderView {
 		String companyName;
 		int id;
 
+		//TODO Add unpaid
 		Cell(int customerId, double price, boolean completed, int serviceId, String date, int shopId, String companyName, int id) {
 			super();
 			
@@ -221,9 +230,9 @@ public class OrderView {
 			dateLabel.setMaxWidth(Double.MAX_VALUE);
 			HBox.setHgrow(dateLabel, Priority.ALWAYS);
 			
-			//TODO Update view
 			if(completed) {
-				completeButton.setText("Uncomplete");
+				completeButton.setGraphic(new ImageView(new Image("view/images/complete.png")));
+				completeButton.setTooltip(new Tooltip("Uncomplete " + id));
 				completeButton.setOnAction(e -> {
 					orderController.setOrderToUnCompleted(id);
 					uncompLv.refresh();
@@ -232,7 +241,8 @@ public class OrderView {
 					setList();
 				});
 			} else {
-				completeButton.setText("Complete");
+				completeButton.setGraphic(new ImageView(new Image("view/images/uncomplete.png")));
+				completeButton.setTooltip(new Tooltip("Complete " + id));
 				completeButton.setOnAction(e -> {
 					orderController.setOrderToCompleted(id);
 					uncompLv.refresh();
@@ -242,11 +252,14 @@ public class OrderView {
 				});
 			}
 			
-			
+			editButton.setGraphic(new ImageView(new Image("view/images/edit.png")));
+			editButton.setTooltip(new Tooltip("Edit " + id));
 			editButton.setOnAction(e -> {
 				edit(this);
 			});
 			
+			removeButton.setGraphic(new ImageView(new Image("view/images/remove.png")));
+			removeButton.setTooltip(new Tooltip("Remove " + id));
 			removeButton.setOnAction(e -> {
 				remove(this);
 			});

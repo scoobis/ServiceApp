@@ -413,7 +413,7 @@ public class HomeView {
 		}
 		
 		vBox.getChildren().addAll(buttons);
-		vBox.getStylesheets().addAll("view/css/buttons.css", "view/css/bar.css");
+		vBox.getStylesheets().addAll("view/css/buttons.css");
 		return vBox;
 	}
 	
