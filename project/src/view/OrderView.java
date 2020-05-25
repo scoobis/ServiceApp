@@ -292,6 +292,7 @@ public class OrderView {
 			dateLabel.setMaxWidth(Double.MAX_VALUE);
 			HBox.setHgrow(dateLabel, Priority.ALWAYS);
 			
+			
 			if(completed) {
 				completeButton.setText("Uncomplete");
 				completeButton.setOnAction(e -> {

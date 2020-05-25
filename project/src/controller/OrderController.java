@@ -1,9 +1,16 @@
 package controller;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Map;
+
+import com.paypal.api.payments.Invoice;
+import com.paypal.base.rest.PayPalRESTException;
 
 import model.Customer;
 import model.Order;
+import model.PaymentInvoice;
 import model.User;
 import model.database.CustomerDatabase;
 import model.database.OrderDatabase;
@@ -11,7 +18,7 @@ import model.database.OrderDatabase;
 public class OrderController {
 
 	OrderDatabase orderDatabase;
-
+	PaymentInvoice invoice = new PaymentInvoice();
 	public OrderController() {
 		orderDatabase = new OrderDatabase();
 	}
@@ -82,8 +89,10 @@ public class OrderController {
 
 		boolean isSetToCompleted = orderDatabase.setOrderToCompleted(id);
 
-		if (isSetToCompleted)
+		if (isSetToCompleted) {
+			sendInvoice(id);
 			return "Order set to completed!";
+		}
 		return "ops, something went wrong!";
 	}
 
@@ -93,9 +102,20 @@ public class OrderController {
 
 		boolean isSetToCompleted = orderDatabase.setOrderToUnCompleted(id);
 
-		if (isSetToCompleted)
+		if (isSetToCompleted) {
 			return "Order set to completed!";
+		}
 		return "ops, something went wrong!";
+	}
+	
+	public void sendInvoice(int id) {
+		System.out.println(id);
+		invoice.create(id);
+		invoice.send();
+	}
+		
+	public Map<Integer,String> getAllInvoices(int shopId){
+		return invoice.getStatus(invoice.getMerchantInvoices(), orderDatabase.getAllOrders(shopId));
 	}
 
 	public void sendOrderCompleteMail(Order order) {
