@@ -79,6 +79,7 @@ public class OrderDatabase implements DatabaseConnector {
 				order.setCustomerId(result.getInt("customer_id"));
 				order.setShopId(result.getInt("shop_id"));
 				order.setcompanyName(result.getString("company_name"));
+				order.setPaypalID(result.getString("paypal_id"));
 				order.setPrice(result.getInt("price"));
 				order.setCompleted(result.getBoolean("completed"));
 				order.setDate(result.getString("date"));
@@ -100,11 +101,12 @@ public class OrderDatabase implements DatabaseConnector {
 	public boolean saveOrder(Order o) {
 		PreparedStatement create;
 		try {
-			create = connection.prepareStatement("INSERT INTO orders (service_id, customer_id, shop_id, company_name, price, completed, date)"
+			create = connection.prepareStatement("INSERT INTO orders (service_id, customer_id, shop_id, company_name, paypal_id, price, completed, date)"
 						+ "VALUES ("+ o.getServiceId() +", "
 						+ o.getCustomerId() +","
 						+ o.getShopId() +","
 						+ "'"+ o.getcompanyName() +"', "
+						+ "'"+ o.getPaypalID() +"', "
 						+ o.getPrice() +","
 						+ o.getCompleted() +","
 						+ "'"+ o.getDate() +"');");
@@ -162,22 +164,7 @@ public class OrderDatabase implements DatabaseConnector {
 			return false;
 			}
 	}
-	
-	public boolean setPaidStatus(int id, String paidStatus) {
-		PreparedStatement edit;
-		try {
-			edit = connection.prepareStatement("UPDATE orders "
-						+ "SET paid_status = "+ paidStatus +" "
-						+ "WHERE id = "+ id +";");
-			edit.executeUpdate();
-			
-			return true;
-			
-		} catch (SQLException e1) { 
-			e1.printStackTrace();
-			return false;
-			}
-	}
+
 	/**
 	 * Sets a order to complete
 	 * @param id
@@ -200,7 +187,7 @@ public class OrderDatabase implements DatabaseConnector {
 		}
 	}
 	
-	/**
+	 /**
 	 * Sets a Order to uncompleted.
 	 * @param id
 	 * @return boolean
@@ -222,7 +209,23 @@ public class OrderDatabase implements DatabaseConnector {
 		}
 	}
 	
-	// TEST METHOD
+	public boolean setPayPalInvoiceID(int id, String invoiceID) {
+		PreparedStatement edit;
+		try {
+			edit = connection.prepareStatement("UPDATE orders "
+						+ "SET paypal_id = '"+ invoiceID +"' "
+						+ "WHERE id = "+ id +";");
+			edit.executeUpdate();
+			
+			return true;
+			
+		} catch (SQLException e1) { 
+			e1.printStackTrace();
+			return false;
+			}
+	}
+	
+	// TODO TEST METHOD
 	public void reset() throws SQLException {
 		String statement = "TRUNCATE TABLE orders";
 		PreparedStatement query = connection.prepareStatement(statement);

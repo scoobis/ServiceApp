@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="project/src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk-13.0.2">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
@@ -17,5 +17,10 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="lib" path="lib/activation-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/javax.mail.jar"/>
+	<classpathentry kind="lib" path="E:/GitHub/2DV609/project/lib/javax.mail.jar"/>
+	<classpathentry kind="lib" path="E:/Downloads/gson-2.2.2.jar"/>
+	<classpathentry kind="lib" path="E:/Downloads/rest-api-sdk-1.14.0.jar"/>
+	<classpathentry kind="lib" path="E:/Downloads/slf4j-api-1.7.21.jar"/>
+	<classpathentry kind="lib" path="E:/GitHub/2DV609/project/lib/activation-1.1.1.jar"/>
 	<classpathentry kind="output" path="project/bin"/>
 </classpath>

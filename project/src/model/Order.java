@@ -14,6 +14,7 @@ public class Order {
 	private double price; // Changed to double
 	private boolean completed;
 	private int id;
+	private String paypalID;
 	
 	private String paidStatus;
 
@@ -125,6 +126,14 @@ public class Order {
 	
 	public String getPaidStatus() {
 		return paidStatus;
+	}
+
+	public String getPaypalID() {
+		return paypalID;
+	}
+
+	public void setPaypalID(String paypalID) {
+		this.paypalID = paypalID;
 	}
 
 }
