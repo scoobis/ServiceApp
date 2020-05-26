@@ -132,22 +132,6 @@ public class OrderDatabase implements DatabaseConnector {
 			}
 	}
 	
-	public boolean setPaidStatus(int id, String paidStatus) {
-		PreparedStatement edit;
-		try {
-			edit = connection.prepareStatement("UPDATE orders "
-						+ "SET paid_status = "+ paidStatus +" "
-						+ "WHERE id = "+ id +";");
-			edit.executeUpdate();
-			
-			return true;
-			
-		} catch (SQLException e1) { 
-			e1.printStackTrace();
-			return false;
-			}
-	}
-	
 	public boolean setOrderToCompleted(int id) {
 		PreparedStatement edit;
 		try {
