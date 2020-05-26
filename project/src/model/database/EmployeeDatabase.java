@@ -6,26 +6,26 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Observer;
 
 import model.Admin;
 import model.Employee;
 import model.SuperAdmin;
 import model.User;
 
-
 /**
- * TODO:
- * Admins:
- * - "Name" variable isn't in the "admin" database but in the admin class.
- * Users:
- * - "Name" variable isn't in the "user" database but in the user class.
+ * A class that handles the Employee Database.
  */
 
-public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, DatabaseSubject {
+public class EmployeeDatabase implements DatabaseConnector {
 	
 	private Connection connection = DatabaseConnector.getConnection();
 
+	/**
+	 * Retrieves all Employees from a certain company.
+	 * @param companyName
+	 * @return ArrayList<Employee>
+	 */
+	
 	public ArrayList<Employee> getAllEmployees(String companyName) {
 		ArrayList<Employee> employees = new ArrayList<>();
 		
@@ -56,6 +56,12 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 		}
 	}
 	
+	/**
+	 * Gets a User by ID.
+	 * @param id
+	 * @return User
+	 */
+	
 	public User getUserById(int id) {
 		User user = new User();
 		try {
@@ -79,6 +85,12 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 			return null;
 		}
 	}
+	
+	/**
+	 * Gets a Admin by ID.
+	 * @param id
+	 * @return Admin
+	 */
 	
 	public Admin getAdminById(int id) {
 		Admin admin = new Admin();
@@ -104,6 +116,12 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 		}
 	}
 	
+	/**
+	 * Gets a SuperAdmin by ID.
+	 * @param id
+	 * @return Employee
+	 */
+	
 	public Employee getSuperAdminById(int id) {
 		Employee superAdmin = new SuperAdmin();
 		try {
@@ -127,10 +145,22 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 		}
 	}
 	
+	/**
+	 * Saves a Employee.
+	 * @param e
+	 * @return boolean
+	 */
+	
 	public boolean saveEmployee(Employee e) {
 			if (e instanceof Admin || e instanceof User) { return saveUserOrAdmin(e); }
 			else { return saveSuperAdmin(e);  }
 	}
+	
+	/**
+	 * Helper function to the SaveEmployee function.
+	 * @param e
+	 * @return boolean
+	 */
 	
 	private boolean saveUserOrAdmin(Employee e) {
 		try {
@@ -151,6 +181,12 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 				}
 	}
 	
+	/**
+	 * Saves a SuperAdmin.
+	 * @param e
+	 * @return boolean
+	 */
+	
 	private boolean saveSuperAdmin(Employee e) {
 		try {
 		PreparedStatement create;
@@ -170,6 +206,12 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 				return false;
 				}
 	}
+	
+	/**
+	 * Deletes a Employee.
+	 * @param e
+	 * @return boolean
+	 */
 	
 	public boolean deleteEmployee(Employee e) {
 		// Not used anymore!
@@ -207,11 +249,22 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 				return false;
 				}
 	}
+	/**
+	 * Edits a Employee.
+	 * @param e
+	 * @return boolean
+	 */
 	
 	public boolean editEmployee(Employee e) {
 			if (e instanceof SuperAdmin) { return editSuperAdmin(e); } 
 			else { return editAdminOrUser(e); }
 	}
+	
+	/**
+	 * Helper function to the editEmployee() function.
+	 * @param e
+	 * @return boolean
+	 */
 	
 	private boolean editSuperAdmin(Employee e) {
 		PreparedStatement edit;
@@ -228,6 +281,12 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 			return false;
 			}
 	}
+	
+	/**
+	 * Helper function to the editEmployee() function.
+	 * @param e
+	 * @return boolean
+	 */
 	
 	private boolean editAdminOrUser(Employee e) {
 		PreparedStatement edit;
@@ -246,7 +305,14 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 			}
 	}
 	
-	public Employee validateEmployee(String email, String password) {
+	/**
+	 * Validates a Employee.
+	 * @param email
+	 * @param password
+	 * @return boolean
+	 */
+	
+	public boolean validateEmployee(String email, String password) {
 		try {
 		String statement = "SELECT * FROM user WHERE email = '" + email + "' "
 				+ "UNION "
@@ -323,21 +389,6 @@ public class EmployeeDatabase implements DatabaseConnector, DatabaseObserver, Da
 		PreparedStatement query = connection.prepareStatement(statement);
 		query.executeUpdate();
 
-	}
-	
-	@Override
-	public void attach(Observer o) {
-		
-	}
-
-	@Override
-	public void detach(Observer o) {
-		
-	}
-
-	@Override
-	public void update() {
-		
 	}
 
 }

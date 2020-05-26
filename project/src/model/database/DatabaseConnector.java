@@ -5,6 +5,10 @@ import java.sql.DriverManager;
 
 import secretStuff.DatabaseSecrets;
 
+/**
+ * A interface that handles connection to the MySQL database.
+ */
+
 public interface DatabaseConnector {
 
     DatabaseSecrets dbSercrets = new DatabaseSecrets();
@@ -14,6 +18,11 @@ public interface DatabaseConnector {
 	final String user = dbSercrets.getUsername();
 	final String password = dbSercrets.getPassword();
 
+	/**
+	 * Creates a connection to the MySQL database.
+	 * @return Connection
+	 */
+	
 	public static Connection getConnection() {
 		try {
             Class.forName(driver);

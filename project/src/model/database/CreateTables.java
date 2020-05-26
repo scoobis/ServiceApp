@@ -3,12 +3,24 @@ package model.database;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
+/**
+ * Creates tables in the mySQL database.0
+ */
+
 public class CreateTables {
 Connection connection = null;
 	
+	/**
+	 * Constructor.
+	 */
+
 	public CreateTables() {
 		connection = DatabaseConnector.getConnection();
 	}
+	
+	/**
+	 * Creates all tables.
+	 */
 	
 	public void executeCreateAllTables() {
 		this.createSuperAdmin();
@@ -21,6 +33,10 @@ Connection connection = null;
 		this.createCustomer();
 		System.out.println("All create functions executed!");
 	}
+	
+	/**
+	 * Creates the super_admin table.
+	 */
 	
 	private void createSuperAdmin() {
 		try {
@@ -38,6 +54,10 @@ Connection connection = null;
 		} catch(Exception e) { System.out.println(e); }
 	}
 	
+	/**
+	 * Creates the admin table.
+	 */
+	
 	private void createAdmin() {
 		try {
 			PreparedStatement create = connection.prepareStatement("CREATE TABLE IF NOT EXISTS admin"
@@ -53,6 +73,10 @@ Connection connection = null;
 			create.executeUpdate();
 		} catch(Exception e) { System.out.println(e); }
 	}
+	
+	/**
+	 * Creates the user table.
+	 */
 	
 	private void createUser() {
 		try {
@@ -70,6 +94,10 @@ Connection connection = null;
 		} catch(Exception e) { System.out.println(e); }
 	}
 	
+	/**
+	 * Creates the shop table.
+	 */
+	
 	private void createShop() {
 		try {
 			PreparedStatement create = connection.prepareStatement("CREATE TABLE IF NOT EXISTS shop"
@@ -82,6 +110,10 @@ Connection connection = null;
 		} catch(Exception e) { System.out.println(e); }
 	}
 	
+	/**
+	 * Creates the company table.
+	 */
+	
 	private void createCompany() {
 		try {
 			PreparedStatement create = connection.prepareStatement("CREATE TABLE IF NOT EXISTS company"
@@ -91,6 +123,10 @@ Connection connection = null;
 			create.executeUpdate();
 		} catch(Exception e) { System.out.println(e); }
 	}
+	
+	/**
+	 * Creates the order tables.
+	 */
 	
 	private void createOrder() {
 		try {
@@ -109,6 +145,10 @@ Connection connection = null;
 		} catch(Exception e) { System.out.println(e); }
 	}
 	
+	/**
+	 * Creates the service table.
+	 */
+	
 	private void createService() {
 		try {
 			PreparedStatement create = connection.prepareStatement("CREATE TABLE IF NOT EXISTS service"
@@ -122,6 +162,10 @@ Connection connection = null;
 			create.executeUpdate();
 		} catch(Exception e) { System.out.println(e); }
 	}
+	
+	/**
+	 * Creates the customer table.
+	 */
 	
 	private void createCustomer() {
 		try {

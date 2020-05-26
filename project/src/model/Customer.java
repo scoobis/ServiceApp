@@ -1,9 +1,12 @@
 package model;
 
+/**
+ * Representation of the "Customer"-role of the system.
+ */
 public class Customer {
 
 	private String email;
-	private int id;
+	private int id; // ID SHOULD BE HERE
 	private String phone;
 	private String name;
 	private String address;
@@ -11,18 +14,32 @@ public class Customer {
 	private boolean active;
 	private String company;
 	
+	/**
+	 * Empty Constructor.
+	 */
+	
 	public Customer() {
 		
 	}
 	
-	public Customer(String email, String phone, String name, String address, boolean active, int id) {
+	/**
+	 * Constructor.
+	 * @param email
+	 * @param phone
+	 * @param name
+	 * @param address
+	 * @param active
+	 */
+	
+	public Customer(String email, String phone, String name, String address, boolean active) { // ID SHOULD NOT BE HERE
 		this.email = email;
-		this.id = id;
 		this.phone = phone;
 		this.name = name;
 		this.address = address;
 		this.active = active;
 	}
+	
+	// Getters and Setters for all the fields.
 	
 	public String getEmail() {
 		return email;
@@ -32,10 +49,12 @@ public class Customer {
 		this.email = email;
 	}
 	
+	// ID SHOULD HAVE A GETTER METHOD
 	public int getId() {
 		return id;
 	}
 	
+	// ID SHOULD HAVE A SETTER METHOD
 	public void setId(int id) {
 		this.id = id;
 	}

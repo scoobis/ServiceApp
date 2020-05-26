@@ -1,5 +1,9 @@
 package model;
 
+/**
+ * A representation of a Service in the system.
+ */
+
 public class Service {
 
 	private String company;
@@ -8,9 +12,21 @@ public class Service {
 	private int id;
 	private double price;
 	
+	/**
+	 * Empty Constructor.
+	 */
+	
 	public Service() {
 		
 	}
+	
+	/**
+	 * Constructor.
+	 * @param company
+	 * @param title
+	 * @param description
+	 * @param price
+	 */
 	
 	public Service(String company, String title, String description, double price) {
 		this.company = company;
@@ -18,6 +34,9 @@ public class Service {
 		this.description = description;
 		this.price = price;
 	}
+	
+	// GETTERS AND SETTERS
+	
 	public String getCompany() {
 		return company;
 	}

@@ -2,12 +2,15 @@ package model;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+
+/**
+ * Abstract class Employee that all system users extends.
+ */
 
 @SuppressWarnings("serial")
 public abstract class Employee implements Serializable {
@@ -22,6 +25,15 @@ public abstract class Employee implements Serializable {
 	
 	private String status;
 	
+	/**
+	 * Constructor
+	 * @param phone
+	 * @param email
+	 * @param name
+	 * @param company
+	 * @param shopId
+	 * @param password
+	 */
 	
 	public Employee(String phone, String email, String name, String company, int shopId, String password) {
 		this.status = "";
@@ -33,8 +45,14 @@ public abstract class Employee implements Serializable {
 		this.password = password;
 	}
 	
-	public static Employee getLoggedInUser() {
-		try {
+	/**
+	 * Gets the logged in Employee.
+	 * @return Employee the logged in Employee
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	
+	public static Employee getLoggedInUser() throws IOException, ClassNotFoundException {
 		File f = new File("LoggedInUser.txt");
 		f.setWritable(true, true);
 		FileInputStream fis = new FileInputStream(f);
@@ -44,26 +62,16 @@ public abstract class Employee implements Serializable {
 		f.setReadable(true);
 		ois.close();
 		return e;
-		} catch(Exception err) {
-			err.printStackTrace();
-			return null;
-		}
 		
 	}
 	
 	/**
 	 * Saves the Logged in Employee Object to a text file located in model.
-	 * Each time we log in a Employee the .txt file will be overwritten which means there can only be one logged in Employee at the time.
-	 * When we check log in credentials and get the Employee back, we can simply use Employee.logInUser(TheUserWeGotBack).
-	 * And everytime we need to check for status we simply use Employee.getLoggedInUser();
-	 * 
-	 * + The solotuion doesnt require any further dependencies because its located as a static funtion in Employee.
-	 * - We need to make sure the text isn't vulnerable for modification by any user. If so a User could rewrite her/himself to be a Admin.
-	 * @param e
+	 * @param e The Employee the be logged in.
 	 * @throws IOException
 	 */
-	public static void logInUser(Employee e) {
-		try {
+	
+	public static void logInUser(Employee e) throws IOException {
 		File f = new File("LoggedInUser.txt");
 		f.setWritable(true, true);
 		FileOutputStream fos = new FileOutputStream(f);
@@ -72,12 +80,20 @@ public abstract class Employee implements Serializable {
 		oos.close();
 		f.setWritable(false);
 		f.setReadable(true);
-		} catch(Exception err) {
-			err.printStackTrace();
-		}
 	}
 	
-	public Employee() { this.status = ""; }
+	public Employee() { this.status = ""; } // TODO: Not sure where this is used. Remove comment if its useful.
+	
+	/**
+	 * Creates a new Order.
+	 * @param customerId
+	 * @param serviceId
+	 * @param date
+	 * @param shopId
+	 * @param company
+	 * @param price
+	 * @return Order
+	 */
 	
 	public Order createOrder(int customerId, int serviceId, String date, int shopId, String company, double price) {
 		Order order = new Order();
@@ -93,8 +109,17 @@ public abstract class Employee implements Serializable {
 	}
 	
 	public int removeOrder(String id) {
-		return -1;
+		return -1; // TODO Not implemented
 	}
+	
+	/**
+	 * Edits a Order.
+	 * @param id
+	 * @param customerId
+	 * @param serviceId
+	 * @param price
+	 * @return Order The newly edited Order.
+	 */
 	
 	public Order editOrder(int id, int customerId, int serviceId, double price) {
 		Order order = new Order();
@@ -105,6 +130,16 @@ public abstract class Employee implements Serializable {
         
         return order;
 	}
+	
+	/**
+	 * Creates a new Customer
+	 * @param name
+	 * @param email
+	 * @param phone
+	 * @param address
+	 * @param company
+	 * @return Customer The newly created customer
+	 */
 	
 	public Customer createCustomer(String name, String email, String phone, String address, String company) {
 		Customer customer = new Customer();
@@ -119,7 +154,18 @@ public abstract class Employee implements Serializable {
         return customer;
 	}
 	
-	public int removeCustomer(String id) { return -1; }
+	public int removeCustomer(String id) { return -1; } // TODO not implemented
+	
+	/**
+	 * Edits a Customer
+	 * @param name
+	 * @param email
+	 * @param phone
+	 * @param address
+	 * @param isActive
+	 * @param id
+	 * @return Customer The newly edited Customer.
+	 */
 	
 	public Customer editCustomer(String name, String email, String phone, String address, boolean isActive, int id) { 
 	Customer customer = new Customer();
@@ -131,6 +177,8 @@ public abstract class Employee implements Serializable {
     
     return customer;
 	}
+	
+	// GETTERS AND SETTERS
 	
 	public int completeOrder(String orderId) { return -1; }
 	
