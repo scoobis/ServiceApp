@@ -1,5 +1,7 @@
 package view;
 
+import java.io.IOException;
+
 import controller.EmployeeController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -72,26 +74,36 @@ public class LoginView {
 		isSuperAdmin.setText("Are you SuperAdmin?");
 		pane.add(isSuperAdmin, 0, 6);
 		
-		Employee test = Employee.getLoggedInUser();
-		if (test != null) {
-			usernameField.setText(test.getEmail());
-		}
-		
-		buttons[0].setOnAction(e -> {
-			
-			Employee employee = employeeController.login(usernameField.getText(), PasswordHasher.hashPassword(passwordField.getText()), isSuperAdmin.isSelected());
-			if(employee != null) {
-				Employee.logInUser(employee);
-				mainView.render(stage);
-			} else {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Login Failed");
-				alert.setHeaderText(null);
-				alert.setContentText("Wrong password or username");
-				alert.showAndWait();
+		Employee test;
+		try {
+			test = Employee.getLoggedInUser();
+			if (test != null) {
+				usernameField.setText(test.getEmail());
 			}
+			buttons[0].setOnAction(e -> {
 				
-		});
+				Employee employee = employeeController.login(usernameField.getText(), PasswordHasher.hashPassword(passwordField.getText()), isSuperAdmin.isSelected());
+				if(employee != null) {
+					try {
+						Employee.logInUser(employee);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					mainView.render(stage);
+				} else {
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("Login Failed");
+					alert.setHeaderText(null);
+					alert.setContentText("Wrong password or username");
+					alert.showAndWait();
+				}
+					
+			});
+		} catch (ClassNotFoundException | IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		buttons[1].setOnAction(e -> {
 			new RegisterView().render(stage);

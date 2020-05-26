@@ -1,5 +1,6 @@
 package view;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import controller.ShopController;
@@ -37,7 +38,12 @@ public class ShopView {
 	public BorderPane getCenter() {
 		ObservableList<Cell> obsList;
 		
-		loggedInUser = Employee.getLoggedInUser();
+		try {
+			loggedInUser = Employee.getLoggedInUser();
+		} catch (ClassNotFoundException | IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		setList();
 		
@@ -45,10 +51,15 @@ public class ShopView {
 		Button createButton = new Button("Create");
 		
 		createButton.setOnAction(e -> {
-			if (Employee.getLoggedInUser().getStatus().equalsIgnoreCase("super_admin"))
-				create();
-			else
-				Popup.displayErrorMessage("You do not have permission to create shops!");
+			try {
+				if (Employee.getLoggedInUser().getStatus().equalsIgnoreCase("super_admin"))
+					create();
+				else
+					Popup.displayErrorMessage("You do not have permission to create shops!");
+			} catch (ClassNotFoundException | IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		});
 		
 		lv = new ListView<Cell>();

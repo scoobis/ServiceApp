@@ -1,5 +1,6 @@
 package view;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import controller.CustomerController;
@@ -36,7 +37,12 @@ public class CustomerView {
 	public BorderPane getCenter() {
 		ObservableList<Cell> obsList;
 		
-		loggedInUser = Employee.getLoggedInUser();
+		try {
+			loggedInUser = Employee.getLoggedInUser();
+		} catch (ClassNotFoundException | IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		setList();
 		

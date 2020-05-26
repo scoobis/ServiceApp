@@ -101,6 +101,7 @@ public class OrderController {
     
     public ArrayList<Order> getAllOrdersCompany(String companyName) {
     	return orderDatabase.getAllOrdersCompany(companyName);
+    }
     
     /**
      * Sets a order to Completed status.

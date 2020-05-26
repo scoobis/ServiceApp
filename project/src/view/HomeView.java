@@ -1,5 +1,6 @@
 package view;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -72,30 +73,35 @@ public class HomeView {
 	
 	private void displayHomePage(GridPane pane) {
 		
-		Employee employee = Employee.getLoggedInUser();
-		allOrders = orderController.getAllOrdersCompany(employee.getCompanyName());
-		allServices = serviceController.getAllServices(employee.getCompanyName());
-		
-		Text companyHeader = new Text("Your Company: " + employee.getCompanyName());
-		companyHeader.setId("companyHeader");
-		
-		Text loggedInAsHeader = new Text("Logged In As: " + employee.getName());
-		loggedInAsHeader.setId("loggedInAsHeader");
-		
-		GridPane centerPane = new GridPane();
-		centerPane.setVgap(60);
-		
-		centerPane.add(companyHeader, 0, 0);
-		centerPane.add(loggedInAsHeader, 1, 0);
-		centerPane.add(this.createBarChart(), 1, 1);
-		centerPane.add(this.createLineChart(), 0, 2);
-		centerPane.add(this.createMostPopularServiceChart(), 1, 2);
-		
-		GridPane.setHalignment(companyHeader, HPos.CENTER);
-		GridPane.setHalignment(loggedInAsHeader, HPos.CENTER);
-		
-		pane.getChildren().add(centerPane);
-		
+		Employee employee;
+		try {
+			employee = Employee.getLoggedInUser();
+			allOrders = orderController.getAllOrdersCompany(employee.getCompanyName());
+			allServices = serviceController.getAllServices(employee.getCompanyName());
+			
+			Text companyHeader = new Text("Your Company: " + employee.getCompanyName());
+			companyHeader.setId("companyHeader");
+			
+			Text loggedInAsHeader = new Text("Logged In As: " + employee.getName());
+			loggedInAsHeader.setId("loggedInAsHeader");
+			
+			GridPane centerPane = new GridPane();
+			centerPane.setVgap(60);
+			
+			centerPane.add(companyHeader, 0, 0);
+			centerPane.add(loggedInAsHeader, 1, 0);
+			centerPane.add(this.createBarChart(), 1, 1);
+			centerPane.add(this.createLineChart(), 0, 2);
+			centerPane.add(this.createMostPopularServiceChart(), 1, 2);
+			
+			GridPane.setHalignment(companyHeader, HPos.CENTER);
+			GridPane.setHalignment(loggedInAsHeader, HPos.CENTER);
+			
+			pane.getChildren().add(centerPane);
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	private void displayInformationPage(GridPane pane) {

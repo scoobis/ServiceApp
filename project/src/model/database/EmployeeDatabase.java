@@ -312,7 +312,7 @@ public class EmployeeDatabase implements DatabaseConnector {
 	 * @return boolean
 	 */
 	
-	public boolean validateEmployee(String email, String password) {
+	public Employee validateEmployee(String email, String password) {
 		try {
 		String statement = "SELECT * FROM user WHERE email = '" + email + "' "
 				+ "UNION "

@@ -1,5 +1,6 @@
 package view;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,7 +53,12 @@ public class OrderView {
 		ObservableList<Cell> uncompObsList;
 		ObservableList<Cell> compObsList;
 		
-		loggedInUser = Employee.getLoggedInUser();
+		try {
+			loggedInUser = Employee.getLoggedInUser();
+		} catch (ClassNotFoundException | IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		allCustomers = new CustomerController().getAllCustomers(loggedInUser.getCompanyName());
 		allServices = new ServiceController().getAllServices(loggedInUser.getCompanyName());
 		
@@ -418,10 +424,6 @@ public class OrderView {
 		
 		public int getID() {
 			return id;
-		}
-		
-		public Order getAsOrder() {
-			return new Order(customerId, serviceId, date, shopId, companyName, price, completed, paidStatus);
 		}
 	}
 }
