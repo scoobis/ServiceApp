@@ -314,8 +314,15 @@ public class OrderView {
 				completeButton.setTooltip(new Tooltip("Uncomplete " + id));
 				completeButton.setText("Uncomplete");
 				completeButton.setOnAction(e -> {
-					orderController.setOrderToUnCompleted(id);
-					orderController.cancelInvoice(id);
+					String message = orderController.setOrderToUnCompleted(id, this.paidStatus);
+					
+					if (message.contains("set to completed!")) {
+						Popup.displaySuccessMessage(message);
+						orderController.cancelInvoice(id);
+					}
+					else
+						Popup.displayErrorMessage(message);
+					
 					uncompLv.refresh();
 					compLv.refresh();
 					
@@ -344,7 +351,10 @@ public class OrderView {
 			editButton.setGraphic(new ImageView(new Image("view/images/edit.png")));
 			editButton.setTooltip(new Tooltip("Edit " + id));
 			editButton.setOnAction(e -> {
-				edit(this);
+				if (this.paidStatus.equalsIgnoreCase("PAID"))
+					Popup.displayErrorMessage("Already paid order, can not be edited!");
+				else
+					edit(this);
 			});
 			
 			removeButton.setGraphic(new ImageView(new Image("view/images/remove.png")));
@@ -424,7 +434,7 @@ public class OrderView {
 		}
 		
 		public Order getAsOrder() {
-			return new Order(customerId, serviceId, date, shopId, companyName, price, completed, paidStatus);
+			return new Order(customerId, serviceId, date, shopId, companyName, price, completed);
 		}
 	}
 }

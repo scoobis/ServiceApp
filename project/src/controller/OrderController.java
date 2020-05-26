@@ -139,9 +139,9 @@ public class OrderController {
      * @return String
      */
 
-	public String setOrderToUnCompleted(int id) {
-		if (id <= 0)
-			return "ops, something went wrong!";
+	public String setOrderToUnCompleted(int id, String paidStatus) {
+		if (id <= 0) return "ops, something went wrong!";
+		else if (paidStatus.equalsIgnoreCase("PAID")) return "Order already paid, can not set to uncompleted";
 
 		boolean isSetToCompleted = orderDatabase.setOrderToUnCompleted(id);
 

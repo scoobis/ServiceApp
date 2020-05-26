@@ -137,6 +137,7 @@ Connection connection = null;
 					+ "shop_id int, "
 					+ "company_name varchar(64), "
 					+ "paid_status varchar(64), "
+					+ "paypal_id varchar(128), "
 					+ "price DOUBLE, "
 					+ "completed boolean, "
 					+ "date varchar(75), "

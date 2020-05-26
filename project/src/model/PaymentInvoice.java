@@ -62,11 +62,8 @@ public class PaymentInvoice extends Thread {
 		}
 		item.setQuantity(1);
 		cur.setCurrency("USD");
-		try {
-			cur.setValue("" + serviceData.getServiceById(serviceID).getPrice());
-		} catch (SQLException e) {
-			System.out.println("Error: " + e.getMessage() + "\nError Code: " + e.getErrorCode());
-		}
+		
+		cur.setValue("" + data.getOrderById(orderId).getPrice());
 		item.setUnitPrice(cur);
 
 		ArrayList<BillingInfo> billing = new ArrayList<BillingInfo>();
