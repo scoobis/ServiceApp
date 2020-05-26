@@ -16,6 +16,7 @@ public class InputValidator {
 		
 		if (name.equalsIgnoreCase("")) return "Name is missing!";
         else if (email.equalsIgnoreCase("")) return "Email is missing!";
+        else if(new Email().validateEmail(email)==false) return "Not a valid email!";
         else if (phone.equalsIgnoreCase("")) return "Phone is missing!";
         else if (address.equalsIgnoreCase("")) return "Address is missing!";
         else if (id == 0) return "Ops, something went wrong!";
@@ -27,6 +28,7 @@ public class InputValidator {
 		
 		if (name.equalsIgnoreCase("")) return "Name is missing!";
         else if (email.equalsIgnoreCase("")) return "Email is missing!";
+        else if(new Email().validateEmail(email)==false) return "Not a valid email!";
         else if (phone.equalsIgnoreCase("")) return "Phone is missing!";
         else if (shopId == 0 || companyName.equalsIgnoreCase("")) return "Ops, something went wrong!";
         else if (password.equalsIgnoreCase("")) return "Password is missing!";

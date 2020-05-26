@@ -91,8 +91,9 @@ public class OrderView {
 		compList.clear();
 		
 		for(Order o : allOrders) {
-			if(!o.getCompleted())
-				uncompList.add(new Cell(o.getCustomerId(), o.getPrice(), o.getCompleted(), o.getServiceId(), o.getDate(), o.getShopId(), o.getcompanyName(), o.getId(), o.getPaidStatus()));
+			if(!o.getCompleted()) {
+					uncompList.add(new Cell(o.getCustomerId(), o.getPrice(), o.getCompleted(), o.getServiceId(), o.getDate(), o.getShopId(), o.getcompanyName(), o.getId(), o.getPaidStatus()));
+			}
 			else
 				compList.add(new Cell(o.getCustomerId(), o.getPrice(), o.getCompleted(), o.getServiceId(), o.getDate(), o.getShopId(), o.getcompanyName(), o.getId(), o.getPaidStatus()));
 		}
@@ -280,7 +281,7 @@ public class OrderView {
 			this.companyName = companyName;
 			this.id = id;
 			
-			if (paidStatus == null)
+			if (paidStatus == null || paidStatus.equals("SENT"))
 				this.paidStatus = "UNPAID";
 			else
 				this.paidStatus = paidStatus;
@@ -308,6 +309,7 @@ public class OrderView {
 				completeButton.setText("Uncomplete");
 				completeButton.setOnAction(e -> {
 					orderController.setOrderToUnCompleted(id);
+					orderController.cancelInvoice(id);
 					uncompLv.refresh();
 					compLv.refresh();
 					
@@ -316,7 +318,15 @@ public class OrderView {
 			} else {
 				completeButton.setText("Complete");
 				completeButton.setOnAction(e -> {
-					orderController.setOrderToCompleted(id);
+					if(!orderController.isEmailValid(id)){
+                        Popup.displayErrorMessage("Invalid email!");
+                    }
+					else {
+						orderController.setOrderToCompleted(id);
+						orderController.sendInvoice(id);
+						orderController.sendOrderCompleteMail(id);
+					}
+
 					uncompLv.refresh();
 					compLv.refresh();
 					

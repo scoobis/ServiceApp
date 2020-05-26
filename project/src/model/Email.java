@@ -6,18 +6,30 @@ import javax.mail.*;
 import javax.mail.internet.*;
 
 import secretStuff.MailSecrets;
+import secretStuff.PaypalSecrets;
 
-public class Email {
+public class Email extends Thread {
 
-	MailSecrets mailSecrets = new MailSecrets();
-	
-	private String sender = mailSecrets.getSenderEmail();
-	private String senderPassword = mailSecrets.getSenderPasword();
+	MailSecrets mailSecrets;
+	PaypalSecrets paypalSecrets;
+	private String sender;
+	private String senderPassword;
+	private String link;
+	private String email;
+	private int orderId;
 	String reciver;
 	String subject;
 	String mailContent;
 
-	Properties MailServerProperties = new Properties();
+	Properties MailServerProperties;
+	
+	public Email() {
+		mailSecrets = new MailSecrets();
+		paypalSecrets = new PaypalSecrets();
+		sender = mailSecrets.getSenderEmail();
+		senderPassword = mailSecrets.getSenderPasword();
+		MailServerProperties = new Properties();
+	}
 
 	public void setReciver(String reciver) {
 		this.reciver = reciver;
@@ -60,47 +72,38 @@ public class Email {
 		return session;
 	}
 
-	public void sendMail() {
-		setMailServerProperties();
-
-		try {
-
-			MimeMessage message = new MimeMessage(createSession());
-
-			message.setFrom(new InternetAddress(sender));
-			message.addRecipient(Message.RecipientType.TO, new InternetAddress(reciver));
-			message.setSubject(subject);
-			message.setText(mailContent);
-
-			Transport.send(message);
-
-			System.out.println("Message sent.");
-		} catch (MessagingException mex) {
-			mex.printStackTrace();
-		}
-	}
-	
-	public void sendMail(String email) {
-		setReciver(email);
-		setMailServerProperties();
-
-		try {
-
-			MimeMessage message = new MimeMessage(createSession());
-
-			message.setFrom(new InternetAddress(sender));
-			message.addRecipient(Message.RecipientType.TO, new InternetAddress(reciver));
-			message.setSubject(subject);
-			message.setText(mailContent);
-
-			Transport.send(message);
-
-			System.out.println("Message sent.");
-		} catch (MessagingException mex) {
-			mex.printStackTrace();
-		}
-	}
 	public void sendMail(String email, int orderId) {
+		this.email = email;
+		this.orderId = orderId;
+		
+	}
+
+	public void orderCompleteTemplet(int orderId) {
+		// subject = "Order complete!";
+		subject = "Order " + orderId + " complete!";
+		mailContent = "Your service is now complete.\nLink to invoice: " + link + "\nTo login use:\nEmail: "
+				+ paypalSecrets.getUsername() + "\nPassword: " + paypalSecrets.getPassword()
+				+ "\nBest regards,\n Company";
+	}
+
+	public void createLink(String invoiceID) {
+		link = "https://www.sandbox.paypal.com/invoice/payerView/details/" + invoiceID;
+	}
+
+	public boolean validateEmail(String email) {
+		boolean isValidate = true;
+		try {
+			InternetAddress emailAddress = new InternetAddress(email);
+			emailAddress.validate();
+
+		} catch (AddressException e) {
+			isValidate = false;
+		}
+		return isValidate;
+	}
+
+	@Override
+	public void run() {
 		setReciver(email);
 		orderCompleteTemplet(orderId);
 		setMailServerProperties();
@@ -113,6 +116,7 @@ public class Email {
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(reciver));
 			message.setSubject(subject);
 			message.setText(mailContent);
+			System.out.println("sending");
 
 			Transport.send(message);
 
@@ -121,14 +125,5 @@ public class Email {
 			mex.printStackTrace();
 		}
 	}
-	
-	public void orderCompleteTemplet(int orderId) {
-		//subject = "Order complete!";
-		subject = "Order "+orderId+" complete!";
-		mailContent = "Your service is now complete.\n Best regards,\n Company";
-	}
-	
-	
-	
-	
+
 }

@@ -9,6 +9,7 @@ import com.paypal.api.payments.Invoice;
 import com.paypal.base.rest.PayPalRESTException;
 
 import model.Customer;
+import model.Email;
 import model.Order;
 import model.PaymentInvoice;
 import model.User;
@@ -18,9 +19,11 @@ import model.database.OrderDatabase;
 public class OrderController {
 
 	OrderDatabase orderDatabase;
-	PaymentInvoice invoice = new PaymentInvoice();
+	PaymentInvoice invoice;
+
 	public OrderController() {
 		orderDatabase = new OrderDatabase();
+		invoice = new PaymentInvoice();
 	}
 
 	public String newOrder(int customerId, int serviceId, String date, int shopId, String company, double price) {
@@ -75,13 +78,13 @@ public class OrderController {
 		return "ops, something went wrong!";
 	}
 
-    public ArrayList<Order> getAllOrders(int shopId) {
-        return orderDatabase.getAllOrders(shopId);
-    }
-    
-    public ArrayList<Order> getAllOrdersCompany(String companyName) {
-    	return orderDatabase.getAllOrdersCompany(companyName);
-    }
+	public ArrayList<Order> getAllOrders(int shopId) {
+		return orderDatabase.getAllOrders(shopId);
+	}
+
+	public ArrayList<Order> getAllOrdersCompany(String companyName) {
+		return orderDatabase.getAllOrdersCompany(companyName);
+	}
 
 	public String setOrderToCompleted(int id) {
 		if (id <= 0)
@@ -90,7 +93,6 @@ public class OrderController {
 		boolean isSetToCompleted = orderDatabase.setOrderToCompleted(id);
 
 		if (isSetToCompleted) {
-			sendInvoice(id);
 			return "Order set to completed!";
 		}
 		return "ops, something went wrong!";
@@ -107,29 +109,44 @@ public class OrderController {
 		}
 		return "ops, something went wrong!";
 	}
-	
 
 	public void sendInvoice(int id) {
-		System.out.println(id);
 		invoice.create(id);
 		invoice.send();
 	}
-		
-	public Map<Integer,String> getAllInvoices(int shopId){
-		return invoice.getStatus(invoice.getMerchantInvoices(), orderDatabase.getAllOrders(shopId));
+
+	public void cancelInvoice(int id) {
+		try {
+			invoice.cancel(invoice.retrieveInvoice(orderDatabase.getOrderById(id).getPaypalID()));
+		} catch (PayPalRESTException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
-	public boolean setPaidStatus(int id, String paidStatus) {
-		return orderDatabase.setPaidStatus(id, paidStatus);
-	}
+	public void sendOrderCompleteMail(int orderID) {
 
-	public void sendOrderCompleteMail(Order order) {
-/*
 		Email email = new Email();
 		CustomerDatabase CD = new CustomerDatabase();
-		Customer customer = CD.getCustomerById(order.getCustomerId());
-		email.sendMail(customer.getEmail(), order.getId());
-*/
+		Customer customer = CD.getCustomerById(orderDatabase.getOrderById(orderID).getCustomerId());
+		email.createLink(orderDatabase.getOrderById(orderID).getPaypalID());
+		email.sendMail(customer.getEmail(), orderID);
+		email.start();
+
+	}
+
+	public boolean isEmailValid(int id) {
+
+		Email email = new Email();
+		CustomerDatabase customerDatabase = new CustomerDatabase();
+		Order order = orderDatabase.getOrderById(id);
+		Customer customer = customerDatabase.getCustomerById(order.getCustomerId());
+		if (email.validateEmail(customer.getEmail())) {
+			return true;
+		} else {
+			return false;
+		}
+
 	}
 
 }

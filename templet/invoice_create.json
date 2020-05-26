@@ -1,0 +1,31 @@
+{
+  "merchant_info": {
+    "email": "sb-fp9qj1686625@business.example.com",
+    "business_name": "2DV609 Group 9",
+    "phone": {
+      "country_code": "046",
+      "national_number": "4085551234"
+    },
+    "address": {
+      "line1": "Test Street 7",
+      "city": "Test Town",
+      "state": "TE",
+      "postal_code": "98765",
+      "country_code": "SE"
+    }
+  },
+  "billing_info": [
+    {
+      
+    }
+  ],
+  "shipping_info": {
+   
+  },
+  "items": [
+    
+  ],
+
+  "note": "Thank you for your business.",
+  "terms": "No refunds after 30 days."
+}
