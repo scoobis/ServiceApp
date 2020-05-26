@@ -16,7 +16,7 @@ public class PasswordHasher {
 	 * @throws NoSuchAlgorithmException
 	 */
 	
-	public String hashPassword(String password) {
+	public static String hashPassword(String password) {
 		try {
 		MessageDigest md = MessageDigest.getInstance("MD5"); // Change MD5 to any Hashing Algorithm.
 		md.update(password.getBytes());

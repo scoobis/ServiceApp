@@ -51,7 +51,7 @@ public class CustomerDatabase implements DatabaseConnector {
 	 * @return Customer
 	 */
 	
-	public Customer getCustomerById(String id) {
+	public Customer getCustomerById(int id) {
 		
 		try {
 		

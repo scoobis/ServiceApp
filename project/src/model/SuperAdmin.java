@@ -25,7 +25,7 @@ public class SuperAdmin extends Employee {
 		this.setEmail(email);
 		this.setName(name);
 		this.setCompanyName(company);
-		this.setPassword(password);
+		//this.setPassword(password); TODO Is this needed? Because employee already sets password
 		
 		this.setStatus("super_admin");
 	}

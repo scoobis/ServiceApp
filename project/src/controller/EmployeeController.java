@@ -1,5 +1,6 @@
 package controller;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 import model.Admin;
@@ -34,20 +35,18 @@ public class EmployeeController {
 	 * @param list A list of information about the new Super_admin.
 	 */
 	
-	public void newSuperAdmin(ArrayList<String> list) {
+	public String newSuperAdmin(String name, String email, String phone, String password, String company) {
 		Employee superAdmin = new SuperAdmin();
-		superAdmin.setEmail(list.get(0));
-		superAdmin.setCompanyName(list.get(1));
-		superAdmin.setName(list.get(2));
-		superAdmin.setPhone(list.get(3));
-		try {
-			String hashedPassword = hash.hashPassword(list.get(4)); // TODO hashedPassword never used?
-			//superAdmin.setPassword(hashedPassword); 
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
+		superAdmin.setEmail(email);
+		superAdmin.setCompanyName(company);
+		superAdmin.setName(name);
+		superAdmin.setPhone(phone);
+		String hashedPassword = PasswordHasher.hashPassword(password); // TODO hashedPassword never used?
+		//superAdmin.setPassword(hashedPassword); 
 		superAdmin.setStatus("Super_Admin");
-		employeeDatabase.saveEmployee(superAdmin);
+		boolean isSaved = employeeDatabase.saveEmployee(superAdmin);
+		if (!isSaved) return "ops, something went wrong!";
+        return "Super admin created successfully";
 	}
 	
 	/**
