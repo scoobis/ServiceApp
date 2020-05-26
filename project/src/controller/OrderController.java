@@ -13,6 +13,7 @@ import model.Email;
 import model.Order;
 import model.PaymentInvoice;
 import model.User;
+import model.database.CustomerDatabase;
 import model.database.OrderDatabase;
 
 /**
@@ -151,17 +152,22 @@ public class OrderController {
 	}
 
 	public void sendInvoice(int id) {
-		invoice.create(id);
-		invoice.send();
+		new Thread(() ->{
+			invoice.create(id);
+			invoice.send();
+			sendOrderCompleteMail(id);
+		}).start();
 	}
 
 	public void cancelInvoice(int id) {
-		try {
-			invoice.cancel(invoice.retrieveInvoice(orderDatabase.getOrderById(id).getPaypalID()));
-		} catch (PayPalRESTException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		new Thread(() ->{
+			try {
+				invoice.cancel(invoice.retrieveInvoice(orderDatabase.getOrderById(id).getPaypalID()));
+			} catch (PayPalRESTException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}).start();
 	}
 
 	public void sendOrderCompleteMail(int orderID) {
@@ -171,8 +177,6 @@ public class OrderController {
 		Customer customer = CD.getCustomerById(orderDatabase.getOrderById(orderID).getCustomerId());
 		email.createLink(orderDatabase.getOrderById(orderID).getPaypalID());
 		email.sendMail(customer.getEmail(), orderID);
-		email.start();
-
 	}
 
 	public boolean isEmailValid(int id) {

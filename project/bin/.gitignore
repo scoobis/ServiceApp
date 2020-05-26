@@ -1,6 +1,3 @@
-/view/
-/model/
-/security/
-/view/
 /controller/
-/tests/
+/model/
+/view/

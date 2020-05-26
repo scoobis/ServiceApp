@@ -8,15 +8,13 @@ import javax.mail.internet.*;
 import secretStuff.MailSecrets;
 import secretStuff.PaypalSecrets;
 
-public class Email extends Thread {
+public class Email{
 
 	MailSecrets mailSecrets;
 	PaypalSecrets paypalSecrets;
 	private String sender;
 	private String senderPassword;
 	private String link;
-	private String email;
-	private int orderId;
 	String reciver;
 	String subject;
 	String mailContent;
@@ -73,10 +71,28 @@ public class Email extends Thread {
 	}
 
 	public void sendMail(String email, int orderId) {
-		this.email = email;
-		this.orderId = orderId;
-		
+		setReciver(email);
+		orderCompleteTemplet(orderId);
+		setMailServerProperties();
+
+		try {
+
+			MimeMessage message = new MimeMessage(createSession());
+
+			message.setFrom(new InternetAddress(sender));
+			message.addRecipient(Message.RecipientType.TO, new InternetAddress(reciver));
+			message.setSubject(subject);
+			message.setText(mailContent);
+			System.out.println("sending");
+
+			Transport.send(message);
+
+			System.out.println("Message sent.");
+		} catch (MessagingException mex) {
+			mex.printStackTrace();
+		}
 	}
+		
 
 	public void orderCompleteTemplet(int orderId) {
 		// subject = "Order complete!";
@@ -101,29 +117,4 @@ public class Email extends Thread {
 		}
 		return isValidate;
 	}
-
-	@Override
-	public void run() {
-		setReciver(email);
-		orderCompleteTemplet(orderId);
-		setMailServerProperties();
-
-		try {
-
-			MimeMessage message = new MimeMessage(createSession());
-
-			message.setFrom(new InternetAddress(sender));
-			message.addRecipient(Message.RecipientType.TO, new InternetAddress(reciver));
-			message.setSubject(subject);
-			message.setText(mailContent);
-			System.out.println("sending");
-
-			Transport.send(message);
-
-			System.out.println("Message sent.");
-		} catch (MessagingException mex) {
-			mex.printStackTrace();
-		}
-	}
-
 }
