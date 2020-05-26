@@ -14,6 +14,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -56,9 +59,11 @@ public class OrderView {
 		setList();
 			
 		BorderPane bp = new BorderPane();
-		
-		Button createButton = new Button("Create");
-		
+    
+		Button createButton = new Button();
+		createButton.setGraphic(new ImageView(new Image("view/images/create.png")));
+		createButton.setTooltip(new Tooltip("Create new order"));
+
 		// do not allow super admin to create orders since it does not have a shop.
 		createButton.setOnAction(e ->  {
 			if (!loggedInUser.getStatus().equalsIgnoreCase("super_admin"))
@@ -66,6 +71,7 @@ public class OrderView {
 			else
 				Popup.displayErrorMessage("Super admins can not create orders");
 		});
+
 		
 		uncompLv = new ListView<Cell>();
 		compLv = new ListView<Cell>();
@@ -76,6 +82,8 @@ public class OrderView {
 		
 		uncompLv.prefWidthProperty().bind(window.widthProperty().multiply(.495));
 		compLv.prefWidthProperty().bind(window.widthProperty().multiply(.495));
+		bp.getStylesheets().add("view/css/list-buttons.css");
+		bp.getStylesheets().add("view/css/tooltips.css");
 		
 		bp.setTop(createButton);
 		bp.setLeft(uncompLv);
@@ -309,7 +317,8 @@ public class OrderView {
 			HBox.setHgrow(dateLabel, Priority.ALWAYS);
 			
 			if(completed) {
-				completeButton.setText("Uncomplete");
+				completeButton.setGraphic(new ImageView(new Image("view/images/complete.png")));
+				completeButton.setTooltip(new Tooltip("Uncomplete " + id));
 				completeButton.setOnAction(e -> {
 					orderController.setOrderToUnCompleted(id);
 					uncompLv.refresh();
@@ -318,7 +327,8 @@ public class OrderView {
 					setList();
 				});
 			} else {
-				completeButton.setText("Complete");
+				completeButton.setGraphic(new ImageView(new Image("view/images/uncomplete.png")));
+				completeButton.setTooltip(new Tooltip("Complete " + id));
 				completeButton.setOnAction(e -> {
 					orderController.setOrderToCompleted(id);
 					uncompLv.refresh();
@@ -328,11 +338,14 @@ public class OrderView {
 				});
 			}
 			
-			
+			editButton.setGraphic(new ImageView(new Image("view/images/edit.png")));
+			editButton.setTooltip(new Tooltip("Edit " + id));
 			editButton.setOnAction(e -> {
 				edit(this);
 			});
 			
+			removeButton.setGraphic(new ImageView(new Image("view/images/remove.png")));
+			removeButton.setTooltip(new Tooltip("Remove " + id));
 			removeButton.setOnAction(e -> {
 				if (loggedInUser.getStatus().equalsIgnoreCase("super_admin") || loggedInUser.getStatus().equalsIgnoreCase("admin"))
 					remove(this);

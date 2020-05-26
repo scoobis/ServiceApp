@@ -10,6 +10,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -30,6 +31,7 @@ public class LoginView {
 	
 	public void render(Stage stage) {
 		window = stage;
+		window.getIcons().add(new Image("view/images/logo.png"));
 		GridPane pane = new GridPane();
 		pane.setAlignment(Pos.CENTER);
 		pane.setHgap(10);

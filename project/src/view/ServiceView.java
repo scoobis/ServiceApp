@@ -40,6 +40,9 @@ public class ServiceView {
 		setList();
 		
 		BorderPane bp = new BorderPane();
+		BorderPane center = new BorderPane();
+		center.setTop(getHeader());
+		
 		Button createButton = new Button("Create");
 		
 		createButton.setOnAction(e -> {
@@ -52,9 +55,29 @@ public class ServiceView {
 		lv = new ListView<Cell>();
 		obsList = FXCollections.observableList(list);
 		lv.setItems(obsList);
-		bp.setCenter(lv);
+		center.setCenter(lv);
+		bp.setCenter(center);
 		bp.setTop(createButton);
 		return bp;
+	}
+	
+	private HBox getHeader() {
+		HBox header = new HBox();
+		Label id = new Label("Id:");
+		Label title = new Label("Title:");
+		Label price = new Label("Price:");
+		Label filler = new Label();
+		id.setMaxWidth(Double.MAX_VALUE);
+		title.setMaxWidth(Double.MAX_VALUE);
+		price.setMaxWidth(Double.MAX_VALUE);
+		filler.setPrefWidth(50);
+		HBox.setHgrow(id, Priority.ALWAYS);
+		HBox.setHgrow(title, Priority.ALWAYS);
+		HBox.setHgrow(price, Priority.ALWAYS);
+		HBox.setHgrow(filler, Priority.ALWAYS);
+		header.getChildren().addAll(id, title, price, filler);
+		header.getStylesheets().add("view/css/header-text.css");
+		return header;
 	}
 	
 	private void setList() {
