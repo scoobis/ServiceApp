@@ -37,12 +37,7 @@ public class CustomerView {
 	public BorderPane getCenter() {
 		ObservableList<Cell> obsList;
 		
-		try {
 			loggedInUser = Employee.getLoggedInUser();
-		} catch (ClassNotFoundException | IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		
 		setList();
 		

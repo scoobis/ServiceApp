@@ -36,7 +36,6 @@ public class Order {
 		this.companyName = companyName;
 		this.price = price;
 		this.completed = completed;
-		this.paidStatus = paidStatus;
 	}
 
 	/**

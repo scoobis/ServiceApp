@@ -1,6 +1,5 @@
 package controller;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 import model.Admin;

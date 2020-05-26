@@ -53,12 +53,8 @@ public class OrderView {
 		ObservableList<Cell> uncompObsList;
 		ObservableList<Cell> compObsList;
 		
-		try {
-			loggedInUser = Employee.getLoggedInUser();
-		} catch (ClassNotFoundException | IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		loggedInUser = Employee.getLoggedInUser();
+		
 		allCustomers = new CustomerController().getAllCustomers(loggedInUser.getCompanyName());
 		allServices = new ServiceController().getAllServices(loggedInUser.getCompanyName());
 		

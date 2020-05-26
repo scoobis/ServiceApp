@@ -42,12 +42,7 @@ public class EmployeeView {
 	public BorderPane getCenter() {
 		ObservableList<Cell> obsList;
 		
-		try {
-			loggedInUser = Employee.getLoggedInUser();
-		} catch (ClassNotFoundException | IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		loggedInUser = Employee.getLoggedInUser();
 		
 		setList();
 		
@@ -71,17 +66,13 @@ public class EmployeeView {
 	
 	private void setList() {
 		ArrayList<Employee> allEmployees;
-		try {
+
 			allEmployees = employeeController.getAllEmployees(Employee.getLoggedInUser().getCompanyName());
 			list.clear();
 			
 			for (Employee employee : allEmployees) {
 				list.add(new Cell(employee.getName(), employee.getEmail(), employee.getPhone(), employee.getCompanyName(), employee.getShopId(), employee.getId(), employee.getStatus()));
 			}
-		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	
 	private void create() {

@@ -48,11 +48,10 @@ public abstract class Employee implements Serializable {
 	/**
 	 * Gets the logged in Employee.
 	 * @return Employee the logged in Employee
-	 * @throws IOException
-	 * @throws ClassNotFoundException
 	 */
 	
-	public static Employee getLoggedInUser() throws IOException, ClassNotFoundException {
+	public static Employee getLoggedInUser() {
+		try {
 		File f = new File("LoggedInUser.txt");
 		f.setWritable(true, true);
 		FileInputStream fis = new FileInputStream(f);
@@ -62,16 +61,20 @@ public abstract class Employee implements Serializable {
 		f.setReadable(true);
 		ois.close();
 		return e;
+		} catch (Exception err) {
+			err.printStackTrace();
+			return null;
+		}
 		
 	}
 	
 	/**
 	 * Saves the Logged in Employee Object to a text file located in model.
 	 * @param e The Employee the be logged in.
-	 * @throws IOException
 	 */
 	
-	public static void logInUser(Employee e) throws IOException {
+	public static void logInUser(Employee e) {
+		try {
 		File f = new File("LoggedInUser.txt");
 		f.setWritable(true, true);
 		FileOutputStream fos = new FileOutputStream(f);
@@ -80,6 +83,9 @@ public abstract class Employee implements Serializable {
 		oos.close();
 		f.setWritable(false);
 		f.setReadable(true);
+		} catch (Exception err) {
+			err.printStackTrace();
+		}
 	}
 	
 	public Employee() { this.status = ""; } // TODO: Not sure where this is used. Remove comment if its useful.

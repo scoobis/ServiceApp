@@ -46,7 +46,8 @@ public class MainView {
 			new Image("view/images/service.png"),
 			new Image("view/images/customer.png"),
 			new Image("view/images/employee.png"),
-			new Image("view/images/shop.png")
+			new Image("view/images/shop.png"),
+			new Image("view/images/home.png")
 		};
 		
 		ToggleGroup group = new ToggleGroup();

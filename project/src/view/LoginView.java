@@ -75,7 +75,6 @@ public class LoginView {
 		pane.add(isSuperAdmin, 0, 6);
 		
 		Employee test;
-		try {
 			test = Employee.getLoggedInUser();
 			if (test != null) {
 				usernameField.setText(test.getEmail());
@@ -84,12 +83,7 @@ public class LoginView {
 				
 				Employee employee = employeeController.login(usernameField.getText(), PasswordHasher.hashPassword(passwordField.getText()), isSuperAdmin.isSelected());
 				if(employee != null) {
-					try {
-						Employee.logInUser(employee);
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+					Employee.logInUser(employee);
 					mainView.render(stage);
 				} else {
 					Alert alert = new Alert(AlertType.INFORMATION);
@@ -100,10 +94,6 @@ public class LoginView {
 				}
 					
 			});
-		} catch (ClassNotFoundException | IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		
 		buttons[1].setOnAction(e -> {
 			new RegisterView().render(stage);

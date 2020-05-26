@@ -74,7 +74,7 @@ public class HomeView {
 	private void displayHomePage(GridPane pane) {
 		
 		Employee employee;
-		try {
+		
 			employee = Employee.getLoggedInUser();
 			allOrders = orderController.getAllOrdersCompany(employee.getCompanyName());
 			allServices = serviceController.getAllServices(employee.getCompanyName());
@@ -98,10 +98,6 @@ public class HomeView {
 			GridPane.setHalignment(loggedInAsHeader, HPos.CENTER);
 			
 			pane.getChildren().add(centerPane);
-		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	
 	private void displayInformationPage(GridPane pane) {

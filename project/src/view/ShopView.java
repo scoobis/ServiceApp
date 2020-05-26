@@ -38,12 +38,7 @@ public class ShopView {
 	public BorderPane getCenter() {
 		ObservableList<Cell> obsList;
 		
-		try {
-			loggedInUser = Employee.getLoggedInUser();
-		} catch (ClassNotFoundException | IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		loggedInUser = Employee.getLoggedInUser();
 		
 		setList();
 		
@@ -51,15 +46,10 @@ public class ShopView {
 		Button createButton = new Button("Create");
 		
 		createButton.setOnAction(e -> {
-			try {
 				if (Employee.getLoggedInUser().getStatus().equalsIgnoreCase("super_admin"))
 					create();
 				else
 					Popup.displayErrorMessage("You do not have permission to create shops!");
-			} catch (ClassNotFoundException | IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
 		});
 		
 		lv = new ListView<Cell>();

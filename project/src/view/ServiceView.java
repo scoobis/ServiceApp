@@ -36,12 +36,7 @@ public class ServiceView {
 	public BorderPane getCenter() {
 		ObservableList<Cell> obsList;
 		
-		try {
-			loggedInUser = Employee.getLoggedInUser();
-		} catch (ClassNotFoundException | IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		loggedInUser = Employee.getLoggedInUser();
 		
 		setList();
 		
@@ -206,6 +201,7 @@ public class ServiceView {
 		Cell(int id, String title, double price, String description) {
 			super();
 			
+			this.id = id;
 			this.description = description;
 			
 			this.title = title;
