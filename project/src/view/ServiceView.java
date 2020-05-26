@@ -16,6 +16,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
+import model.Employee;
 import model.Service;
 
 public class ServiceView {
@@ -23,6 +24,8 @@ public class ServiceView {
 	private ArrayList<Cell> list;
 	private ListView<Cell> lv;
 	private ServiceController serviceController;
+	
+	private Employee loggedInUser;
 	
 	public ServiceView() {
 		serviceController = new ServiceController();
@@ -32,6 +35,8 @@ public class ServiceView {
 	public BorderPane getCenter() {
 		ObservableList<Cell> obsList;
 		
+		loggedInUser = Employee.getLoggedInUser();
+		
 		setList();
 		
 		BorderPane bp = new BorderPane();
@@ -40,7 +45,12 @@ public class ServiceView {
 		
 		Button createButton = new Button("Create");
 		
-		createButton.setOnAction(e -> create());
+		createButton.setOnAction(e -> {
+			if (loggedInUser.getStatus().equalsIgnoreCase("admin") || loggedInUser.getStatus().equalsIgnoreCase("super_admin"))
+				create();
+			else
+				Popup.displayErrorMessage("You do not have permission to create services!");
+		});
 	
 		lv = new ListView<Cell>();
 		obsList = FXCollections.observableList(list);
@@ -71,7 +81,7 @@ public class ServiceView {
 	}
 	
 	private void setList() {
-		ArrayList<Service> allServices = serviceController.getAllServices("company"); // TODO get company from logged in user
+		ArrayList<Service> allServices = serviceController.getAllServices(loggedInUser.getCompanyName());
 		
 		list.clear();
 		
@@ -100,7 +110,7 @@ public class ServiceView {
 		
 		button.setOnAction(e -> {
 			
-			String companyName = "company"; // TODO and company from logged in user
+			String companyName = loggedInUser.getCompanyName();
 			String title = titleField.getText();
 			String description = descField.getText();
 			double price = Double.parseDouble(priceField.getText());
@@ -109,9 +119,13 @@ public class ServiceView {
 			window.close();
 			
 			String message = serviceController.newService(companyName, title, description, price);
-			Popup.display(message);
 			
 			setList();
+			
+			if (message.contains("successfully"))
+				Popup.displaySuccessMessage(message);
+			else
+				Popup.displayErrorMessage(message);
 		});
 		
 		window.setTitle("Create new order");
@@ -140,7 +154,7 @@ public class ServiceView {
 		button.setOnAction(e -> {
 			
 			int id = cell.getID();
-			String companyName = "company"; //TODO get company from logged in user
+			String companyName = loggedInUser.getCompanyName();
 			String title = titleField.getText();
 			String description = descField.getText();
 			double price = Double.parseDouble(priceField.getText());
@@ -149,7 +163,11 @@ public class ServiceView {
 			window.close();
 			
 			String message = serviceController.editService(companyName, title, description, price, id);
-			Popup.display(message);
+			
+			if (message.contains("successfully"))
+				Popup.displaySuccessMessage(message);
+			else
+				Popup.displayErrorMessage(message);
 			
 			setList();
 			
@@ -161,33 +179,28 @@ public class ServiceView {
 	
 	private void remove(Cell cell) {
 		String message = serviceController.deleteService(cell.getID(), cell.getTitle());
-		Popup.display(message);
 		lv.refresh();
 		
 		setList();
+		
+		Popup.displayErrorMessage(message);
 	}
 	
 	public class Cell extends HBox {
-		Label idLabel = new Label();
-		Label titleLabel = new Label();
-		Label priceLabel = new Label();
-		Button editButton = new Button("Edit");
-		Button removeButton = new Button("Remove");
-		int id;
-		double price;
-		String title;
-		String company;
-		String description;
+		private Label titleLabel = new Label();
+		private Label priceLabel = new Label();
+		private Button editButton = new Button("Edit");
+		private Button removeButton = new Button("Remove");
+		private int id;
+		private double price;
+		private String title;
+		private String company;
+		private String description;
 
 		Cell(int id, String title, double price, String description) {
 			super();
 			
 			this.description = description;
-			
-			this.id = id;
-			idLabel.setText("Service id: " + id);
-			idLabel.setMaxWidth(Double.MAX_VALUE);
-			HBox.setHgrow(idLabel, Priority.ALWAYS);
 			
 			this.title = title;
 			titleLabel.setText("Title: " + title);
@@ -195,19 +208,25 @@ public class ServiceView {
 			HBox.setHgrow(titleLabel, Priority.ALWAYS);
 			
 			this.price = price;
-			priceLabel.setText("Price: " + price);
+			priceLabel.setText("Price: $" + price);
 			priceLabel.setMaxWidth(Double.MAX_VALUE);
 			HBox.setHgrow(priceLabel, Priority.ALWAYS);
 			
 			editButton.setOnAction(e -> {
-				edit(this);
+				if (loggedInUser.getStatus().equalsIgnoreCase("admin") || loggedInUser.getStatus().equalsIgnoreCase("super_admin"))
+					edit(this);
+				else
+					Popup.displayErrorMessage("You do not have permission to edit services!");
 			});
 			
 			removeButton.setOnAction(e -> {
-				remove(this);
+				if (loggedInUser.getStatus().equalsIgnoreCase("super_admin"))
+					remove(this);
+				else
+					Popup.displayErrorMessage("You do not have permission to remove services!");
 			});
 			
-			this.getChildren().addAll(idLabel, titleLabel, priceLabel, editButton, removeButton);
+			this.getChildren().addAll(titleLabel, priceLabel, editButton, removeButton);
 		}
 
 		public int getID() { return id; }

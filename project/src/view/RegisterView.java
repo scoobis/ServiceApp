@@ -16,9 +16,14 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
-public class RegisterView implements IView{
-	Stage window;
-	private ArrayList<String> list = new ArrayList<String>();
+public class RegisterView {
+	private Stage window;
+	private ArrayList<String> list;
+	
+	public RegisterView() {
+		 list = new ArrayList<String>();
+	}
+	
 	public void render(Stage stage) {
 		window = stage;
 		GridPane pane = new GridPane();
@@ -35,7 +40,7 @@ public class RegisterView implements IView{
 		TextField emailField = new TextField();
 		pane.add(emailField, 0, 2);
 		
-		Label company = new Label("Company");
+		Label company = new Label("Company Name");
 		pane.add(company, 0, 3);
 		TextField companyField = new TextField();
 		pane.add(companyField, 0, 4);
@@ -68,28 +73,23 @@ public class RegisterView implements IView{
 		
 		
 		HBox boxButtons = new HBox();
-		boxButtons.setMargin(backButton, new Insets(0,0,0,50));
+		HBox.setMargin(backButton, new Insets(0,0,0,50));
 		boxButtons.getChildren().addAll(registerButton,backButton);
 		pane.add(boxButtons, 0, 13);
 		
 		registerButton.setOnAction(e -> {
 				if(passwordField.getText().equals(passwordConfirmField.getText())) {
-					list.add(emailField.getText());
-					list.add(companyField.getText());
-					list.add(nameField.getText());
-					list.add(phoneField.getText());
-					list.add(passwordField.getText());
+					
 					EmployeeController cont = new EmployeeController();
-					cont.newSuperAdmin(list);
-					LoginView log = new LoginView();
-					log.render(window);
+					String message = cont.newSuperAdmin(nameField.getText(), emailField.getText(), phoneField.getText(), passwordField.getText(), companyField.getText());
+					
+					if (message.contains("successfully"))
+						new LoginView().render(window);
+					else
+						Popup.displayErrorMessage(message);
 				}
 				else {
-					Alert alert = new Alert(AlertType.INFORMATION);
-					alert.setTitle("Password don't match");
-					alert.setHeaderText(null);
-					alert.setContentText("Password don't match");
-					alert.showAndWait();
+					Popup.displayErrorMessage("Password don't match");
 				}
 		});
 		

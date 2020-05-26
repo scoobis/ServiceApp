@@ -1,4 +1,4 @@
-package model.database.tests;
+package tests.database;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,8 +18,8 @@ class OrderDatabaseUnitTests {
 	OrderDatabase db = new OrderDatabase();
 	
 	public void init() throws SQLException {
-		/*a = new Order(1, 1, "testdatum", 1, "1", 12, false); TODO NEEDS FIXING
-		b = new Order(2, 2, "testdatum", 1, "2", 15, false);*/
+		a = new Order(1, 1, "testdatum", 1, "company_a", 12, false);
+		b = new Order(2, 2, "testdatum", 1, "company_b", 15, false);
 		
 		db.reset();
 	}
@@ -55,7 +55,7 @@ class OrderDatabaseUnitTests {
 		this.init();
 		
 		db.saveOrder(a);
-		//db.editOrder(1, b); TODO NEEDS FIXING
+		db.editOrder(b);
 		
 		assertEquals(b.getPrice(), db.getOrderById(1).getPrice());
 	}

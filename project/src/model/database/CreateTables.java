@@ -3,12 +3,24 @@ package model.database;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
+/**
+ * Creates tables in the mySQL database.0
+ */
+
 public class CreateTables {
 Connection connection = null;
 	
+	/**
+	 * Constructor.
+	 */
+
 	public CreateTables() {
 		connection = DatabaseConnector.getConnection();
 	}
+	
+	/**
+	 * Creates all tables.
+	 */
 	
 	public void executeCreateAllTables() {
 		this.createSuperAdmin();
@@ -22,12 +34,17 @@ Connection connection = null;
 		System.out.println("All create functions executed!");
 	}
 	
+	/**
+	 * Creates the super_admin table.
+	 */
+	
 	private void createSuperAdmin() {
 		try {
 			PreparedStatement create = connection.prepareStatement("CREATE TABLE IF NOT EXISTS super_admin"
 					+ "(id int NOT NULL AUTO_INCREMENT, "
 					+ "company_name varchar(25), "
 					+ "name varchar(75), "
+					+ "shop_id int, "
 					+ "phone varchar(25), "
 					+ "email varchar(155), "
 					+ "password varchar(512), "
@@ -36,6 +53,10 @@ Connection connection = null;
 			create.executeUpdate();
 		} catch(Exception e) { System.out.println(e); }
 	}
+	
+	/**
+	 * Creates the admin table.
+	 */
 	
 	private void createAdmin() {
 		try {
@@ -53,6 +74,10 @@ Connection connection = null;
 		} catch(Exception e) { System.out.println(e); }
 	}
 	
+	/**
+	 * Creates the user table.
+	 */
+	
 	private void createUser() {
 		try {
 			PreparedStatement create = connection.prepareStatement("CREATE TABLE IF NOT EXISTS user"
@@ -69,6 +94,10 @@ Connection connection = null;
 		} catch(Exception e) { System.out.println(e); }
 	}
 	
+	/**
+	 * Creates the shop table.
+	 */
+	
 	private void createShop() {
 		try {
 			PreparedStatement create = connection.prepareStatement("CREATE TABLE IF NOT EXISTS shop"
@@ -81,6 +110,10 @@ Connection connection = null;
 		} catch(Exception e) { System.out.println(e); }
 	}
 	
+	/**
+	 * Creates the company table.
+	 */
+	
 	private void createCompany() {
 		try {
 			PreparedStatement create = connection.prepareStatement("CREATE TABLE IF NOT EXISTS company"
@@ -91,6 +124,10 @@ Connection connection = null;
 		} catch(Exception e) { System.out.println(e); }
 	}
 	
+	/**
+	 * Creates the order tables.
+	 */
+	
 	private void createOrder() {
 		try {
 			PreparedStatement create = connection.prepareStatement("CREATE TABLE IF NOT EXISTS orders"
@@ -99,6 +136,7 @@ Connection connection = null;
 					+ "customer_id int, "
 					+ "shop_id int, "
 					+ "company_name varchar(64), "
+					+ "paid_status varchar(64), "
 					+ "price DOUBLE, "
 					+ "completed boolean, "
 					+ "date varchar(75), "
@@ -106,6 +144,10 @@ Connection connection = null;
 			create.executeUpdate();
 		} catch(Exception e) { System.out.println(e); }
 	}
+	
+	/**
+	 * Creates the service table.
+	 */
 	
 	private void createService() {
 		try {
@@ -120,6 +162,10 @@ Connection connection = null;
 			create.executeUpdate();
 		} catch(Exception e) { System.out.println(e); }
 	}
+	
+	/**
+	 * Creates the customer table.
+	 */
 	
 	private void createCustomer() {
 		try {

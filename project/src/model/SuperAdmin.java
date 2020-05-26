@@ -1,20 +1,44 @@
 package model;
 
+/**
+ * A representation of a Super Admin in the system.
+ */
+
+@SuppressWarnings("serial")
 public class SuperAdmin extends Employee {
 
+	//TODO Is this needed?
+	//private static final long serialVersionUID = 6369704467594286628L;
+
+	/**
+	 * Constructor.
+	 * @param phone
+	 * @param email
+	 * @param name
+	 * @param company
+	 * @param status
+	 */
+	
 	public SuperAdmin(String phone, String email, String name, String company, String status) {
 		super();
 		this.setPhone(phone);
 		this.setEmail(email);
 		this.setName(name);
 		this.setCompanyName(company);
+		this.setPassword(password);
 		
 		this.setStatus("super_admin");
 	}
 	
+	/**
+	 * Empty Constructor.
+	 */
+	
 	public SuperAdmin() {
 		this.setStatus("super_admin");
 	}
+	
+	// TODO Not implemented
 	
 	public User createUser() {
 		return null;
@@ -40,6 +64,14 @@ public class SuperAdmin extends Employee {
 		
 		return shop;
 	}
+	/**
+	 * Creates a Service.
+	 * @param companyName
+	 * @param title
+	 * @param description
+	 * @param price
+	 * @return Service.
+	 */
 	
 	public Service createService(String companyName, String title, String description, double price) {
 		Service service = new Service();
@@ -51,9 +83,21 @@ public class SuperAdmin extends Employee {
         return service;
 	}
 	
+	// TODO Not implemented.
+	
 	public int removeService() {
 		return -1;
 	}
+	
+	/**
+	 * Edits a Service.
+	 * @param companyName
+	 * @param title
+	 * @param description
+	 * @param price
+	 * @param id
+	 * @return Service
+	 */
 	
 	public Service editService(String companyName, String title, String description, double price, int id) {
 		Service service = new Service();
@@ -65,6 +109,17 @@ public class SuperAdmin extends Employee {
         
         return service;
 	}
+	
+	/**
+	 * Creates a new Admin.
+	 * @param name
+	 * @param email
+	 * @param phone
+	 * @param password
+	 * @param companyName
+	 * @param shopId
+	 * @return Admin
+	 */
 	
 	public Admin createAdmin(String name, String email, String phone, String password, String companyName, int shopId) {
 		Admin admin = new Admin();
@@ -78,9 +133,21 @@ public class SuperAdmin extends Employee {
         return admin;
 	}
 	
+	// TODO Not implemented.
+	
 	public int removeAdmin() {
 		return -1;
 	}
+	
+	/**
+	 * Edits a Admin.
+	 * @param phone
+	 * @param email
+	 * @param name
+	 * @param shopId
+	 * @param id
+	 * @return Admin
+	 */
 	
 	public Admin editAdmin(String phone, String email, String name, int shopId, int id) {
 		Admin admin = new Admin();

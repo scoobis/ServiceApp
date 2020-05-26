@@ -1,18 +1,14 @@
 package view;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.stream.IntStream;
 
 import controller.OrderController;
 import controller.ServiceController;
 import javafx.geometry.HPos;
-import javafx.geometry.Pos;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.Chart;
@@ -21,10 +17,8 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -89,10 +83,10 @@ public class HomeView {
 		loggedInAsHeader.setId("loggedInAsHeader");
 		
 		GridPane centerPane = new GridPane();
+		centerPane.setVgap(60);
 		
 		centerPane.add(companyHeader, 0, 0);
-		centerPane.add(loggedInAsHeader, 0, 1);
-		
+		centerPane.add(loggedInAsHeader, 1, 0);
 		centerPane.add(this.createBarChart(), 1, 1);
 		centerPane.add(this.createLineChart(), 0, 2);
 		centerPane.add(this.createMostPopularServiceChart(), 1, 2);
@@ -130,24 +124,11 @@ public class HomeView {
 	private void displaySettingsPage(Pane pane) {
 		GridPane centerPane = new GridPane();
 		
-		Button logoutButton = new Button("Logout");
+		Text commingSoon = new Text("Cooming Soon!");
 		
-		centerPane.add(logoutButton, 0, 0);
+		centerPane.add(commingSoon, 0, 0);
 		
 		pane.getChildren().add(centerPane);
-		
-		logoutButton.setOnAction(e -> {
-			PrintWriter pw;
-			try {
-				pw = new PrintWriter("LoggedInUser.txt");
-				pw.close();
-				
-				// TODO render loginView
-				
-			} catch (FileNotFoundException e1) {
-				e1.printStackTrace();
-			}
-		});
 	}
 	
 	private void displayHelpPage(Pane pane) {

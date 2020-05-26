@@ -4,13 +4,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import controller.CustomerController;
 import controller.OrderController;
 import controller.ServiceController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -22,6 +22,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
+import model.Customer;
+import model.Employee;
 import model.Order;
 import model.Service;
 
@@ -34,25 +36,42 @@ public class OrderView {
 	
 	private OrderController orderController;
 	
+	private Employee loggedInUser;
+	
+	private ArrayList<Customer> allCustomers;
+	ArrayList<Service> allServices;
+	
 	public OrderView() {
 		orderController = new OrderController();
+		
 		uncompList = new ArrayList<Cell>();
 		compList = new ArrayList<Cell>();
 	}
 	
-	//TODO Try with TableView
 	public BorderPane getCenter(Stage window) {
 		ObservableList<Cell> uncompObsList;
 		ObservableList<Cell> compObsList;
 		
+		loggedInUser = Employee.getLoggedInUser();
+		allCustomers = new CustomerController().getAllCustomers(loggedInUser.getCompanyName());
+		allServices = new ServiceController().getAllServices(loggedInUser.getCompanyName());
+		
 		setList();
 			
 		BorderPane bp = new BorderPane();
+    
 		Button createButton = new Button();
-		
 		createButton.setGraphic(new ImageView(new Image("view/images/create.png")));
-		createButton.setOnAction(e -> create());
 		createButton.setTooltip(new Tooltip("Create new order"));
+
+		// do not allow super admin to create orders since it does not have a shop.
+		createButton.setOnAction(e ->  {
+			if (!loggedInUser.getStatus().equalsIgnoreCase("super_admin"))
+				create();
+			else
+				Popup.displayErrorMessage("Super admins can not create orders");
+		});
+
 		
 		uncompLv = new ListView<Cell>();
 		compLv = new ListView<Cell>();
@@ -75,47 +94,64 @@ public class OrderView {
 	
 	private void setList() {
 		
-		ArrayList<Order> allOrders = orderController.getAllOrders(1); // TODO get shopId from logged in user
+		ArrayList<Order> allOrders = orderController.getAllOrders(loggedInUser.getShopId());
 		
 		uncompList.clear();
 		compList.clear();
 		
 		for(Order o : allOrders) {
 			if(!o.getCompleted())
-				uncompList.add(new Cell(o.getCustomerId(), o.getPrice(), o.getCompleted(), o.getServiceId(), o.getDate(), o.getShopId(), o.getcompanyName(), o.getId()));
+				uncompList.add(new Cell(o.getCustomerId(), o.getPrice(), o.getCompleted(), o.getServiceId(), o.getDate(), o.getShopId(), o.getcompanyName(), o.getId(), o.getPaidStatus()));
 			else
-				compList.add(new Cell(o.getCustomerId(), o.getPrice(), o.getCompleted(), o.getServiceId(), o.getDate(), o.getShopId(), o.getcompanyName(), o.getId()));
+				compList.add(new Cell(o.getCustomerId(), o.getPrice(), o.getCompleted(), o.getServiceId(), o.getDate(), o.getShopId(), o.getcompanyName(), o.getId(), o.getPaidStatus()));
 		}
 	}
 	
 	private void create() {
 		GridPane pane = new GridPane();
+		pane.setVgap(5);
 		Button button = new Button("Create");
-		IntTextField customerIdField = new IntTextField();
 		DoubleTextField priceField = new DoubleTextField();
 		ComboBox<String> serviceBox = new ComboBox<String>();
-		
-		for(Service service : FXCollections.observableList(new ServiceController().getAllServices("company"))) { //TODO Get company from logged in user
-			serviceBox.getItems().add("" + service.getId() + ": " + service.getTitle());
+		ComboBox<String> customerBox = new ComboBox<String>();
+		int i = 1;
+		for (Service s : allServices) {
+			serviceBox.getItems().add(i + ". " + s.getTitle() + "  |  $" + s.getPrice());
+			if (i == 1) serviceBox.setValue(i + ". " + s.getTitle() + "  |  $" + s.getPrice());
+		i++;
 		}
 		
-		pane.add(new Label("Customer Id:"), 0, 0);
-		pane.add(customerIdField, 0, 1);
-		pane.add(new Label("Price:"), 0, 2);
-		pane.add(priceField, 0, 3);
-		pane.add(new Label("Service:"), 0, 4);
-		pane.add(serviceBox, 0, 5);
+		i = 1;
+		for (Customer c : allCustomers) {
+			customerBox.getItems().add(i + ". " + c.getName() + "  |  " + c.getEmail());
+			if (i == 1) customerBox.setValue(i + ". " + c.getName() + "  |  " + c.getEmail());
+			i++;
+		}
+		
+		pane.add(new Label("Customer:"), 0, 0);
+		pane.add(customerBox, 0, 1);
+		pane.add(new Label("Service:"), 0, 2);
+		pane.add(serviceBox, 0, 3);
+		pane.add(new Label("Price:"), 0, 4);
+		pane.add(priceField, 0, 5);
 		pane.add(button, 0, 6);
 		
 		Scene scene = new Scene(pane, 300, 600);
 		Stage window = new Stage();
 		
 		button.setOnAction(e -> {
-			int serviceId = Integer.parseInt(serviceBox.getValue().substring(0, serviceBox.getValue().indexOf(':')));
-			int customerId = Integer.parseInt(customerIdField.getText());
+			
+			int serviceVal = serviceBox.getValue().indexOf(".");
+			serviceVal = Integer.parseInt(serviceBox.getValue().substring(0, serviceVal)) - 1;
+			
+			int customerVal = customerBox.getValue().indexOf(".");
+			customerVal = Integer.parseInt(customerBox.getValue().substring(0, customerVal)) - 1;
+			
+			int serviceId = allServices.get(serviceVal).getId();
+			int customerId = allCustomers.get(customerVal).getId();
 			String date = this.getTodaysDate();
-			int shopId = 1; // TODO get shopId from logged in user
-			String companyName = "company"; // TODO get company from logged in user
+			int shopId = loggedInUser.getShopId();
+			String companyName = loggedInUser.getCompanyName();
 			double price = Double.parseDouble(priceField.getText());
 			
 			uncompLv.refresh();
@@ -123,9 +159,13 @@ public class OrderView {
 			window.close();
 			
 			String message = orderController.newOrder(customerId, serviceId, date, shopId, companyName, price);
-			Popup.display(message);
 			
 			setList();
+			
+			if (message.contains("successfully"))
+				Popup.displaySuccessMessage(message);
+			else
+				Popup.displayErrorMessage(message);
 		});
 		
 		window.setTitle("Create new order");
@@ -137,16 +177,30 @@ public class OrderView {
 		
 		GridPane pane = new GridPane();
 		Button editBtn = new Button("Edit");
-		IntTextField customerIdField = new IntTextField("" + cell.getCustomerId());
 		DoubleTextField priceField = new DoubleTextField("" + cell.getPrice());
-		IntTextField shopIdField = new IntTextField("" + cell.getShopId());
+		ComboBox<String> serviceBox = new ComboBox<String>();
+		ComboBox<String> customerBox = new ComboBox<String>();
+	
+		int i = 1;
+		for (Service s : allServices) {
+			serviceBox.getItems().add(i + ". " + s.getTitle() + "  |  $" + s.getPrice());
+			if (cell.getServiceId() == s.getId()) serviceBox.setValue(i + ". " + s.getTitle() + "  |  $" + s.getPrice());
+		i++;
+		}
 		
-		pane.add(new Label("Customer Id:"), 0, 0);
-		pane.add(customerIdField, 0, 1);
-		pane.add(new Label("Price:"), 0, 2);
-		pane.add(priceField, 0, 3);
-		pane.add(new Label("Shop Id:"), 0, 4);
-		pane.add(shopIdField, 0, 5);
+		i = 1;
+		for (Customer c : allCustomers) {
+			customerBox.getItems().add(i + ". " + c.getName() + "  |  " + c.getEmail());
+			if (cell.getCustomerId() == c.getId()) customerBox.setValue(i + ". " + c.getName() + "  |  " + c.getEmail());
+			i++;
+		}
+		
+		pane.add(new Label("Customer:"), 0, 0);
+		pane.add(customerBox, 0, 1);
+		pane.add(new Label("Service:"), 0, 2);
+		pane.add(serviceBox, 0, 3);
+		pane.add(new Label("Price:"), 0, 4);
+		pane.add(priceField, 0, 5);
 		pane.add(editBtn, 0, 6);
 		
 		Scene scene = new Scene(pane, 300, 600);
@@ -154,9 +208,15 @@ public class OrderView {
 		
 		editBtn.setOnAction(e -> {
 			
+			int serviceVal = serviceBox.getValue().indexOf(".");
+			serviceVal = Integer.parseInt(serviceBox.getValue().substring(0, serviceVal)) - 1;
+			
+			int customerVal = customerBox.getValue().indexOf(".");
+			customerVal = Integer.parseInt(customerBox.getValue().substring(0, customerVal)) - 1;
+			
 			int id = cell.getID();
-			int customerId = Integer.parseInt(customerIdField.getText());
-			int serviceId = cell.getServiceId();
+			int customerId = allCustomers.get(customerVal).getId();
+			int serviceId = allServices.get(serviceVal).getId();
 			double price = Double.parseDouble(priceField.getText());
 			
 			uncompLv.refresh();
@@ -164,9 +224,13 @@ public class OrderView {
 			window.close();
 			
 			String message = orderController.editOrder(id, customerId, serviceId, price);
-			Popup.display(message);
 			
 			setList();
+			
+			if (message.contains("successfully"))
+				Popup.displaySuccessMessage(message);
+			else
+				Popup.displayErrorMessage(message);
 		});
 		
 		window.setTitle("Edit " + cell.getCustomerId() + "'s order");
@@ -176,12 +240,13 @@ public class OrderView {
 	
 	private void remove(Cell cell) {
 		String message = orderController.deleteOrder(cell.getID());
-		Popup.display(message);
 		
 		uncompLv.refresh();
 		compLv.refresh();
 		
 		setList();
+		
+		Popup.displayErrorMessage(message);
 	}
 	
 	private String getTodaysDate() {
@@ -190,38 +255,59 @@ public class OrderView {
 	}
 	
 	public class Cell extends HBox {
-		Label customerLabel = new Label();
-		Label priceLabel = new Label();
-		Label dateLabel = new Label();
-		Button editButton = new Button();
-		Button removeButton = new Button();
-		Button completeButton = new Button();
-		int customerId;
-		double price;
-		boolean completed;
-		int serviceId;
-		String date;
-		int shopId;
-		String companyName;
-		int id;
+		private Label paidStatusLabel = new Label();
+		private Label customerLabel = new Label();
+		private Label priceLabel = new Label();
+		private Label dateLabel = new Label();
+		private Button editButton = new Button("Edit");
+		private Button removeButton = new Button("Remove");
+		private Button completeButton = new Button();
+		private int customerId;
+		private double price;
+		private boolean completed;
+		private int serviceId;
+		private String date;
+		private int shopId;
+		private String companyName;
+		private int id;
+		private String customerName;
+		
+		String paidStatus;
 
-		//TODO Add unpaid
-		Cell(int customerId, double price, boolean completed, int serviceId, String date, int shopId, String companyName, int id) {
+		Cell(int customerId, double price, boolean completed, int serviceId, String date, int shopId, String companyName, int id, String paidStatus) {
 			super();
 			
 			this.serviceId = serviceId;
 			this.completed = completed;
 			this.shopId = shopId;
 			this.companyName = companyName;
+			this.customerId = customerId;
 			this.id = id;
 			
-			this.customerId = customerId;
-			customerLabel.setText("Customer id: " + customerId);
+			this.customerName = "DELETED";
+			
+			if (paidStatus == null)
+				this.paidStatus = "UNPAID";
+			else
+				this.paidStatus = paidStatus;
+			paidStatusLabel.setText("Pay Status: " + this.paidStatus);
+			paidStatusLabel.setMaxWidth(Double.MAX_VALUE);
+			HBox.setHgrow(paidStatusLabel, Priority.ALWAYS);
+			
+			
+			for (Customer c : allCustomers) {
+				if (c.getId() == customerId) {
+					this.customerName = c.getName();
+					break;
+				}
+			}
+				
+			customerLabel.setText("Customer: " + this.customerName);
 			customerLabel.setMaxWidth(Double.MAX_VALUE);
 			HBox.setHgrow(customerLabel, Priority.ALWAYS);
 			
 			this.price = price;
-			priceLabel.setText("Price: " + price);
+			priceLabel.setText("Price: $" + price);
 			priceLabel.setMaxWidth(Double.MAX_VALUE);
 			HBox.setHgrow(priceLabel, Priority.ALWAYS);
 			
@@ -261,10 +347,13 @@ public class OrderView {
 			removeButton.setGraphic(new ImageView(new Image("view/images/remove.png")));
 			removeButton.setTooltip(new Tooltip("Remove " + id));
 			removeButton.setOnAction(e -> {
-				remove(this);
+				if (loggedInUser.getStatus().equalsIgnoreCase("super_admin") || loggedInUser.getStatus().equalsIgnoreCase("admin"))
+					remove(this);
+				else
+					Popup.displayErrorMessage("You do not have permission to remove orders");
 			});
 			
-			this.getChildren().addAll(customerLabel, priceLabel, dateLabel, completeButton ,editButton, removeButton);
+			this.getChildren().addAll(customerLabel, priceLabel, paidStatusLabel, dateLabel, completeButton ,editButton, removeButton);
 		}
 
 		public int getCustomerId() {
@@ -318,6 +407,10 @@ public class OrderView {
 		public String getCompanyName() {
 			return companyName;
 		}
+		
+		public String getPaidStatus() {
+			return paidStatus;
+		}
 
 		public void setCompanyName(String companyName) {
 			this.companyName = companyName;
@@ -328,7 +421,7 @@ public class OrderView {
 		}
 		
 		public Order getAsOrder() {
-			return new Order(customerId, serviceId, date, shopId, companyName, price, completed);
+			return new Order(customerId, serviceId, date, shopId, companyName, price, completed, paidStatus);
 		}
 	}
 }
