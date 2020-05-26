@@ -299,7 +299,7 @@ public class OrderView {
 			HBox.setHgrow(customerLabel, Priority.ALWAYS);
 			
 			this.price = price;
-			priceLabel.setText("Price: " + price);
+			priceLabel.setText("Price: $" + price);
 			priceLabel.setMaxWidth(Double.MAX_VALUE);
 			HBox.setHgrow(priceLabel, Priority.ALWAYS);
 			
@@ -310,7 +310,7 @@ public class OrderView {
 			
 			
 			if(completed) {
-				completeButton.setGraphic(new ImageView(new Image("view/images/complete.png")));
+				completeButton.setGraphic(new ImageView(new Image("view/images/uncomplete.png")));
 				completeButton.setTooltip(new Tooltip("Uncomplete " + id));
 				completeButton.setText("Uncomplete");
 				completeButton.setOnAction(e -> {
@@ -329,7 +329,7 @@ public class OrderView {
 					setList();
 				});
 			} else {
-				completeButton.setGraphic(new ImageView(new Image("view/images/uncomplete.png")));
+				completeButton.setGraphic(new ImageView(new Image("view/images/complete.png")));
 				completeButton.setTooltip(new Tooltip("Complete " + id));
 				completeButton.setText("Complete");
 				completeButton.setOnAction(e -> {
