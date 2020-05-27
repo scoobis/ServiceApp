@@ -54,15 +54,6 @@ public class Admin extends Employee {
 	}
 	
 	/**
-	 * Removes a User.
-	 * @return Integer
-	 */
-	
-	public int removeUser() {
-		return -1; //TODO not implemented.
-	}
-	
-	/**
 	 * Edits a User.
 	 * @param phone
 	 * @param email
@@ -81,20 +72,6 @@ public class Admin extends Employee {
         user.setId(id);
         
         return user;
-	}
-	
-	// TODO: These are not implemented
-	
-	public Service createService() {
-		return null;
-	}
-	
-	public int removeService() {
-		return -1;
-	}
-	
-	public Service editService() {
-		return null;
 	}
 	
 }

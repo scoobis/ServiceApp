@@ -154,7 +154,10 @@ public class OrderView {
 			String date = this.getTodaysDate();
 			int shopId = loggedInUser.getShopId();
 			String companyName = loggedInUser.getCompanyName();
-			double price = Double.parseDouble(priceField.getText());
+			double price = -1;
+			String priceStr = priceField.getText();
+			if(priceStr.length() != 0)
+				price = Double.parseDouble(priceField.getText());
 			
 			uncompLv.refresh();
 			compLv.refresh();

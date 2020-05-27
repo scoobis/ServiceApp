@@ -10,6 +10,7 @@ import com.paypal.base.rest.PayPalRESTException;
 
 import model.Customer;
 import model.Email;
+import model.InputValidator;
 import model.Order;
 import model.PaymentInvoice;
 import model.User;
@@ -24,6 +25,7 @@ public class OrderController {
 
     OrderDatabase orderDatabase;
     PaymentInvoice invoice;
+    InputValidator inputValidator;
 
     /**
      * Constructor
@@ -32,6 +34,7 @@ public class OrderController {
 	public OrderController() {
 		orderDatabase = new OrderDatabase();
 		invoice = new PaymentInvoice();
+		inputValidator = new InputValidator();
 	}
 
     /**
@@ -46,18 +49,11 @@ public class OrderController {
      */
     
     public String newOrder(int customerId, int serviceId, String date, int shopId, String company, double price) {
-    	
-    	// TODO Why isn't this in InputValidator?
-        if (customerId <= 0) return "ops, something went wrong!";
-        else if (serviceId <= 0) return "ops, something went wrong!";
-        else if (date.equalsIgnoreCase("")) return "ops, something went wrong!";
-        else if (shopId <= 0) return "ops, something went wrong!";
-        else if (date.equalsIgnoreCase("")) return "ops, something went wrong!";
-        else if (company.equalsIgnoreCase("")) return "ops, something went wrong!";
 
-        // TODO solve price is not set
-        // TODO we need to get it from service, what's the best approach?
-
+        String valid = inputValidator.validateOrderInput(customerId, serviceId, date, shopId, company, price);
+        
+        if (!valid.equalsIgnoreCase("")) return valid;
+        
         User user = new User();
 
         boolean isSaved = orderDatabase.saveOrder(user.createOrder(customerId, serviceId, date, shopId, company, price));
@@ -164,7 +160,6 @@ public class OrderController {
 			try {
 				invoice.cancel(invoice.retrieveInvoice(orderDatabase.getOrderById(id).getPaypalID()));
 			} catch (PayPalRESTException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}).start();

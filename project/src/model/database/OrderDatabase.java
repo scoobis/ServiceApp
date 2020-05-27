@@ -225,7 +225,6 @@ public class OrderDatabase implements DatabaseConnector {
 			}
 	}
 	
-	// TODO TEST METHOD
 	public void reset() throws SQLException {
 		String statement = "TRUNCATE TABLE orders";
 		PreparedStatement query = connection.prepareStatement(statement);

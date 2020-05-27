@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import controller.EmployeeController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -14,11 +15,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class RegisterView {
 	private Stage window;
 	private ArrayList<String> list;
+	
+	private final int WIDTH = 1800;
+	private final int HEIGHT = 900;
 	
 	public RegisterView() {
 		 list = new ArrayList<String>();
@@ -27,8 +32,8 @@ public class RegisterView {
 	public void render(Stage stage) {
 		window = stage;
 		GridPane pane = new GridPane();
-		pane.setMinHeight(900);
-		pane.setMinWidth(1800);
+		pane.setMinHeight(HEIGHT);
+		pane.setMinWidth(WIDTH);
 		pane.setAlignment(Pos.CENTER);
 		pane.setHgap(10);
 		pane.setVgap(10);
@@ -100,6 +105,10 @@ public class RegisterView {
 		});
 		
 		Scene scene = new Scene(pane);
+		
+		Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+	    window.setX((screenBounds.getWidth() - WIDTH) / 2); 
+	    window.setY((screenBounds.getHeight() - HEIGHT) / 2); 
 		
 		window.setScene(scene);
 	    window.setMaximized(false);

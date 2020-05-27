@@ -88,7 +88,7 @@ public abstract class Employee implements Serializable {
 		}
 	}
 	
-	public Employee() { this.status = ""; } // TODO: Not sure where this is used. Remove comment if its useful.
+	public Employee() { this.status = ""; } 
 	
 	/**
 	 * Creates a new Order.
@@ -112,10 +112,6 @@ public abstract class Employee implements Serializable {
         order.setCompleted(false);
         
         return order;
-	}
-	
-	public int removeOrder(String id) {
-		return -1; // TODO Not implemented
 	}
 	
 	/**
@@ -159,8 +155,6 @@ public abstract class Employee implements Serializable {
         
         return customer;
 	}
-	
-	public int removeCustomer(String id) { return -1; } // TODO not implemented
 	
 	/**
 	 * Edits a Customer

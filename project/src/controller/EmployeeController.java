@@ -40,8 +40,8 @@ public class EmployeeController {
 		superAdmin.setCompanyName(company);
 		superAdmin.setName(name);
 		superAdmin.setPhone(phone);
-		String hashedPassword = PasswordHasher.hashPassword(password); // TODO hashedPassword never used?
-		//superAdmin.setPassword(hashedPassword); 
+		String hashedPassword = PasswordHasher.hashPassword(password);
+		superAdmin.setPassword(hashedPassword); 
 		superAdmin.setStatus("Super_Admin");
 		boolean isSaved = employeeDatabase.saveEmployee(superAdmin);
 		if (!isSaved) return "ops, something went wrong!";

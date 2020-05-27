@@ -98,7 +98,9 @@ public class ServiceView {
 			String companyName = loggedInUser.getCompanyName();
 			String title = titleField.getText();
 			String description = descField.getText();
-			double price = Double.parseDouble(priceField.getText());
+			double price = -1;
+			if(priceField.getText().length() != 0)
+				price = Double.parseDouble(priceField.getText());
 			
 			lv.refresh();
 			window.close();

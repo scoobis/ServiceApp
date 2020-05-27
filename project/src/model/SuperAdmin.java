@@ -7,9 +7,6 @@ package model;
 @SuppressWarnings("serial")
 public class SuperAdmin extends Employee {
 
-	//TODO Is this needed?
-	//private static final long serialVersionUID = 6369704467594286628L;
-
 	/**
 	 * Constructor.
 	 * @param phone
@@ -25,7 +22,6 @@ public class SuperAdmin extends Employee {
 		this.setEmail(email);
 		this.setName(name);
 		this.setCompanyName(company);
-		//this.setPassword(password); TODO Is this needed? Because employee already sets password
 		
 		this.setStatus("super_admin");
 	}
@@ -36,20 +32,6 @@ public class SuperAdmin extends Employee {
 	
 	public SuperAdmin() {
 		this.setStatus("super_admin");
-	}
-	
-	// TODO Not implemented
-	
-	public User createUser() {
-		return null;
-	}
-	
-	public int removeUser() {
-		return -1;
-	}
-	
-	public User editUser() {
-		return null;
 	}
 	
 	public Shop createShop(String name, String address, String companyName) {
@@ -81,12 +63,6 @@ public class SuperAdmin extends Employee {
         service.setPrice(price);
         
         return service;
-	}
-	
-	// TODO Not implemented.
-	
-	public int removeService() {
-		return -1;
 	}
 	
 	/**
@@ -131,12 +107,6 @@ public class SuperAdmin extends Employee {
         admin.setShopId(shopId);
         
         return admin;
-	}
-	
-	// TODO Not implemented.
-	
-	public int removeAdmin() {
-		return -1;
 	}
 	
 	/**

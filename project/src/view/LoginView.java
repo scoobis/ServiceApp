@@ -5,6 +5,7 @@ import java.io.IOException;
 import controller.EmployeeController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -20,6 +21,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import model.Employee;
 import security.PasswordHasher;
@@ -29,6 +31,9 @@ public class LoginView {
 	private Stage window = null;
 	private EmployeeController employeeController;
 	private MainView mainView;
+	
+	private final int WIDTH = 400;
+	private final int HEIGHT = 300;
 	
 	public LoginView() {
 		employeeController = new EmployeeController();
@@ -43,10 +48,12 @@ public class LoginView {
 		pane.setHgap(10);
 		pane.setVgap(10);
 		pane.setPadding(new Insets(25,25,25,25));
-		pane.setMinHeight(300);
-		pane.setMinWidth(400);
+		pane.setMinHeight(HEIGHT);
+		pane.setMinWidth(WIDTH);
+		pane.setMaxHeight(HEIGHT);
+		pane.setMaxWidth(WIDTH);
 		
-		Label username = new Label("Username");
+		Label username = new Label("Email");
 		pane.add(username, 0, 1);
 		
 		TextField usernameField = new TextField();
@@ -61,9 +68,6 @@ public class LoginView {
 		Button loginButton = new Button();
 		loginButton.setText("Login");
 	
-		
-		//Button registerButton = new Button();
-		//registerButton.setText("Register");
 		Hyperlink registerButton = new Hyperlink("Register account.");
 		TextFlow flow = new TextFlow(
 			    new Text("Don't have an account? "), registerButton
@@ -106,6 +110,9 @@ public class LoginView {
 		
 		Scene scene = new Scene(pane);
 		
+		Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+	    window.setX((screenBounds.getWidth() - WIDTH) / 2); 
+	    window.setY((screenBounds.getHeight() - HEIGHT) / 2); 
 		
 		window.setScene(scene);
 	    window.setMaximized(false);
