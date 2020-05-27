@@ -81,6 +81,8 @@ public class OrderView {
 		uncompLv.prefWidthProperty().bind(window.widthProperty().multiply(.495));
 		compLv.prefWidthProperty().bind(window.widthProperty().multiply(.495));
 		
+		bp.getStylesheets().add("view/css/list-buttons.css");
+		
 		bp.setTop(createButton);
 		bp.setLeft(uncompLv);
 		bp.setRight(compLv);
@@ -262,8 +264,8 @@ public class OrderView {
 		Label customerLabel = new Label();
 		Label priceLabel = new Label();
 		Label dateLabel = new Label();
-		Button editButton = new Button("Edit");
-		Button removeButton = new Button("Remove");
+		Button editButton = new Button();
+		Button removeButton = new Button();
 		Button completeButton = new Button();
 		int customerId;
 		double price;
@@ -289,22 +291,22 @@ public class OrderView {
 				this.paidStatus = "UNPAID";
 			else
 				this.paidStatus = paidStatus;
-			paidStatusLabel.setText("Pay Status: " + this.paidStatus);
+			paidStatusLabel.setText("" + this.paidStatus);
 			paidStatusLabel.setMaxWidth(Double.MAX_VALUE);
 			HBox.setHgrow(paidStatusLabel, Priority.ALWAYS);
 			
 			this.customerId = customerId;
-			customerLabel.setText("Customer id: " + customerId);
+			customerLabel.setText("" + customerId);
 			customerLabel.setMaxWidth(Double.MAX_VALUE);
 			HBox.setHgrow(customerLabel, Priority.ALWAYS);
 			
 			this.price = price;
-			priceLabel.setText("Price: $" + price);
+			priceLabel.setText("$" + price);
 			priceLabel.setMaxWidth(Double.MAX_VALUE);
 			HBox.setHgrow(priceLabel, Priority.ALWAYS);
 			
 			this.date = date;
-			dateLabel.setText("Date: " + date);
+			dateLabel.setText("" + date);
 			dateLabel.setMaxWidth(Double.MAX_VALUE);
 			HBox.setHgrow(dateLabel, Priority.ALWAYS);
 			
@@ -312,7 +314,6 @@ public class OrderView {
 			if(completed) {
 				completeButton.setGraphic(new ImageView(new Image("view/images/uncomplete.png")));
 				completeButton.setTooltip(new Tooltip("Uncomplete " + id));
-				completeButton.setText("Uncomplete");
 				completeButton.setOnAction(e -> {
 					String message = orderController.setOrderToUnCompleted(id, this.paidStatus);
 					
@@ -331,7 +332,6 @@ public class OrderView {
 			} else {
 				completeButton.setGraphic(new ImageView(new Image("view/images/complete.png")));
 				completeButton.setTooltip(new Tooltip("Complete " + id));
-				completeButton.setText("Complete");
 				completeButton.setOnAction(e -> {
 					if(!orderController.isEmailValid(id)){
                         Popup.displayErrorMessage("Invalid email!");

@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -16,6 +17,9 @@ import javafx.scene.image.Image;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import model.Employee;
 import security.PasswordHasher;
@@ -39,8 +43,8 @@ public class LoginView {
 		pane.setHgap(10);
 		pane.setVgap(10);
 		pane.setPadding(new Insets(25,25,25,25));
-		pane.setMinHeight(900);
-		pane.setMinWidth(1800);
+		pane.setMinHeight(300);
+		pane.setMinWidth(400);
 		
 		Label username = new Label("Username");
 		pane.add(username, 0, 1);
@@ -58,28 +62,29 @@ public class LoginView {
 		loginButton.setText("Login");
 	
 		
-		Button registerButton = new Button();
-		registerButton.setText("Register");
+		//Button registerButton = new Button();
+		//registerButton.setText("Register");
+		Hyperlink registerButton = new Hyperlink("Register account.");
+		TextFlow flow = new TextFlow(
+			    new Text("Don't have an account? "), registerButton
+			);
 		
-		HBox boxButtons = new HBox();
-		
-		Button[] buttons = new Button[2];
-		buttons[0] = loginButton;
-		buttons[1] = registerButton;
-		HBox.setMargin(buttons[1], new Insets(0,0,0,50));
-		boxButtons.getChildren().addAll(buttons);
-		pane.add(boxButtons, 0, 5);
+		HBox.setHgrow(loginButton, Priority.ALWAYS);
+		loginButton.prefWidthProperty().bind(pane.widthProperty().multiply(.8));
+		loginButton.getStylesheets().add("view/css/login-button.css");
+		pane.add(loginButton, 0, 5);
+		pane.add(flow, 0, 6);
 		
 		CheckBox isSuperAdmin = new CheckBox();
 		isSuperAdmin.setText("Are you SuperAdmin?");
-		pane.add(isSuperAdmin, 0, 6);
+		pane.add(isSuperAdmin, 0, 7);
 		
 		Employee test;
 			test = Employee.getLoggedInUser();
 			if (test != null) {
 				usernameField.setText(test.getEmail());
 			}
-			buttons[0].setOnAction(e -> {
+			loginButton.setOnAction(e -> {
 				
 				Employee employee = employeeController.login(usernameField.getText(), PasswordHasher.hashPassword(passwordField.getText()), isSuperAdmin.isSelected());
 				if(employee != null) {
@@ -95,7 +100,7 @@ public class LoginView {
 					
 			});
 		
-		buttons[1].setOnAction(e -> {
+		registerButton.setOnAction(e -> {
 			new RegisterView().render(stage);
 		});
 		

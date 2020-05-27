@@ -165,8 +165,7 @@ public class HomeView {
 				+ "Each employee have a status, these are, Super Admin, Admin, and User.\n"
 				+ "Each company have one Super Admin. Each shop have one Admin,\n"
 				+ "but each shop can have multiple users");
-		Text otherText = new Text("Logout - Can be found in settings.\n"
-				+ "Static - Can be found on the main page. \n"
+		Text otherText = new Text("Static - Can be found on the main page. \n"
 				+ "Contact - Email us at some.email@email.com");
 		
 		orderText.setTextAlignment(TextAlignment.CENTER);
