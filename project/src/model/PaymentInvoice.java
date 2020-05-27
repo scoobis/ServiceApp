@@ -23,7 +23,7 @@ import model.database.OrderDatabase;
 import model.database.ServiceDatabase;
 import secretStuff.PaypalSecrets;
 
-public class PaymentInvoice extends Thread {
+public class PaymentInvoice {
 	private PaypalSecrets secret;
 	private Invoice instance;
 	private APIContext context;

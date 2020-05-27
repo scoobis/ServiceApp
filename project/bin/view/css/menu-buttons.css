@@ -1,0 +1,8 @@
+.toggle-button {
+	-fx-font-size: 20px;
+	-fx-font-weight: bold;
+}
+
+.toggle-button:hover {
+	-fx-cursor: hand;
+}
