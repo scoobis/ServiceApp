@@ -142,7 +142,7 @@ public class OrderController {
 		boolean isSetToCompleted = orderDatabase.setOrderToUnCompleted(id);
 
 		if (isSetToCompleted) {
-			return "Order set to completed!";
+			return "Order set to uncompleted!";
 		}
 		return "ops, something went wrong!";
 	}
