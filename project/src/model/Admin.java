@@ -4,6 +4,7 @@ package model;
  * Representation of the "Admin"-role of the system.
  */
 
+@SuppressWarnings("serial")
 public class Admin extends Employee {
 
 	/**

@@ -1,6 +1,5 @@
 package view;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import controller.ShopController;

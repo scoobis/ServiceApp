@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 
 import model.Order;
-import model.Service;
 import model.database.OrderDatabase;
 
 class OrderDatabaseUnitTests {

@@ -14,6 +14,7 @@ class PasswordHasherUnitTester {
 	
 	private String password = "testingtesting";
 	
+	@SuppressWarnings("static-access")
 	@Test
 	void passwordHasherTest() throws NoSuchAlgorithmException {
 		String hashedPassword = puh.hashPassword(password);

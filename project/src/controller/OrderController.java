@@ -1,11 +1,7 @@
 package controller;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Map;
 
-import com.paypal.api.payments.Invoice;
 import com.paypal.base.rest.PayPalRESTException;
 
 import model.Customer;
@@ -93,7 +89,7 @@ public class OrderController {
 
         boolean isDeleted = orderDatabase.editOrder(user.editOrder(id, customerId, serviceId, price));
 
-        if (isDeleted) return "Order Edited!";
+        if (isDeleted) return "Order Edited successfully!";
         return "ops, something went wrong!";
     }
     

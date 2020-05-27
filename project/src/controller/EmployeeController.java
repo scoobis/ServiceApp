@@ -35,6 +35,10 @@ public class EmployeeController {
 	 */
 	
 	public String newSuperAdmin(String name, String email, String phone, String password, String company) {
+		String inputCheck = inputValidator.validateEmployeeInput(name, email, phone, password, company, 1, 1); // id as stub
+
+    	if (!inputCheck.equalsIgnoreCase("")) return inputCheck;
+		
 		Employee superAdmin = new SuperAdmin();
 		superAdmin.setEmail(email);
 		superAdmin.setCompanyName(company);

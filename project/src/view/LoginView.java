@@ -1,7 +1,5 @@
 package view;
 
-import java.io.IOException;
-
 import controller.EmployeeController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -105,7 +103,7 @@ public class LoginView {
 			});
 		
 		registerButton.setOnAction(e -> {
-			new RegisterView().render(stage);
+			new RegisterView().render();
 		});
 		
 		Scene scene = new Scene(pane);

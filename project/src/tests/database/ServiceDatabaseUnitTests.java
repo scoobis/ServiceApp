@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
-import model.Customer;
 import model.Service;
 import model.database.ServiceDatabase;
 

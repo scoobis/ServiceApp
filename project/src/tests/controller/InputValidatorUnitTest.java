@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import controller.ServiceController;
 import model.InputValidator;
 
 class inputValidator {
