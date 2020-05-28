@@ -1,5 +1,6 @@
 package controller;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.paypal.base.rest.PayPalRESTException;
@@ -12,6 +13,7 @@ import model.PaymentInvoice;
 import model.User;
 import model.database.CustomerDatabase;
 import model.database.OrderDatabase;
+import model.database.ServiceDatabase;
 
 /**
  *  Handles calls from View to Model which concerns any calls to the Order class.
@@ -20,6 +22,8 @@ import model.database.OrderDatabase;
 public class OrderController {
 
     OrderDatabase orderDatabase;
+    CustomerDatabase CD;
+    ServiceDatabase sd;
     PaymentInvoice invoice;
     InputValidator inputValidator;
 
@@ -29,6 +33,8 @@ public class OrderController {
     
 	public OrderController() {
 		orderDatabase = new OrderDatabase();
+		CD = new CustomerDatabase();
+		sd = new ServiceDatabase();
 		invoice = new PaymentInvoice();
 		inputValidator = new InputValidator();
 	}
@@ -145,7 +151,14 @@ public class OrderController {
 
 	public void sendInvoice(int id) {
 		new Thread(() ->{
-			invoice.create(id);
+			int serviceId = orderDatabase.getOrderById(id).getServiceId();
+			int customerId = orderDatabase.getOrderById(id).getCustomerId();
+			try {
+				orderDatabase.setPayPalInvoiceID(id, invoice.create(sd.getServiceById(serviceId).getTitle(), orderDatabase.getOrderById(id).getPrice(), CD.getCustomerById(customerId).getName()).getId());
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
 			invoice.send();
 			sendOrderCompleteMail(id);
 		}).start();
@@ -164,7 +177,6 @@ public class OrderController {
 	public void sendOrderCompleteMail(int orderID) {
 
 		Email email = new Email();
-		CustomerDatabase CD = new CustomerDatabase();
 		Customer customer = CD.getCustomerById(orderDatabase.getOrderById(orderID).getCustomerId());
 		email.createLink(orderDatabase.getOrderById(orderID).getPaypalID());
 		email.sendMail(customer.getEmail(), orderID);
@@ -173,9 +185,8 @@ public class OrderController {
 	public boolean isEmailValid(int id) {
 
 		Email email = new Email();
-		CustomerDatabase customerDatabase = new CustomerDatabase();
 		Order order = orderDatabase.getOrderById(id);
-		Customer customer = customerDatabase.getCustomerById(order.getCustomerId());
+		Customer customer = CD.getCustomerById(order.getCustomerId());
 		if (email.validateEmail(customer.getEmail())) {
 			return true;
 		} else {
