@@ -76,7 +76,7 @@ public class CustomerView {
 		Button button = new Button("Create");
 		TextField nameField = new TextField();
 		TextField emailField = new TextField();
-		IntTextField phoneField = new IntTextField();
+		PhoneTextField phoneField = new PhoneTextField();
 		TextField addressField = new TextField();
 		
 		pane.add(new Label("Name:"), 0, 0);
@@ -122,7 +122,7 @@ public class CustomerView {
 		Button button = new Button("Edit");
 		TextField nameField = new TextField("" + cell.getName());
 		TextField emailField = new TextField("" + cell.getEmail());
-		IntTextField phoneField = new IntTextField("" + cell.getPhone());
+		PhoneTextField phoneField = new PhoneTextField("" + cell.getPhone());
 		TextField addressField = new TextField("" + cell.getAddress());
 		CheckBox activeBox = new CheckBox();
 		activeBox.setSelected(cell.getActive());

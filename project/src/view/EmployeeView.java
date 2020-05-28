@@ -88,7 +88,7 @@ public class EmployeeView {
 		ComboBox<String> statusBox = new ComboBox<>();
 		TextField emailField = new TextField();
 		ComboBox<String> shopBox = new ComboBox<>();
-		TextField phoneField = new TextField();
+		PhoneTextField phoneField = new PhoneTextField();
 		
 		ArrayList<Shop> allShops = shopController.getAllShops(loggedInUser.getCompanyName());
 		int i = 1;
@@ -163,7 +163,7 @@ public class EmployeeView {
 		TextField nameField = new TextField("" + cell.getName());
 		ComboBox<String> shopBox = new ComboBox<>();
 		TextField emailField = new TextField("" + cell.getEmail());
-		TextField phoneField = new TextField("" + cell.getPhone());
+		PhoneTextField phoneField = new PhoneTextField("" + cell.getPhone());
 		
 		ArrayList<Shop> allShops = shopController.getAllShops(loggedInUser.getCompanyName());
 		int i = 1;
