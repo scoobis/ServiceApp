@@ -195,7 +195,7 @@ public class ServiceView {
 			HBox.setHgrow(titleLabel, Priority.ALWAYS);
 			
 			this.price = price;
-			priceLabel.setText("" + price);
+			priceLabel.setText("$" + price);
 			priceLabel.setMaxWidth(Double.MAX_VALUE);
 			HBox.setHgrow(priceLabel, Priority.ALWAYS);
 			
