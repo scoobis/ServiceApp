@@ -174,7 +174,7 @@ public class ServiceView {
 		Popup.displayErrorMessage(message);
 	}
 	
-	public class Cell extends HBox {
+	private class Cell extends HBox {
 		private Label titleLabel = new Label();
 		private Label priceLabel = new Label();
 		private Button editButton = new Button();
@@ -182,7 +182,6 @@ public class ServiceView {
 		private int id;
 		private double price;
 		private String title;
-		private String company;
 		private String description;
 
 		Cell(int id, String title, double price, String description) {
@@ -227,16 +226,8 @@ public class ServiceView {
 		public int getID() { return id; }
 
 
-		public void setId(int id) { this.id = id; }
-
-
 		public String getTitle() {
 			return title;
-		}
-
-
-		public void setTitle(String title) {
-			this.title = title;
 		}
 
 
@@ -245,28 +236,8 @@ public class ServiceView {
 		}
 
 
-		public void setPrice(int price) {
-			this.price = price;
-		}
-
-
-		public String getCompany() {
-			return company;
-		}
-
-
-		public void setCompany(String company) {
-			this.company = company;
-		}
-
-
 		public String getDescription() {
 			return description;
-		}
-
-
-		public void setDescription(String description) {
-			this.description = description;
 		}
 		
 	}

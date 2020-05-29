@@ -265,7 +265,7 @@ public class OrderView {
         return df.format(new Date());
 	}
 	
-	public class Cell extends HBox {
+	private class Cell extends HBox {
 		Label paidStatusLabel = new Label();
 		Label customerLabel = new Label();
 		Label priceLabel = new Label();
@@ -275,11 +275,7 @@ public class OrderView {
 		Button completeButton = new Button();
 		int customerId;
 		double price;
-		boolean completed;
 		int serviceId;
-		String date;
-		int shopId;
-		String companyName;
 		int id;
 		
 		String paidStatus;
@@ -288,9 +284,6 @@ public class OrderView {
 			super();
 			
 			this.serviceId = serviceId;
-			this.completed = completed;
-			this.shopId = shopId;
-			this.companyName = companyName;
 			this.id = id;
 			
 			if (paidStatus == null || paidStatus.equals("SENT"))
@@ -311,7 +304,6 @@ public class OrderView {
 			priceLabel.setMaxWidth(Double.MAX_VALUE);
 			HBox.setHgrow(priceLabel, Priority.ALWAYS);
 			
-			this.date = date;
 			dateLabel.setText("" + date);
 			dateLabel.setMaxWidth(Double.MAX_VALUE);
 			HBox.setHgrow(dateLabel, Priority.ALWAYS);
@@ -381,68 +373,16 @@ public class OrderView {
 			return customerId;
 		}
 
-		public void setCustomerId(int customerId) {
-			this.customerId = customerId;
-		}
-
 		public double getPrice() {
 			return price;
-		}
-
-		public void setPrice(double price) {
-			this.price = price;
-		}
-
-		public boolean isCompleted() {
-			return completed;
-		}
-
-		public void setCompleted(boolean completed) {
-			this.completed = completed;
 		}
 
 		public int getServiceId() {
 			return serviceId;
 		}
 
-		public void setServiceId(int serviceId) {
-			this.serviceId = serviceId;
-		}
-
-		public String getDate() {
-			return date;
-		}
-
-		public void setDate(String date) {
-			this.date = date;
-		}
-
-		public int getShopId() {
-			return shopId;
-		}
-
-		public void setShopId(int shopId) {
-			this.shopId = shopId;
-		}
-
-		public String getCompanyName() {
-			return companyName;
-		}
-		
-		public String getPaidStatus() {
-			return paidStatus;
-		}
-
-		public void setCompanyName(String companyName) {
-			this.companyName = companyName;
-		}
-		
 		public int getID() {
 			return id;
-		}
-		
-		public Order getAsOrder() {
-			return new Order(customerId, serviceId, date, shopId, companyName, price, completed);
 		}
 	}
 }

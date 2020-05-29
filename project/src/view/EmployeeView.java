@@ -242,7 +242,7 @@ public class EmployeeView {
 		Popup.displayErrorMessage(message);
 	}
 	
-	public class Cell extends HBox {
+	private class Cell extends HBox {
 		Label nameLabel = new Label();
 		Label statusLabel = new Label();
 		Label emailLabel = new Label();
@@ -252,7 +252,6 @@ public class EmployeeView {
 		String name;
 		String email;
 		String phone;
-		String company;
 		int shopId;
 		int id;
 		String status;
@@ -261,7 +260,6 @@ public class EmployeeView {
 			super();
 			
 			this.id = id;
-			this.company = company;
 			this.shopId = shopId;
 			
 			this.name = name;
@@ -313,44 +311,20 @@ public class EmployeeView {
 			return status;
 		}
 
-		public void setName(String name) {
-			this.name = name;
-		}
-
 		public String getEmail() {
 			return email;
 		}
 
-		public void setEmail(String email) {
-			this.email = email;
-		}
-
 		public String getPhone() {
 			return phone;
-		}
-
-		public void setPhone(String phone) {
-			this.phone = phone;
-		}
-
-		public String getCompany() {
-			return company;
 		}
 		
 		public int getID() {
 			return id;
 		}
 
-		public void setCompany(String company) {
-			this.company = company;
-		}
-
 		public int getShopId() {
 			return shopId;
-		}
-
-		public void setShopId(int shopId) {
-			this.shopId = shopId;
 		}
 		
 	}
