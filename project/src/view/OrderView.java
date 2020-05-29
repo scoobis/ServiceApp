@@ -103,6 +103,9 @@ public class OrderView {
 			else
 				compList.add(new Cell(o.getCustomerId(), o.getPrice(), o.getCompleted(), o.getServiceId(), o.getDate(), o.getShopId(), o.getcompanyName(), o.getId(), o.getPaidStatus()));
 		}
+		
+		if (uncompList.isEmpty()) uncompList.add(new Cell());
+		if (compList.isEmpty()) compList.add(new Cell());
 	}
 	
 	private void create() {
@@ -371,6 +374,8 @@ public class OrderView {
 			
 			this.getChildren().addAll(customerLabel, priceLabel, paidStatusLabel, dateLabel, completeButton ,editButton, removeButton);
 		}
+		
+		Cell() {}
 
 		public int getCustomerId() {
 			return customerId;

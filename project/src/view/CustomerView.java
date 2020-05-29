@@ -65,6 +65,8 @@ public class CustomerView {
 		
 		list.clear();
 		
+		if (allCustomers.isEmpty()) list.add(new Cell());
+		
 		for (Customer customer : allCustomers) {
 			list.add(new Cell(customer.getId(), customer.getName(), customer.getEmail(), customer.getPhone(), customer.getAddress(), customer.isActive()));
 		}
@@ -232,6 +234,8 @@ public class CustomerView {
 			
 			this.getChildren().addAll(nameLabel, emailLabel, phoneLabel, editButton, removeButton);
 		}
+		
+		Cell() {}
 
 		public int getID() {
 			return id;

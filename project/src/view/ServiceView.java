@@ -69,6 +69,8 @@ public class ServiceView {
 		
 		list.clear();
 		
+		if (allServices.isEmpty()) list.add(new Cell());
+		
 		for(Service service : allServices) {
 			list.add(new Cell(service.getId(), service.getTitle(), service.getPrice(), service.getDescription()));
 		}
@@ -219,6 +221,8 @@ public class ServiceView {
 			
 			this.getChildren().addAll(titleLabel, priceLabel, editButton, removeButton);
 		}
+		
+		Cell() {}
 
 		public int getID() { return id; }
 

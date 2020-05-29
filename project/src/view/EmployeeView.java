@@ -120,6 +120,8 @@ public class EmployeeView {
 		
 		button.setOnAction(e -> {
 			
+			if (allShops.isEmpty()) Popup.displayErrorMessage("No shop selected!");
+			
 			int val = shopBox.getValue().indexOf(".");
 			val = Integer.parseInt(shopBox.getValue().substring(0, val)) - 1;
 			
@@ -229,7 +231,7 @@ public class EmployeeView {
 			message = employeeController.deleteUser(cell.getID(), cell.getName());
 		else if (cell.getStatus().equalsIgnoreCase("admin"))
 			message = employeeController.deleteAdmin(cell.getID(), cell.getName());
-		else message = "No such status";
+		else message = "Can not delete super admin!";
 		
 		lv.refresh();
 		

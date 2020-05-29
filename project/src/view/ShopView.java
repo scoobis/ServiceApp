@@ -70,6 +70,8 @@ public class ShopView {
 		ArrayList<Shop> allShops = shopController.getAllShops(loggedInUser.getCompanyName());
 		list.clear();
 		
+		if (allShops.isEmpty()) list.add(new Cell());
+		
 		for (Shop shop : allShops) {
 			list.add(new Cell(shop.getId(), shop.getAddress(), shop.getName()));
 		}
@@ -234,6 +236,8 @@ public class ShopView {
 			this.getChildren().addAll(nameLabel, addressLabel, editButton, removeButton);
 			
 		}
+		
+		Cell() {}
 		
 		public int getID() { return id; }
 		
