@@ -24,6 +24,8 @@ import javafx.stage.Stage;
 import model.Employee;
 import model.Shop;
 import security.PasswordHasher;
+import view.essentials.PhoneTextField;
+import view.essentials.Popup;
 
 public class EmployeeView {
 	

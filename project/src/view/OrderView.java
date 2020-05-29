@@ -26,6 +26,8 @@ import model.Customer;
 import model.Employee;
 import model.Order;
 import model.Service;
+import view.essentials.DoubleTextField;
+import view.essentials.Popup;
 
 public class OrderView {
 	

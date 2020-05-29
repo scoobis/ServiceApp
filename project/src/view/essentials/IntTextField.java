@@ -1,14 +1,14 @@
-package view;
+package view.essentials;
 
 import javafx.scene.control.TextField;
 
-public class PhoneTextField extends TextField {
+public class IntTextField extends TextField {
 
-	public PhoneTextField() {
+	public IntTextField() {
 
 	}
 
-	public PhoneTextField(String init) {
+	public IntTextField(String init) {
 		super.setText(init);
 	}
 
@@ -33,8 +33,8 @@ public class PhoneTextField extends TextField {
 	}
 	
 	private void verify() {
-        if (super.getText().length() > 10) {
-            super.setText(super.getText().substring(0, 10));
+        if (super.getText().length() > 8) {
+            super.setText(super.getText().substring(0, 8));
         }
     }
 }

@@ -21,6 +21,8 @@ import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 import model.Employee;
 import model.Service;
+import view.essentials.DoubleTextField;
+import view.essentials.Popup;
 
 public class ServiceView {
 	

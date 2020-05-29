@@ -1,12 +1,14 @@
-package view;
+package view.essentials;
 
 import javafx.scene.control.TextField;
 
-public class DoubleTextField extends TextField {
-	public DoubleTextField() {
+public class PhoneTextField extends TextField {
+
+	public PhoneTextField() {
+
 	}
 
-	public DoubleTextField(String init) {
+	public PhoneTextField(String init) {
 		super.setText(init);
 	}
 
@@ -27,12 +29,12 @@ public class DoubleTextField extends TextField {
 	}
 
 	private boolean validate(String text) {
-		return text.matches("[0-9]*[.]?");
+		return text.matches("[0-9]*");
 	}
 	
 	private void verify() {
-        if (super.getText().length() > 8) {
-            super.setText(super.getText().substring(0, 8));
+        if (super.getText().length() > 10) {
+            super.setText(super.getText().substring(0, 10));
         }
     }
 }

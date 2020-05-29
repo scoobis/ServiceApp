@@ -22,6 +22,7 @@ import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 import model.Employee;
 import model.Shop;
+import view.essentials.Popup;
 
 public class ShopView {
 

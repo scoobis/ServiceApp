@@ -21,6 +21,8 @@ import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 import model.Customer;
 import model.Employee;
+import view.essentials.PhoneTextField;
+import view.essentials.Popup;
 
 public class CustomerView {
 	

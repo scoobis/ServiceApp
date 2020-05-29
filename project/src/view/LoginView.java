@@ -21,6 +21,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import model.Employee;
 import security.PasswordHasher;
+import view.essentials.Popup;
 
 
 public class LoginView {
