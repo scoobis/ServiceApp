@@ -21,6 +21,8 @@ import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 import model.Employee;
 import model.Service;
+import view.essentials.DoubleTextField;
+import view.essentials.Popup;
 
 public class ServiceView {
 	
@@ -68,6 +70,8 @@ public class ServiceView {
 		ArrayList<Service> allServices = serviceController.getAllServices(loggedInUser.getCompanyName());
 		
 		list.clear();
+		
+		if (allServices.isEmpty()) list.add(new Cell());
 		
 		for(Service service : allServices) {
 			list.add(new Cell(service.getId(), service.getTitle(), service.getPrice(), service.getDescription()));
@@ -172,7 +176,7 @@ public class ServiceView {
 		Popup.displayErrorMessage(message);
 	}
 	
-	public class Cell extends HBox {
+	private class Cell extends HBox {
 		private Label titleLabel = new Label();
 		private Label priceLabel = new Label();
 		private Button editButton = new Button();
@@ -180,7 +184,6 @@ public class ServiceView {
 		private int id;
 		private double price;
 		private String title;
-		private String company;
 		private String description;
 
 		Cell(int id, String title, double price, String description) {
@@ -219,20 +222,14 @@ public class ServiceView {
 			
 			this.getChildren().addAll(titleLabel, priceLabel, editButton, removeButton);
 		}
+		
+		Cell() {}
 
 		public int getID() { return id; }
 
 
-		public void setId(int id) { this.id = id; }
-
-
 		public String getTitle() {
 			return title;
-		}
-
-
-		public void setTitle(String title) {
-			this.title = title;
 		}
 
 
@@ -241,28 +238,8 @@ public class ServiceView {
 		}
 
 
-		public void setPrice(int price) {
-			this.price = price;
-		}
-
-
-		public String getCompany() {
-			return company;
-		}
-
-
-		public void setCompany(String company) {
-			this.company = company;
-		}
-
-
 		public String getDescription() {
 			return description;
-		}
-
-
-		public void setDescription(String description) {
-			this.description = description;
 		}
 		
 	}

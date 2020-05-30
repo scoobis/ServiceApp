@@ -1,14 +1,12 @@
-package view;
+package view.essentials;
 
 import javafx.scene.control.TextField;
 
-public class IntTextField extends TextField {
-
-	public IntTextField() {
-
+public class DoubleTextField extends TextField {
+	public DoubleTextField() {
 	}
 
-	public IntTextField(String init) {
+	public DoubleTextField(String init) {
 		super.setText(init);
 	}
 
@@ -29,7 +27,7 @@ public class IntTextField extends TextField {
 	}
 
 	private boolean validate(String text) {
-		return text.matches("[0-9]*");
+		return text.matches("[0-9]*[.]?");
 	}
 	
 	private void verify() {

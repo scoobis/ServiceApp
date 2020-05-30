@@ -24,6 +24,8 @@ import javafx.stage.Stage;
 import model.Employee;
 import model.Shop;
 import security.PasswordHasher;
+import view.essentials.PhoneTextField;
+import view.essentials.Popup;
 
 public class EmployeeView {
 	
@@ -119,6 +121,8 @@ public class EmployeeView {
 		Stage window = new Stage();
 		
 		button.setOnAction(e -> {
+			
+			if (allShops.isEmpty()) Popup.displayErrorMessage("No shop selected!");
 			
 			int val = shopBox.getValue().indexOf(".");
 			val = Integer.parseInt(shopBox.getValue().substring(0, val)) - 1;
@@ -229,7 +233,7 @@ public class EmployeeView {
 			message = employeeController.deleteUser(cell.getID(), cell.getName());
 		else if (cell.getStatus().equalsIgnoreCase("admin"))
 			message = employeeController.deleteAdmin(cell.getID(), cell.getName());
-		else message = "No such status";
+		else message = "Can not delete super admin!";
 		
 		lv.refresh();
 		
@@ -240,7 +244,7 @@ public class EmployeeView {
 		Popup.displayErrorMessage(message);
 	}
 	
-	public class Cell extends HBox {
+	private class Cell extends HBox {
 		Label nameLabel = new Label();
 		Label statusLabel = new Label();
 		Label emailLabel = new Label();
@@ -250,7 +254,6 @@ public class EmployeeView {
 		String name;
 		String email;
 		String phone;
-		String company;
 		int shopId;
 		int id;
 		String status;
@@ -259,7 +262,6 @@ public class EmployeeView {
 			super();
 			
 			this.id = id;
-			this.company = company;
 			this.shopId = shopId;
 			
 			this.name = name;
@@ -311,44 +313,20 @@ public class EmployeeView {
 			return status;
 		}
 
-		public void setName(String name) {
-			this.name = name;
-		}
-
 		public String getEmail() {
 			return email;
 		}
 
-		public void setEmail(String email) {
-			this.email = email;
-		}
-
 		public String getPhone() {
 			return phone;
-		}
-
-		public void setPhone(String phone) {
-			this.phone = phone;
-		}
-
-		public String getCompany() {
-			return company;
 		}
 		
 		public int getID() {
 			return id;
 		}
 
-		public void setCompany(String company) {
-			this.company = company;
-		}
-
 		public int getShopId() {
 			return shopId;
-		}
-
-		public void setShopId(int shopId) {
-			this.shopId = shopId;
 		}
 		
 	}

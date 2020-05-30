@@ -5,7 +5,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Hyperlink;
@@ -13,7 +12,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -23,6 +21,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import model.Employee;
 import security.PasswordHasher;
+import view.essentials.Popup;
 
 
 public class LoginView {
@@ -93,11 +92,7 @@ public class LoginView {
 					Employee.logInUser(employee);
 					mainView.render(stage);
 				} else {
-					Alert alert = new Alert(AlertType.INFORMATION);
-					alert.setTitle("Login Failed");
-					alert.setHeaderText(null);
-					alert.setContentText("Wrong password or username");
-					alert.showAndWait();
+					Popup.displayErrorMessage("Wrong password or username \n \n If you are super admin make sure to check the box below!");
 				}
 					
 			});
