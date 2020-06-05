@@ -25,13 +25,16 @@ public class ServiceDatabase implements DatabaseConnector {
 		ArrayList<Service> services = new ArrayList<>();
 		
 		try {
-		String statement = "SELECT id FROM service WHERE company_name = '" + companyName + "'";
+		String statement = "SELECT * FROM service WHERE company_name = '" + companyName + "'";
 		Statement query = connection.prepareStatement(statement);
 		ResultSet result = query.executeQuery(statement);
 	
 		while(result.next()) {
-			services.add(getServiceById(result.getInt("id")));
+			Service s = new Service(result.getString("company_name"), result.getString("title"),
+					result.getString("description"), result.getDouble("price"));
+			s.setId(result.getInt("id"));
 			
+			services.add(s);
 		}
 		
 		return services;
@@ -139,14 +142,5 @@ public class ServiceDatabase implements DatabaseConnector {
 			e.printStackTrace();
 			return false;
 		}
-	}
-	
-	// TEST METHOD
-	
-	public void reset() throws SQLException {
-		String statement = "TRUNCATE TABLE service";
-		PreparedStatement query = connection.prepareStatement(statement);
-		query.executeUpdate();
-
 	}
 }

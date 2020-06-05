@@ -7,7 +7,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -70,7 +69,7 @@ public class CustomerView {
 		if (allCustomers.isEmpty()) list.add(new Cell());
 		
 		for (Customer customer : allCustomers) {
-			list.add(new Cell(customer.getId(), customer.getName(), customer.getEmail(), customer.getPhone(), customer.getAddress(), customer.isActive()));
+			list.add(new Cell(customer.getId(), customer.getName(), customer.getEmail(), customer.getPhone(), customer.getAddress()));
 		}
 		
 	}
@@ -128,8 +127,6 @@ public class CustomerView {
 		TextField emailField = new TextField("" + cell.getEmail());
 		PhoneTextField phoneField = new PhoneTextField("" + cell.getPhone());
 		TextField addressField = new TextField("" + cell.getAddress());
-		CheckBox activeBox = new CheckBox();
-		activeBox.setSelected(cell.getActive());
 		
 		pane.add(new Label("Name:"), 0, 0);
 		pane.add(nameField, 0, 1);
@@ -139,9 +136,7 @@ public class CustomerView {
 		pane.add(phoneField, 0, 5);
 		pane.add(new Label("Address:"), 0, 6);
 		pane.add(addressField, 0, 7);
-		pane.add(new Label("Active:"), 0, 8);
-		pane.add(activeBox, 0, 9);
-		pane.add(button, 0, 10);
+		pane.add(button, 0, 8);
 		
 		Scene scene = new Scene(pane, 300, 600);
 		Stage window = new Stage();
@@ -153,9 +148,8 @@ public class CustomerView {
 			String phone = phoneField.getText();
 			String name = nameField.getText();
 			String address = addressField.getText();
-			boolean active = activeBox.isSelected();
 			
-			String message = customerController.editCustomer(name, email, phone, address, active, id);
+			String message = customerController.editCustomer(name, email, phone, address, id);
 			
 			lv.refresh();
 			window.close();
@@ -192,12 +186,10 @@ public class CustomerView {
 		String email;
 		String phone;
 		String address;
-		boolean active;
 		
-		Cell(int id, String name, String email, String phone, String address, boolean active) {
+		Cell(int id, String name, String email, String phone, String address) {
 			super();
 			
-			this.active = active;
 			this.address = address;
 			this.id = id;
 			
@@ -259,12 +251,5 @@ public class CustomerView {
 		public String getAddress() {
 			return address;
 		}
-
-		
-		public boolean getActive() {
-			return active;
-		}
-
-		
 	}
 }

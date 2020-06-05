@@ -1,4 +1,4 @@
-package model;
+UNIQUEUNIQUEpackage model;
 
 public class Shop {
 	

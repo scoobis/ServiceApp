@@ -18,43 +18,23 @@ public class ShopDatabase {
 			
 			ArrayList<Shop> shops = new ArrayList<>();
 			
-			String statement = "SELECT id FROM shop WHERE company_name = '" + companyName + "'";
+			String statement = "SELECT * FROM shop WHERE company_name = '" + companyName + "'";
 			Statement query = connection.prepareStatement(statement);
 			ResultSet result = query.executeQuery(statement);
 			
 			while(result.next()) {
-				shops.add(getShopById(result.getInt("id")));
+				Shop shop = new Shop(result.getString("company_name"), result.getString("address"),
+						result.getString("name"));
+				shop.setId(result.getInt("id"));
+				
+				shops.add(shop);
 			}
-			
 			return shops;
 			
 		} catch(SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
-	}
-	
-	private Shop getShopById(int id) {
-		try {
-			
-			String statement = "SELECT * FROM shop WHERE id=" + id + ";";
-			Statement query = connection.prepareStatement(statement);
-			ResultSet result = query.executeQuery(statement);
-			
-			Shop shop = new Shop();
-			
-			while(result.next()) {
-				shop.setId(result.getInt("id"));
-				shop.setAddress(result.getString("address"));
-				shop.setName(result.getString("name"));
-				shop.setCompanyName(result.getString("company_name"));
-				return shop;
-			}
-			
-		} catch(SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
 	}
 	
 	public boolean saveShop(Shop shop) {

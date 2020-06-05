@@ -29,12 +29,16 @@ public class CustomerDatabase implements DatabaseConnector {
 		
 		try {
 		
-		String statement = "SELECT id FROM customer WHERE company_name = '" + companyName + "'";
+		String statement = "SELECT * FROM customer WHERE company_name = '" + companyName + "'";
 		Statement query = connection.prepareStatement(statement);
 		ResultSet result = query.executeQuery(statement);
 		
 		while(result.next()) {
-			customers.add(getCustomerById(result.getInt("id")));
+			Customer c = new Customer(result.getString("email"), result.getString("phone"),
+					result.getString("name"), result.getString("adress"));
+			c.setId(result.getInt("id"));
+			
+			customers.add(c);
 		}
 		
 		return customers;
@@ -52,29 +56,22 @@ public class CustomerDatabase implements DatabaseConnector {
 	 */
 	
 	public Customer getCustomerById(int id) {
-		
 		try {
 		
 		String statement = "SELECT * FROM customer WHERE id=" + id + ";";
 		Statement query = connection.prepareStatement(statement);
 		ResultSet result = query.executeQuery(statement);
 		
-		Customer c = new Customer();
-		
 		while(result.next()) {
-			c.setActive(result.getBoolean("status"));
-			c.setAddress(result.getString("adress"));
-			c.setEmail(result.getString("email"));
-			c.setName(result.getString("name"));
-			c.setPhone(result.getString("phone"));
+			Customer c = new Customer(result.getString("email"), result.getString("phone"),
+					result.getString("name"), result.getString("adress"));
 			c.setId(result.getInt("id"));
+			
+			return c;
 		}
-		return c;
 		
-		} catch(SQLException e) {
-			e.printStackTrace();
-			return null;
-		}
+		} catch(SQLException e) { e.printStackTrace(); }
+		return null;
 	}
 	
 	/**
@@ -91,8 +88,7 @@ public class CustomerDatabase implements DatabaseConnector {
 						"', '" + customer.getEmail() + 
 						"', '" + customer.getName()+ 
 						"', '" + customer.getAddress() +
-						"', '" + customer.getCompany() + 
-						"'," +  customer.isActive() +")";
+						"', '" + customer.getCompany() +")";
 			
 			query = connection.prepareStatement(statement);
 			query.executeUpdate();
@@ -133,10 +129,8 @@ public class CustomerDatabase implements DatabaseConnector {
 		String statement = "UPDATE customer SET phone = '" + c.getPhone() + "', " +
 							"email = '" + c.getEmail() + "', " + 
 							"name = '" + c.getName() + "', " + 
-							"adress = '" + c.getAddress() + "', " + 
-							"status = " + c.isActive() + 
+							"adress = '" + c.getAddress() + "'" + 
 							" WHERE id='" + c.getId() + "';";
-		System.out.println(statement);
 		PreparedStatement query = connection.prepareStatement(statement);
 		query.executeUpdate(statement);
 		
@@ -147,18 +141,6 @@ public class CustomerDatabase implements DatabaseConnector {
 			return false;
 		}
 		
-	}
-	
-	/**
-	 * Function used for testing to reset the auto_increment values after each test
-	 * @throws SQLException 
-	 */
-	
-	public void reset() throws SQLException {
-		String statement = "TRUNCATE TABLE customer";
-		PreparedStatement query = connection.prepareStatement(statement);
-		query.executeUpdate();
-
 	}
 
 }

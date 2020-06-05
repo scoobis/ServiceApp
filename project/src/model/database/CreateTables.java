@@ -46,7 +46,7 @@ Connection connection = null;
 					+ "name varchar(75), "
 					+ "shop_id int, "
 					+ "phone varchar(25), "
-					+ "email varchar(155), "
+					+ "email varchar(155) UNIQUE, "
 					+ "password varchar(512), "
 					+ "status varchar(25), "
 					+ "PRIMARY KEY(id))");
@@ -66,7 +66,7 @@ Connection connection = null;
 					+ "name varchar(75), "
 					+ "shop_id int, "
 					+ "phone varchar(25), "
-					+ "email varchar(155), "
+					+ "email varchar(155) UNIQUE, "
 					+ "password varchar(512), "
 					+ "status varchar(25), "
 					+ "PRIMARY KEY(id))");
@@ -86,7 +86,7 @@ Connection connection = null;
 					+ "name varchar(75), "
 					+ "shop_id int, "
 					+ "phone varchar(25), "
-					+ "email varchar(155), "
+					+ "email varchar(155) UNIQUE, "
 					+ "password varchar(512), "
 					+ "status varchar(25), "
 					+ "PRIMARY KEY(id))");
@@ -117,7 +117,7 @@ Connection connection = null;
 	private void createCompany() {
 		try {
 			PreparedStatement create = connection.prepareStatement("CREATE TABLE IF NOT EXISTS company"
-					+ "(name varchar(64), "
+					+ "(name varchar(64) UNIQUE, "
 					+ "adress varchar(128), "
 					+ "PRIMARY KEY(name))");
 			create.executeUpdate();
@@ -158,7 +158,6 @@ Connection connection = null;
 					+ "title varchar(64), "
 					+ "description TEXT, "
 					+ "price DOUBLE, "
-					+ "uniques boolean, "
 					+ "PRIMARY KEY(id))");
 			create.executeUpdate();
 		} catch(Exception e) { System.out.println(e); }
@@ -176,7 +175,6 @@ Connection connection = null;
 					+ "email varchar(155), "
 					+ "name varchar(128), "
 					+ "adress varchar(128), "
-					+ "status varchar(64), "
 					+ "company_name varchar(64), "
 					+ "PRIMARY KEY(id))");
 			create.executeUpdate();

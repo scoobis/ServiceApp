@@ -71,14 +71,14 @@ public class CustomerController {
      * @return String
      */
     
-    public String editCustomer(String name, String email, String phone, String address, boolean isActive, int id) {
+    public String editCustomer(String name, String email, String phone, String address, int id) {
     	String inputCheck = inputValidator.validateCustomerInput(name, email, phone, address, id);
 
     	if (!inputCheck.equalsIgnoreCase("")) return inputCheck;
     	
         User user = new User();
 
-        boolean isDeleted = customerDatabase.editCustomer(user.editCustomer(name, email, phone, address, isActive, id));
+        boolean isDeleted = customerDatabase.editCustomer(user.editCustomer(name, email, phone, address, id));
 
         if (isDeleted) return name + " Edited successfully!";
         return "ops, something went wrong!";

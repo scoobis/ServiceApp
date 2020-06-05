@@ -150,8 +150,6 @@ public abstract class Employee implements Serializable {
         customer.setAddress(address);
         customer.setCompany(company);
         
-        customer.setActive(true); // always true?
-        
         return customer;
 	}
 	
@@ -166,7 +164,7 @@ public abstract class Employee implements Serializable {
 	 * @return Customer The newly edited Customer.
 	 */
 	
-	public Customer editCustomer(String name, String email, String phone, String address, boolean isActive, int id) { 
+	public Customer editCustomer(String name, String email, String phone, String address, int id) { 
 	Customer customer = new Customer();
     customer.setName(name);
     customer.setEmail(email);

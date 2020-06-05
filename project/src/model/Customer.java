@@ -6,12 +6,10 @@ package model;
 public class Customer {
 
 	private String email;
-	private int id; // ID SHOULD BE HERE
+	private int id;
 	private String phone;
 	private String name;
 	private String address;
-	// private String password; // Added password to customer, when registering a customer use the PasswordHashed to immidietaly hash the password.
-	private boolean active;
 	private String company;
 	
 	/**
@@ -31,15 +29,12 @@ public class Customer {
 	 * @param active
 	 */
 	
-	public Customer(String email, String phone, String name, String address, boolean active) { // ID SHOULD NOT BE HERE
+	public Customer(String email, String phone, String name, String address) {
 		this.email = email;
 		this.phone = phone;
 		this.name = name;
 		this.address = address;
-		this.active = active;
 	}
-	
-	// Getters and Setters for all the fields.
 	
 	public String getEmail() {
 		return email;
@@ -49,12 +44,10 @@ public class Customer {
 		this.email = email;
 	}
 	
-	// ID SHOULD HAVE A GETTER METHOD
 	public int getId() {
 		return id;
 	}
 	
-	// ID SHOULD HAVE A SETTER METHOD
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -84,22 +77,6 @@ public class Customer {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	
-	public boolean isActive() {
-		return active;
-	}
-	
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
-	/*public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}*/
 	
 	public void setCompany(String comapny) {
 		this.company = comapny;
