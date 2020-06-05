@@ -26,12 +26,18 @@ public class OrderDatabase implements DatabaseConnector {
 		ArrayList<Order> orders = new ArrayList<>();
 		
 		try {
-			String statement = "SELECT id FROM orders WHERE shop_id = " + shopId + ";";
+			String statement = "SELECT * FROM orders WHERE shop_id = " + shopId + ";";
 			Statement query = connection.prepareStatement(statement);
 			ResultSet result = query.executeQuery(statement);
 			
 			while(result.next()) {
-				orders.add(getOrderById(result.getInt("id")));
+				Order order = new Order(result.getInt("customer_id"), result.getInt("service_id"),
+						result.getString("date"), result.getInt("shop_id"), result.getString("company_name"),
+						result.getInt("price"), result.getBoolean("completed"), result.getString("paid_status"),
+						result.getString("paypal_id"));
+				order.setId(result.getInt("id"));
+				
+				orders.add(order);
 			}
 			
 			return orders;
@@ -46,12 +52,18 @@ public class OrderDatabase implements DatabaseConnector {
 		ArrayList<Order> orders = new ArrayList<>();
 		
 		try {
-			String statement = "SELECT id FROM orders WHERE company_name = '" + companyName + "';";
+			String statement = "SELECT * FROM orders WHERE company_name = '" + companyName + "';";
 			Statement query = connection.prepareStatement(statement);
 			ResultSet result = query.executeQuery(statement);
 			
 			while(result.next()) {
-				orders.add(getOrderById(result.getInt("id")));
+				Order order = new Order(result.getInt("customer_id"), result.getInt("service_id"),
+						result.getString("date"), result.getInt("shop_id"), result.getString("company_name"),
+						result.getInt("price"), result.getBoolean("completed"), result.getString("paid_status"),
+						result.getString("paypal_id"));
+				order.setId(result.getInt("id"));
+				
+				orders.add(order);
 			}
 			
 			return orders;

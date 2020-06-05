@@ -29,7 +29,7 @@ public class Order {
 	 * @param completed
 	 */
 	
-	public Order(int customerId, int serviceId, String date, int shopId, String companyName, double price, boolean completed) {
+	public Order(int customerId, int serviceId, String date, int shopId, String companyName, double price, boolean completed, String paidStatus, String paypalID) {
 		this.customerId = customerId;
 		this.serviceId = serviceId;
 		this.date = date;
@@ -37,6 +37,8 @@ public class Order {
 		this.companyName = companyName;
 		this.price = price;
 		this.completed = completed;
+		this.paidStatus = paidStatus;
+		this.paypalID = paypalID;
 	}
 
 	/**
